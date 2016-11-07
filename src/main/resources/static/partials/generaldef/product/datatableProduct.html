@@ -1,0 +1,35 @@
+
+<!-------------------------->
+<!-- START - DATA TABLE -->
+<!-------------------------->
+<div class="data-table-container">
+    <header class="data-table-header">
+        <div class="data-table-header__label">
+            <span class="fs-title">Productos</span>
+        </div>
+    </header>
+
+    <table class="data-table">
+        <thead>
+        <tr class="">
+            <th flex-item="2" class="data-table__sortable-cell data-table__sortable-cell--desc">Codigo</th>
+            <th flex-item="6">Nombre</th>
+            <th flex-item="2" >Edit</th>
+            <th flex-item="2" >Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="prod in listProduct" class=" ">
+            <td flex-item="2">{{prod.productcode}}</td>
+            <td flex-item="6">{{prod.description}}</td>
+            <td flex-item="2">
+                <lx-icon ng-click="openDialogProduct(prod)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+            </td>
+            <td flex-item="2">
+                <lx-icon ng-click="deleteProduct(prod)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

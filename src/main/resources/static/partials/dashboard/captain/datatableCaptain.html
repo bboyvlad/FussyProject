@@ -1,0 +1,34 @@
+<div class="data-table-container">
+    <header class="data-table-header">
+        <div class="data-table-header__label">
+            <span class="fs-title">Capitanes</span>
+        </div>
+    </header>
+
+    <table class="data-table">
+        <thead>
+        <tr class="">
+            <th> name </th>
+            <th> email </th>
+            <th> license </th>
+            <th> phone </th>
+            <th  >Edit</th>
+            <th  >Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="captain in listCaptain" class=" ">
+            <th> {{captain.name}} </th>
+            <th> {{captain.email}} </th>
+            <th> {{captain.license}} </th>
+            <th> {{captain.phone}} </th>
+            <td >
+                <lx-icon ng-click="openDialogCaptain(captain)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+            </td>
+            <td >
+                <lx-icon ng-click="deleteCaptain(captain)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
