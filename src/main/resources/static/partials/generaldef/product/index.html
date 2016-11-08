@@ -1,0 +1,32 @@
+<div class="row" id="tabPrice" flex-container="row" flex-column="16" flex-gutter="24"
+     ng-init="updateMenu()">
+
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="blue" lx-indicator="orange">
+
+            <lx-tab lx-icon="content-save" lx-label="Agregar">
+
+                <div ng-include="'/partials/generaldef/product/addproductprices.html'"></div>
+
+            </lx-tab>
+
+            <lx-tab lx-icon="stackoverflow" lx-label="Gestionar" >
+                <!-------------------------->
+                <!-- START - DATA TABLE -->
+                <!-------------------------->
+                <div ng-include="'/partials/generaldef/product/datatableProduct.html'"></div>
+
+                <!-------------------------->
+                <!-- START - DIALOG  -->
+                <!-------------------------->
+                <div ng-include="'/partials/generaldef/product/editProductDialog.html'"></div>
+
+            </lx-tab>
+        </lx-tabs>
+
+    </div>
+
+</div>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptservicerequest" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5a71aef2-23a3-48a4-a550-10a298059039">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fcreate" class="java.util.Date"/>
+	<parameter name="airport" class="java.lang.String"/>
+	<parameter name="city" class="java.lang.String"/>
+	<parameter name="craftype" class="java.lang.String"/>
+	<parameter name="client" class="java.lang.String"/>
+	<parameter name="email" class="java.lang.String"/>
+	<parameter name="locationiata" class="java.lang.String"/>
+	<parameter name="typeaviation" class="java.lang.String"/>
+	<parameter name="mpound" class="java.lang.Integer"/>
+	<parameter name="serialcode" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="amount" class="java.lang.Double"/>
+	<field name="pricedesc" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<image>
+				<reportElement x="7" y="3" width="199" height="79" uuid="8c71c8ae-467c-4e8f-aa15-3bd3d24889ab"/>
+				<imageExpression><![CDATA[java.lang.System.getProperty("user.home")+"/fussyfiles/reports/images/logojd.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="206" y="24" width="366" height="24" uuid="0f53efe0-c55e-4ac6-af43-deeff06e0dcf"/>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[COMMERCIAL DIVISION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="52" width="366" height="20" uuid="36fdb6da-7a82-4e3b-8717-a016a1dc44c1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Services request / Solicitud de servicios]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="222" splitType="Stretch">
+			<textField>
+				<reportElement x="188" y="76" width="100" height="20" uuid="2cd4807e-c15f-4a72-85a3-9d1f89bfc982"/>
+				<textFieldExpression><![CDATA[$P{airport}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="101" width="100" height="20" uuid="a4d9c70d-8da7-4ace-9467-ee1dadbb3b77"/>
+				<textFieldExpression><![CDATA[$P{city}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="150" width="100" height="20" uuid="3a824c04-e9fd-46c7-bf1c-e0747857d95d"/>
+				<textFieldExpression><![CDATA[$P{craftype}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="52" width="161" height="20" uuid="243d5537-9f43-4750-9e17-2eca5c60733a"/>
+				<text><![CDATA[Codigo IATA / IATA Code:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="76" width="161" height="20" uuid="fb6a7365-2d1c-4341-959b-c07060c3ae76"/>
+				<text><![CDATA[Aeropuerto / Airport:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="101" width="161" height="20" uuid="59c20867-f867-45f6-8f3f-6a420a5f5a12"/>
+				<text><![CDATA[Ciudad / City:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="126" width="161" height="20" uuid="07b3914b-d3c3-40aa-ace0-40055596534f"/>
+				<text><![CDATA[Cliente / Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="188" y="126" width="188" height="20" uuid="a0015003-5b61-4d7d-b230-a81a580e676f"/>
+				<textFieldExpression><![CDATA[$P{client}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="126" width="147" height="20" uuid="9e16b466-a275-4a68-98b0-57d7ed3e3fe8"/>
+				<textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="150" width="161" height="20" uuid="5f1ac6f2-cf51-44f8-b983-176c96347663"/>
+				<text><![CDATA[Tipo de aeronave / Aircraft type:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="175" width="161" height="20" uuid="eb729f3a-0ba2-4120-98c4-3bb22b50933b"/>
+				<text><![CDATA[Peso máx de despegue (MTOW):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="199" width="161" height="20" uuid="e63ca6ac-f0de-4e8b-bcc6-3535e9d144a1"/>
+				<text><![CDATA[Tipo de aviación / Aviation type:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="11" y="4" width="551" height="45" forecolor="#666666" backcolor="#666666" uuid="672a28a8-4864-451b-a1a5-401b3d3c99e7"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="6" width="161" height="20" forecolor="#FFFFFF" uuid="dd13126c-4706-4d62-9be9-82bac1f74925"/>
+				<text><![CDATA[Realizado por / By :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="29" width="161" height="20" forecolor="#FFFFFF" uuid="8df7603b-3a8a-465d-bda3-490e4da6265d"/>
+				<text><![CDATA[Fecha / Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="188" y="29" width="100" height="20" forecolor="#FFFFFF" uuid="3092fd4b-2e59-4b4b-ad9e-b8b381a6698d"/>
+				<textFieldExpression><![CDATA[$P{fcreate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="188" y="7" width="196" height="20" forecolor="#FFFFFF" uuid="98ee7259-4ed7-4278-a53d-e4d20591f684"/>
+				<text><![CDATA[Fuel and services suppy system ( Fussy)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="188" y="52" width="100" height="20" uuid="ef5f8403-ef05-49a6-be6f-dece96fea549"/>
+				<textFieldExpression><![CDATA[$P{locationiata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="199" width="100" height="20" uuid="878b446d-4dac-458e-aa02-31d53dddd3aa"/>
+				<textFieldExpression><![CDATA[$P{typeaviation}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="175" width="100" height="20" uuid="9cedec19-3c98-428f-ac59-2c2b991a0a4b"/>
+				<textFieldExpression><![CDATA[$P{mpound}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="438" y="7" width="124" height="19" forecolor="#FFFFFF" uuid="284e12e7-7a3a-4490-b800-605dc3ff948e"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{serialcode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<rectangle>
+				<reportElement x="11" y="3" width="551" height="25" forecolor="#666666" backcolor="#666666" uuid="dd354475-88ff-4826-97db-b9b35d65551a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="5" width="161" height="20" forecolor="#FFFFFF" uuid="7827ec89-ef5a-4641-855f-e2eddfbe9841"/>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="5" width="118" height="20" forecolor="#FFFFFF" uuid="19df1d2d-5cf1-4dd1-bcdc-ad2139073841"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="5" width="217" height="20" forecolor="#FFFFFF" uuid="3c8719ab-d92a-46e9-8bbc-5c1db4f71af7"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="2" width="161" height="20" uuid="d9d549cd-9a36-4bf4-8dd1-77901faca6db"/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="188" y="2" width="118" height="20" uuid="fffb0f29-d92f-4c96-9f35-4376f62b0694"/>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="332" y="2" width="217" height="20" uuid="eae2df55-c650-4536-a5a2-70031a4aa4b2"/>
+				<textFieldExpression><![CDATA[$F{pricedesc}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="61" splitType="Stretch">
+			<rectangle>
+				<reportElement x="11" y="5" width="177" height="52" forecolor="#666666" backcolor="#666666" uuid="4a5493da-ab22-4e29-be2d-9f2fc9c49a4f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="18" width="177" height="27" forecolor="#FFFFFF" uuid="4058d06b-e90f-4534-b299-34cf2689e582"/>
+				<text><![CDATA[Documents required for commercial aviation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="21" width="366" height="12" uuid="b20fc135-fb2c-4db2-b5e0-b2380f38a5c7"/>
+				<text><![CDATA[* Aircraft Insurance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="6" width="366" height="12" uuid="c058181b-b2e6-416f-9165-9ca67f2b5b3a"/>
+				<text><![CDATA[* Airworthiness Certificate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="33" width="366" height="12" uuid="134fbed6-7fd8-4660-8da8-cf39ea268ba3"/>
+				<text><![CDATA[* Certificae of aircraft registration]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="45" width="366" height="12" uuid="b6779fa9-d767-4c44-b085-584a6c258585"/>
+				<text><![CDATA[* Certificae of noise and radio license]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="62" splitType="Stretch">
+			<rectangle>
+				<reportElement x="11" y="2" width="551" height="16" forecolor="#666666" backcolor="#666666" uuid="ba52c0c6-afe1-4318-baf7-feb81a7a7a0e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="11" y="2" width="551" height="12" forecolor="#FFFFFF" uuid="74d16ef0-57d1-4d9b-b0dd-eddf5865e49e"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[NOTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="18" width="551" height="12" uuid="f7584afa-1fc7-43db-b882-0ec245126e7e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[* A surcharge of 20% is applied to the fee for landing operations on sundays and holydays]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="30" width="551" height="26" uuid="70bc43e0-2431-452a-9e41-958942bb05b6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[* 45% surcharge for handling fee applies when operation are donducted outside the opening hours of each airport according to the published in the AIP of cuba]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="50" width="551" height="12" uuid="4400efcb-cb3c-47d1-97e1-97be2d515f15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[* All prices are quoted in USD and must be paid in USD]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
