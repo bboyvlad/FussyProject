@@ -307,6 +307,36 @@ public class ServicerequestController {
         }
     }
 
+    @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
+    public @ResponseBody List<Servicerequest> showServicesRequests(){
+        try{
+            return servicerequestRepository.findAll();
+        }catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/manage/open",method = RequestMethod.GET)
+    public @ResponseBody List<Servicerequest> showServicesRequestsOpen(){
+        try{
+            return servicerequestRepository.findByClosedFalse();
+        }catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/manage/close",method = RequestMethod.GET)
+    public @ResponseBody List<Servicerequest> showServicesRequestsClose(){
+        try{
+            return servicerequestRepository.findByClosedTrue();
+        }catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
     String getAviationname(int aviationtype){
 
         if(aviationtype==1){
