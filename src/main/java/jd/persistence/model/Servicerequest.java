@@ -1,0 +1,177 @@
+package jd.persistence.model;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
+
+/**
+ * Created by eduardom on 10/8/16.
+ */
+@Entity
+@Table(name = "Servicerequest")
+public class Servicerequest {
+    private long id;
+    private long principal;
+    private long location;
+    private long aviationtype;
+    private long paymethod;
+    private double guarantee;
+    private double amount;
+    private Date dcreate;
+    private Date dupdate;
+    private Date dexpired;
+    private Date dlanding;
+    private boolean released;
+    private boolean closed;
+    private String serialcode;
+    private Set<Itemrequest> items;
+
+    public Servicerequest() {
+    }
+
+    public Servicerequest(long id, long principal, long location, long aviationtype, long paymethod, double guarantee, double amount, Date dcreate, Date dupdate, Date dexpired, Date dlanding, boolean released, boolean closed, Set<Itemrequest> items) {
+        this.id = id;
+        this.principal = principal;
+        this.location = location;
+        this.aviationtype = aviationtype;
+        this.paymethod = paymethod;
+        this.guarantee = guarantee;
+        this.amount = amount;
+        this.dcreate = dcreate;
+        this.dupdate = dupdate;
+        this.dexpired = dexpired;
+        this.dlanding = dlanding;
+        this.released = released;
+        this.closed = closed;
+        this.items = items;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SERVICEREQUEST_ID", unique = true, nullable = false)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "PRINCIPAL_ID")
+    public long getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(long principal) {
+        this.principal = principal;
+    }
+
+    public long getLocation() {
+        return location;
+    }
+
+    public void setLocation(long location) {
+        this.location = location;
+    }
+
+    public long getAviationtype() {
+        return aviationtype;
+    }
+
+    public void setAviationtype(long aviationtype) {
+        this.aviationtype = aviationtype;
+    }
+
+    public long getPaymethod() {
+        return paymethod;
+    }
+
+    public void setPaymethod(long paymethod) {
+        this.paymethod = paymethod;
+    }
+
+    public double getGuarantee() {
+        return guarantee;
+    }
+
+    public void setGuarantee(double guarantee) {
+        this.guarantee = guarantee;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public Date getDcreate() {
+        return dcreate;
+    }
+
+    public void setDcreate(Date dcreate) {
+        this.dcreate = dcreate;
+    }
+
+    public Date getDupdate() {
+        return dupdate;
+    }
+
+    public void setDupdate(Date dupdate) {
+        this.dupdate = dupdate;
+    }
+
+    public Date getDexpired() {
+        return dexpired;
+    }
+
+    public void setDexpired(Date dexpired) {
+        this.dexpired = dexpired;
+    }
+
+    public Date getDlanding() {
+        return dlanding;
+    }
+
+    public void setDlanding(Date dlanding) {
+        this.dlanding = dlanding;
+    }
+
+    public boolean isReleased() {
+        return released;
+    }
+
+    public void setReleased(boolean released) {
+        this.released = released;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Servicerequest_Itemrequest", joinColumns = {
+            @JoinColumn(name = "SERVICEREQUEST_ID", nullable = false, updatable = false) },
+            inverseJoinColumns = {@JoinColumn(name = "ITEMREQUEST_ID",
+                    nullable = false, updatable = false) })
+    public Set<Itemrequest> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<Itemrequest> items) {
+        this.items = items;
+    }
+
+    public String getSerialcode() {
+        return serialcode;
+    }
+
+    public void setSerialcode(String serialcode) {
+        this.serialcode = serialcode;
+    }
+}

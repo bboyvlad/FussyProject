@@ -1,0 +1,31 @@
+<div class="row" ng-init="updateMenu()">
+
+    <!--{{user}}-->
+    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+        <div flex-item="10">
+            <div class="card" >
+                <div class="p+">
+                    <strong class="fs-headline display-block">Error al activar su cuenta...</strong>
+
+                    <div class="paragraph fs-body-1 mt+">
+                        <p>
+                            Seguramente su enlace de activación se vencio, por favor solicite uno nuevo....
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card__actions">
+                    <div class="p+">
+                        <button class="btn btn--m btn--raised bgc-teal-50 tc-indigo-900" lx-ripple="indigo-500" ng-click="resendToken(vm.fsingup)">Re-enviar email</button>
+                        <a href="" ng-href="/loginpage">
+                            <button class="btn btn--m btn--raised bgc-indigo-50 tc-indigo-900" lx-ripple="indigo-500">Login</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+

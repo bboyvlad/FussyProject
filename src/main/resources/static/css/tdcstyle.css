@@ -1,0 +1,21 @@
+.emboss{
+    /*background:#6d6d6d; same as font colour*/
+    color:#6d6d6d; /*same as background colour*/
+    font-size:14px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    text-shadow: 1px 1px #ccc, -2px -1px #3d3d3d; /*two shadows, one in light gray ie ccc offset to the right and bottom, the second in a dark grey offset to the left and top - you should however adjust the colour depending on the background and font colour*/
+}
+
+.ccname_text{
+    bottom: 55px !important;
+    left: 35px !important;
+}
+
+.tdc_img{
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    margin-top: 40px !important;
+    border-bottom-width: 0px !important;
+    margin-bottom: -10px !important;
+}
