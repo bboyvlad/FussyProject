@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/fussy.iml" filepath="$PROJECT_DIR$/fussy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fussyapplication.iml" filepath="$PROJECT_DIR$/fussyapplication.iml" />
     </modules>
   </component>
 </project>

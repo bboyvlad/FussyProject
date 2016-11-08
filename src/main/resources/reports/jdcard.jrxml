@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jdcard" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cd358475-febf-4fc8-8646-21a51d97ccbe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="customer" class="java.lang.String"/>
+	<parameter name="number" class="java.lang.String"/>
+	<parameter name="expired" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="173" splitType="Stretch">
+			<image>
+				<reportElement x="4" y="0" width="607" height="173" uuid="bb562626-a3f8-4863-9e99-e235531ee949"/>
+				<imageExpression><![CDATA[java.lang.System.getProperty("user.home")+"/fussyfiles/reports/images/jdcardheaderrpt.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="466" splitType="Stretch">
+			<rectangle>
+				<reportElement x="18" y="95" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="e3c7de54-e1ed-4b91-9acc-323d69e0798a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="18" y="4" width="531" height="32" forecolor="#333333" uuid="1385a8ad-7c78-4e06-ae7a-7592fb4bd65f"/>
+				<textElement textAlignment="Center">
+					<font size="26"/>
+				</textElement>
+				<text><![CDATA[* Felicidades  *]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="46" width="531" height="39" forecolor="#333333" uuid="c1164a5b-ce4d-4981-a40a-9bb93336ba2d"/>
+				<textElement textAlignment="Justified">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[recuerda que con tu JDCARD podrás gestionar los servicios que estén disponibles para tu localidad.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="95" width="245" height="21" forecolor="#333333" uuid="2fbcf378-af5a-446b-9a8b-d37b326a95d8"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Suministro de combustible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="121" width="245" height="21" forecolor="#333333" uuid="36d45717-6102-4a89-98c7-514303b475cd"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Servicio de rampa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="147" width="271" height="21" forecolor="#333333" uuid="06c92972-fe21-43f8-8a38-369b318b3657"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Servicio de sobrevuelo y aterrizaje]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="49" y="174" width="271" height="21" forecolor="#333333" uuid="7dbf05eb-7bf5-4dbc-a9aa-53e6286ede75"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Servicio de seguridad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="95" width="210" height="21" forecolor="#333333" uuid="ad926837-7364-4429-9c16-47141c118a0c"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Catering]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="121" width="210" height="21" forecolor="#333333" uuid="92982ff4-1f9d-45c5-8d6f-1f3fbeb7b496"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Reserva de hotel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="148" width="210" height="21" forecolor="#333333" uuid="27b34437-2c90-4a5b-8119-e8fde13d91a5"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Limusina]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="18" y="121" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="f4565b3a-075c-4b48-ad49-afe450381209"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="18" y="148" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="cadd208d-2043-4cc3-98d0-724f6e8fc7e4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="18" y="174" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="52ca2051-b933-4480-a54e-0f2448001a4e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="327" y="95" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="61620b7a-9f75-4bf7-b576-616e13ffda57"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="327" y="121" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="133fcad1-f0aa-4382-8848-05711965e23e"/>
+			</rectangle>
+			<image>
+				<reportElement x="89" y="201" width="735" height="265" uuid="c2ab729a-bb12-4214-8abf-376166cb167f"/>
+				<imageExpression><![CDATA[java.lang.System.getProperty("user.home")+"/fussyfiles/reports/images/rptjdcardexample.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="327" y="147" width="28" height="21" forecolor="#666666" backcolor="#E38D48" uuid="16899414-21b7-4e7c-9834-8fe66ab8f20b"/>
+			</rectangle>
+			<textField>
+				<reportElement x="131" y="387" width="262" height="20" forecolor="#FFFFFF" uuid="6aa73f1b-00f9-4114-8ca9-41ce38d90ce0"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{customer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="364" width="263" height="20" forecolor="#FFFFFF" uuid="62c443af-0635-4ebb-8ac8-078e47e57750"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="431" width="67" height="12" forecolor="#FFFFFF" uuid="daa1e1fa-0b1d-4125-af37-62ff340d01a2"/>
+				<textFieldExpression><![CDATA[$P{expired}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="42" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="50" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="21" y="9" width="531" height="22" forecolor="#333333" uuid="76b38def-d496-4116-8bd7-d09f4392dc5c"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[www.jdoilfield.net]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

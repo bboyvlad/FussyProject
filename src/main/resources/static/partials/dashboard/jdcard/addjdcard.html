@@ -1,0 +1,138 @@
+<div class="row" ng-init="updateMenu()">
+
+    <form name="AddJdForm" novalidate>
+        user id: {{user.id}}
+        {{fjdcard}}
+        <!--{{paymethod}}-->
+        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="8">
+                <div class="card" >
+                    <div class="p+">
+                        <strong class="fs-headline display-block">Escogue tu metodo de pago</strong>
+                        <!--1{{paymethod}} 2{{paymethod}}-->
+                        <div class="paragraph fs-body-1 mt+">
+                            <div class="p+ pt0">
+                                <div flex-container="row">
+                                    <div flex-item>
+                                        <lx-select
+                                                name="idpaymethod"
+                                                ng-model="fjdcard.idpaymethod"
+                                                lx-allow-clear="true"
+                                                lx-choices="paymethod"
+                                                lx-fixed-label="true"
+                                                lx-valid="AddJdForm.idpaymethod.$valid"
+                                                lx-error="AddJdForm.idpaymethod.$invalid && AddJdForm.idpaymethod.$touched"
+                                                ng-required="true"
+                                                lx-label="Escoja su metodo de pago">
+                                            <lx-select-selected>
+                                                {{ $selected.payacctnum }}
+                                            </lx-select-selected>
+
+                                            <lx-select-choices>
+                                                {{ $choice.payacctnum }}
+                                            </lx-select-choices>
+                                        </lx-select>
+                                        <div ng-messages="AddJdForm.idpaymethod.$error"
+                                             ng-if="AddJdForm.idpaymethod.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div flex-container="row">
+                                    <div flex-item>
+                                        <lx-text-field
+                                                lx-label="TDC Codigo de Seguridad"
+                                                lx-valid="AddJdForm.pay_ccsec.$valid"
+                                                lx-error="AddJdForm.pay_ccsec.$invalid && AddJdForm.pay_ccsec.$touched">
+                                            <input type="text" name="pay_ccsec" ng-required="true"
+                                                   ng-model="fjdcard.pay_ccsec"
+                                                   payments-validate="cvc" payments-type-model="type"
+                                                   ng-minlength="3" ng-maxlength="4" >
+                                        </lx-text-field>
+                                        <div ng-messages="AddJdForm.pay_ccsec.$error"
+                                             ng-if="AddJdForm.pay_ccsec.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Introduce el numero de tu TDC</div>
+                                            <div ng-message="minlength">Introduce los 3 digitos del verso de tu tarjeta</div>
+                                            <div ng-message="maxlength">Introduce los 4 digitos del verso de tu tarjeta</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div flex-item="8">
+                <div class="card" >
+                    <div class="card__img card__img--top">
+                        <img th:src="@{/css/img/Fuelcard_empty.jpg}"
+                             src="/css/img/Fuelcard_empty.jpg"
+                             ng-src="/css/img/Fuelcard_empty.jpg" />
+                        <span class="fs-headline tc-white-1 display-block emboss ccname_text">{{fjdcard.cardname}}</span>
+                    </div>
+                    <div class="p+">
+                        <strong class="fs-headline display-block">Personaliza tu J&amp;D Card</strong>
+                        <div class="paragraph fs-body-1 mt+">
+                            <div class="p+ pt0">
+                                <div flex-container="row">
+                                    <div flex-item>
+
+                                        <lx-text-field
+                                                lx-label="El Nombre que desea en su J&amp;D Card"
+                                                lx-valid="AddJdForm.cardname.$valid"
+                                                lx-error="AddJdForm.cardname.$invalid && AddJdForm.cardname.$touched">
+                                            <input type="text" name="cardname" ng-model="fjdcard.cardname"  ng-required="true"  ng-pattern="regex" capitalize>
+                                        </lx-text-field>
+                                        <div ng-messages="AddJdForm.cardname.$error"
+                                             ng-if="AddJdForm.cardname.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Debes llenar este campo</div>
+                                            <div ng-message="pattern">Solo se permiten letras mayusculas y espacios. Ejemplo: "MATILDE R PEREZ R"</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div flex-container="row">
+                                    <div flex-item>
+                                        <lx-text-field
+                                                lx-label="Monto"
+                                                lx-valid="AddJdForm.amount.$valid"
+                                                lx-error="AddJdForm.amount.$invalid && AddJdForm.amount.$touched">
+                                            <input type="text" name="amount" ng-required="true" ng-model="fjdcard.amount" ng-minlength="1" ui-number-mask>
+                                        </lx-text-field>
+                                        <div ng-messages="AddJdForm.amount.$error"
+                                             ng-if="AddJdForm.amount.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Introduce el Monto</div>
+                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: relative;">
+            <lx-progress lx-type="linear" lx-color="teal"
+                         ng-if="LinearProgress">
+            </lx-progress>
+        </div>
+        <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
+
+            <lx-button lx-color="green"
+                       ng-click="addjdCard($event, fjdcard)"
+                       ng-disabled="sendbutton || AddJdForm.$invalid">
+                ADQUIRIR J&amp;D CARD</lx-button>
+        </div>
+    </form>
+
+</div>

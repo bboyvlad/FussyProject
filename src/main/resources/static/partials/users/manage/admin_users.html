@@ -1,0 +1,325 @@
+<div class="row" flex-column="16" flex-gutter="24" flex-container="row"
+     ng-init="updateMenu()">
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="blue" lx-indicator="orange">
+            <lx-tab lx-icon="content-save" lx-label="Agregar">
+
+                <!-- FORM TAB -->
+                <div class="row" >
+                    <form name="UserForm" novalidate>
+                        1{{fuser}} 2{{master}}
+                        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                            <div flex-item="12">
+                                <div class="card" >
+                                    <div class="p+">
+                                        <strong class="fs-headline display-block">Registrar Cuenta</strong>
+
+                                        <div class="paragraph fs-body-1 mt+">
+                                            <div class="p+ pt0">
+                                                <div flex-container="row">
+                                                    <div flex-item>
+                                                        <lx-text-field lx-label="Nombres"
+                                                                       lx-valid="UserForm.name.$valid"
+                                                                       lx-error="UserForm.name.$invalid && UserForm.name.$touched">
+                                                            <input type="text" name="name" ng-model="fuser.name"
+                                                                   ng-required="true">
+                                                        </lx-text-field>
+                                                        <div ng-messages="UserForm.name.$error"
+                                                             ng-if="UserForm.name.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">No Olvides de colocar tu Nombre</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div flex-container="row">
+                                                    <div flex-item>
+                                                        <lx-text-field lx-label="Apellido"
+                                                                       lx-valid="UserForm.lastname.$valid"
+                                                                       lx-error="UserForm.lastname.$invalid && UserForm.lastname.$touched">
+                                                            <input type="text" name="lastname" ng-model="fuser.lastname"
+                                                                   ng-required="true">
+                                                        </lx-text-field>
+                                                        <div ng-messages="UserForm.lastname.$error"
+                                                             ng-if="UserForm.lastname.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">No Olvides de colocar tu Apellido</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div flex-container="row">
+                                                    <div flex-item>
+                                                        <lx-text-field lx-label="Email"
+                                                                       lx-valid="UserForm.email.$valid"
+                                                                       lx-error="UserForm.email.$invalid && UserForm.email.$touched">
+
+                                                            <input type="email" name="email" ng-model="fuser.email"
+                                                                   ng-required="true" />
+                                                        </lx-text-field>
+                                                        <div ng-messages="UserForm.email.$error"
+                                                             ng-if="UserForm.email.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">Es Necesario tu Correo</div>
+                                                            <div ng-message="email">Tu correo no es valido!</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div flex-container="row">
+                                                    <div flex-item>
+                                                        <lx-text-field lx-label="Contraseña"
+                                                                       lx-valid="UserForm.pass.$valid"
+                                                                       lx-error="UserForm.pass.$invalid && UserForm.pass.$touched">
+                                                            <input type="password" name="pass" ng-model="fuser.pass"
+                                                                   ng-required="true" />
+                                                        </lx-text-field>
+                                                        <div ng-messages="UserForm.pass.$error"
+                                                             ng-if="UserForm.pass.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">No puede estar vacia tu Contraseña</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div flex-container="row">
+                                                    <div flex-item>
+                                                        <lx-text-field lx-label="Confirmar Contraseña"
+                                                                       lx-valid="UserForm.chkpass.$valid"
+                                                                       lx-error="UserForm.chkpass.$invalid && UserForm.chkpass.$touched">
+                                                            <input type="password" name="chkpass" ng-model="fuser.chkpass"
+                                                                   ng-required="true" compare-to="fuser.pass"/>
+                                                        </lx-text-field>
+                                                        <div ng-messages="UserForm.chkpass.$error"
+                                                             ng-if="UserForm.chkpass.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">Verifica tu Contraseña</div>
+                                                            <div ng-message="compareTo">Revisa tu contraseña, No estan iguales...</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="card__actions">
+                                        <div class="p+">
+                                            <div style="position: relative;">
+                                                <lx-progress lx-type="linear" lx-color="teal"
+                                                             ng-if="LinearProgress">
+                                                </lx-progress>
+                                            </div>
+                                            <lx-button lx-color="red"
+                                                       ng-click="reset()"
+                                            >Limpiar</lx-button>
+                                            <lx-button lx-color="green"
+                                                       ng-click="userCreate($event, fuser)"
+                                                       ng-disabled="sendbutton || UserForm.$invalid"
+                                            >REGISTRAR</lx-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </lx-tab>
+
+            <lx-tab lx-icon="account-box" lx-label="Gestionar">
+
+                <!-- DATATABLE TAB -->
+
+                <div class="data-table-container">
+                    <header class="data-table-header">
+                        <div class="data-table-header__label">
+                            <span class="fs-title">Usuarios</span>
+                        </div>
+                    </header>
+
+                    <table class="data-table">
+                        <thead>
+                        <tr class="">
+                            <th width="30%">Nombres</th>
+                            <th width="30%">Email</th>
+                            <th width="10%">Estatus</th>
+                            <th width="15%">Edit</th>
+                            <th width="15%">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="luser in listUser" class=" ">
+                            <td width="30%">{{luser.name}}, {{luser.lastname}}</td>
+                            <td width="30%">{{luser.email}}</td>
+                            <td width="10%">{{luser.enabled}}</td>
+                            <td width="15%">
+                                <lx-icon ng-click="openDialogUser(luser)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+                            </td>
+                            <td width="15%">
+                                <lx-icon ng-click="deleteUser(luser)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- EDIT DIALOG -->
+
+                <lx-dialog id="{{ dialogUser }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Usuario
+                            </span>
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+
+                        <!-- EDIT FORM -->
+                        <div class="row" >
+                            <form name="editUserForm" novalidate>
+                                1{{fuser}} 2{{master}}
+                                <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                                    <div flex-item="16">
+                                        <div class="card" >
+                                            <div class="p+">
+                                                <strong class="fs-headline display-block">Registrar Cuenta</strong>
+
+                                                <div class="paragraph fs-body-1 mt+">
+                                                    <div class="p+ pt0">
+                                                        <div flex-container="row">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Nombres"
+                                                                               lx-valid="editUserForm.name.$valid"
+                                                                               lx-error="editUserForm.name.$invalid && editUserForm.name.$touched">
+                                                                    <input type="text" name="name"
+                                                                           ng-model="fuseredit.name"
+                                                                           ng-required="true">
+                                                                </lx-text-field>
+                                                                <div ng-messages="editUserForm.name.$error"
+                                                                     ng-if="editUserForm.name.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">No Olvides de colocar tu Nombre</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div flex-container="row">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Apellido"
+                                                                               lx-valid="editUserForm.lastname.$valid"
+                                                                               lx-error="editUserForm.lastname.$invalid && editUserForm.lastname.$touched">
+                                                                    <input type="text" name="lastname" ng-model="fuseredit.lastname"
+                                                                           ng-required="true">
+                                                                </lx-text-field>
+                                                                <div ng-messages="editUserForm.lastname.$error"
+                                                                     ng-if="editUserForm.lastname.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">No Olvides de colocar tu Apellido</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div flex-container="row">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Email"
+                                                                               lx-valid="editUserForm.email.$valid"
+                                                                               lx-error="editUserForm.email.$invalid && editUserForm.email.$touched">
+
+                                                                    <input type="email" name="email" ng-model="fuseredit.email"
+                                                                           ng-required="true" />
+                                                                </lx-text-field>
+                                                                <div ng-messages="editUserForm.email.$error"
+                                                                     ng-if="editUserForm.email.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">Es Necesario tu Correo</div>
+                                                                    <div ng-message="email">Tu correo no es valido!</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div flex-container="row">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Contraseña"
+                                                                               lx-valid="editUserForm.pass.$valid"
+                                                                               lx-error="editUserForm.pass.$invalid && editUserForm.pass.$touched">
+                                                                    <input type="password" name="pass" ng-model="fuseredit.pass"
+                                                                           ng-required="true" />
+                                                                </lx-text-field>
+                                                                <div ng-messages="editUserForm.pass.$error"
+                                                                     ng-if="editUserForm.pass.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">No puede estar vacia tu Contraseña</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div flex-container="row">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Confirmar Contraseña"
+                                                                               lx-valid="editUserForm.chkpass.$valid"
+                                                                               lx-error="editUserForm.chkpass.$invalid && editUserForm.chkpass.$touched">
+                                                                    <input type="password" name="chkpass" ng-model="fuseredit.chkpass"
+                                                                           ng-required="true" compare-to="fuseredit.pass"/>
+                                                                </lx-text-field>
+                                                                <div ng-messages="editUserForm.chkpass.$error"
+                                                                     ng-if="editUserForm.chkpass.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">Verifica tu Contraseña</div>
+                                                                    <div ng-message="compareTo">Revisa tu contraseña, No estan iguales...</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="card__actions">
+                                                <div class="p+">
+                                                    <div style="position: relative;">
+                                                        <lx-progress lx-type="linear" lx-color="teal"
+                                                                     ng-if="LinearProgress">
+                                                        </lx-progress>
+                                                    </div>
+                                                    <lx-button lx-color="red"
+                                                               ng-click="reset()"
+                                                    >Limpiar</lx-button>
+                                                    <lx-button lx-color="green"
+                                                               ng-click="userCreate($event, fuseredit)"
+                                                               ng-disabled="sendbutton || editUserForm.$invalid"
+                                                    >REGISTRAR</lx-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
+                    </lx-dialog-footer>
+                </lx-dialog>
+
+            </lx-tab>
+
+        </lx-tabs>
+
+    </div>
+
+</div>
