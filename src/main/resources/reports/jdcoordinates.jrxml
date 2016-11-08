@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jdcoordinates" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62fcad7d-1ba7-4647-9d8a-c5edaa1c5924">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="c8afa434-35af-4a97-8a73-fe5acdc71340"/>
+	<parameter name="serial" class="java.lang.String"/>
+	<field name="fila" class="java.lang.Integer"/>
+	<field name="a" class="java.lang.String"/>
+	<field name="b" class="java.lang.String"/>
+	<field name="c" class="java.lang.String"/>
+	<field name="d" class="java.lang.String"/>
+	<field name="e" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="151" splitType="Stretch">
+			<image>
+				<reportElement x="43" y="0" width="494" height="151" uuid="7e9723e5-74db-4d07-b666-527e11228577"/>
+				<imageExpression><![CDATA[java.lang.System.getProperty("user.home")+"/fussyfiles/reports/images/coordinatecardheaderrpt2.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="192" splitType="Stretch">
+			<rectangle>
+				<reportElement x="43" y="19" width="28" height="20" forecolor="#333333" backcolor="#00CCFF" uuid="5919855b-1911-47a9-b411-27eccf4a06e8"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="77" y="19" width="455" height="20" forecolor="#333333" uuid="e7dfaeb4-f6ca-40c6-83f2-d907918982b6"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[¿COMO ACTIVAR TU TARJETA DE COORDENADAS?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="45" width="455" height="28" forecolor="#333333" uuid="6b5fc967-9c4c-432d-a61d-adc10bc33714"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingresa a tu bandeja de correo electronico, y has clic en el correo de ·SEGURIDAD J&D·a continuacion encontraras un link que te llevara al panel de activación. ]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="43" y="84" width="28" height="20" forecolor="#333333" backcolor="#FF9933" uuid="c1bcbef9-3269-4433-a889-f11c9840fb98"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="77" y="84" width="455" height="20" forecolor="#333333" uuid="b22fe6d2-46a0-43a0-be68-64484bb3de21"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tips de Seguridad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="106" width="455" height="13" forecolor="#333333" uuid="bf576ef7-77b8-453a-9d51-ac8556e994f6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[· Mantenla en un lugar seguro.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="120" width="455" height="13" forecolor="#333333" uuid="e39369b9-6fa3-4f85-ae6c-390ddf8e3a18"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[· Nunca la almacenes en un dispositivo electrónico.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="133" width="455" height="13" forecolor="#333333" uuid="3d48e0ca-6e22-4eb5-ada9-dc712f6f76eb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[· Nunca suministres información de tu tarjeta de coordendas a través de emails,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="146" width="445" height="13" forecolor="#333333" uuid="1c645755-5915-47a6-8fbb-8bf9d90be7ff"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[llamadas telefonicas, o sitios web diferentes a www.jdoilfield.net.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="159" width="455" height="13" forecolor="#333333" uuid="5b44b2de-7fcd-477a-b0c3-5fbac5b62a1e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[· Sólo te pediremos dos coordendas para efectuar una transacción segura.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<rectangle>
+				<reportElement x="170" y="2" width="206" height="20" forecolor="#00CCFF" backcolor="#00CCFF" uuid="c7b1af15-2451-447f-ae06-78477c94cfb3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="206" y="2" width="28" height="20" forecolor="#FFFFFF" uuid="7ddb0ceb-0b14-4620-b5d0-f113203448d3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="238" y="2" width="36" height="20" forecolor="#FFFFFF" uuid="84379b6c-4bb4-4a27-9596-b4a96ef94b18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[B]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="278" y="2" width="29" height="20" forecolor="#FFFFFF" uuid="25938dde-bb57-4253-b443-d0724f9781f3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[C]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="313" y="2" width="29" height="20" forecolor="#FFFFFF" uuid="05d61aa8-73cf-4c5d-b8a0-5287cbabb32a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[D]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="2" width="28" height="20" forecolor="#FFFFFF" uuid="5bb71cdc-043e-48d9-a418-b1ae7c40cd65"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[E]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement x="170" y="0" width="206" height="20" forecolor="#9BEAFE" backcolor="#00CCFF" uuid="e58f7af6-750e-4d61-aae0-df26fca0aec5"/>
+			</rectangle>
+			<textField>
+				<reportElement x="170" y="0" width="35" height="20" forecolor="#FFFFFF" uuid="3fca0e20-8063-4c74-b859-03d297d02401"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fila}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="207" y="0" width="27" height="20" forecolor="#FFFFFF" uuid="e8b4f3d9-e721-47cd-8498-d7e82975fab5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{a}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="238" y="0" width="36" height="20" forecolor="#FFFFFF" uuid="f9501519-a0b8-4252-9b47-b5c93c6604de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{b}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="278" y="0" width="29" height="20" forecolor="#FFFFFF" uuid="737f4ddf-7532-4c01-9ede-549c83181cbe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{c}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="313" y="0" width="29" height="20" forecolor="#FFFFFF" uuid="687474c8-4963-4d6e-9b3e-dcac655b077a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{d}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="0" width="28" height="20" forecolor="#FFFFFF" uuid="9d6c94d5-376c-4dd1-a8db-3efa55b7ecf7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{e}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="26" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="61" y="0" width="455" height="20" forecolor="#333333" uuid="60af823a-3f44-4adb-af78-1f5aea5dd061"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[WWW.JDOILFIELD.NET]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="253" y="0" width="60" height="15" uuid="bc40fa70-ebc3-4079-9e80-e1b23a2529ba"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SERIAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="296" y="0" width="78" height="12" uuid="ae861d18-37b4-4fe4-bfbc-caa8332b732e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{serial}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

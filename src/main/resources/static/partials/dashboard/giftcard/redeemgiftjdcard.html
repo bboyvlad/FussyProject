@@ -1,0 +1,101 @@
+<div class="row" ng-init="updateMenu()">
+
+    <form name="RedeemGiftForm" novalidate>
+        user id: {{user.id}}
+        {{fredeemcard}}
+        <!--{{jdcardOpts}}-->
+        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="8">
+
+                <div class="card">
+                    <div class="p+">
+                        <strong class="fs-headline display-block">Escoga una J&amp;D Card</strong>
+                        <!--1{{paymethod}} 2{{paymethod}}-->
+                        <div class="paragraph fs-body-1 mt+">
+                            <div class="p+ pt0">
+                                <div flex-container="row">
+                                    <div flex-item>
+                                        <lx-select
+                                                name="jdcard"
+                                                ng-model="fredeemcard.jdcard"
+                                                lx-allow-clear="true"
+                                                lx-choices="jdcardOpts"
+                                                lx-fixed-label="true"
+                                                lx-valid="RedeemGiftForm.jdcard.$valid"
+                                                lx-error="RedeemGiftForm.jdcard.$invalid && RedeemGiftForm.jdcard.$touched"
+                                                ng-required="true"
+                                                lx-label="Escoja su metodo de pago">
+                                            <lx-select-selected>
+                                                {{ $selected.payacctnum }}
+                                            </lx-select-selected>
+
+                                            <lx-select-choices>
+                                                {{ $choice.payacctnum }}
+                                            </lx-select-choices>
+                                        </lx-select>
+                                        <div ng-messages="RedeemGiftForm.jdcard.$error"
+                                             ng-if="RedeemGiftForm.jdcard.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div flex-item="8">
+                    <div class="card" >
+
+                        <div class="p+">
+                            <strong class="fs-headline display-block">Personaliza tu Gift Card</strong>
+                            <div class="paragraph fs-body-1 mt+">
+                                <div class="p+ pt0">
+
+                                    <div flex-container="row">
+                                        <div flex-item>
+
+                                            <lx-text-field
+                                                    lx-label="Gift Card Codigo"
+                                                    lx-valid="RedeemGiftForm.claimcode.$valid"
+                                                    lx-error="RedeemGiftForm.claimcode.$invalid && RedeemGiftForm.claimcode.$touched">
+                                                <input type="name" name="claimcode" ng-model="fredeemcard.claimcode"  ng-required="true" >
+                                            </lx-text-field>
+                                            <div ng-messages="RedeemGiftForm.claimcode.$error"
+                                                 ng-if="RedeemGiftForm.claimcode.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Debes llenar este campo</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <lx-progress lx-type="linear" lx-color="teal"
+                                 ng-if="LinearProgress">
+                    </lx-progress>
+                </div>
+                <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
+                    <lx-button lx-color="red"
+                               ng-click="reset()"
+                    >Limpiar</lx-button>
+                    <lx-button lx-color="green"
+                               ng-click="redeemGiftCard($event, fredeemcard)"
+                               ng-disabled="sendbutton || RedeemGiftForm.$invalid">
+                        Reclamar Gift Card</lx-button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

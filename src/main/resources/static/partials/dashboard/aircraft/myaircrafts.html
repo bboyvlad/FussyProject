@@ -1,0 +1,261 @@
+<div class="row" flex-column="16" flex-gutter="24" flex-container="row"
+     ng-init="updateMenu()">
+
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="blue" lx-indicator="orange">
+        <lx-tab lx-icon="content-save" lx-label="Agregar">
+            <!--{{user.id}}-->
+
+            {{faircrafts}}
+            <form name="AircraftForm" novalidate>
+
+                <div class="p+" flex-container="row" >
+                    <div flex-item="12">
+                        <div class="card" >
+                            <div class="p+">
+                                <strong class="fs-headline display-block">Nuevo Aeronave</strong>
+                                <!--1{{faircrafts}}2{{faircrafts}}-->
+                                <div class="paragraph fs-body-1 mt+">
+                                    <div class="p+ pt0">
+                                        <div flex-container="row">
+                                            <div class="p+" flex-item="2">
+                                            </div>
+                                            <div flex-item="8">
+                                                <!--<div flex-container="row">
+                                                    <div flex-item>-->
+                                                        <lx-select
+                                                                name="aircraftmodel"
+                                                                ng-model="faircrafts.aircraftmodel"
+                                                                lx-allow-clear="true"
+                                                                lx-choices="selectAjax.aircraftOpts"
+                                                                lx-display-filter="true"
+                                                                lx-fixed-label="true"
+                                                                lx-filter="searchAircrafts(newValue)"
+                                                                lx-valid="AircraftForm.aircraftmodel.$valid"
+                                                                lx-error="AircraftForm.aircraftmodel.$invalid && AircraftForm.aircraftmodel.$touched"
+                                                                lx-loading="selectAjax.loading"
+                                                                ng-required="true"
+                                                                lx-label="Aeronaves">
+                                                            <lx-select-selected>
+                                                                 {{ $selected.name }} - {{ $selected.manufacture }} - {{ $selected.craftype }}
+                                                            </lx-select-selected>
+
+                                                            <lx-select-choices>
+                                                                {{ $choice.name }} - {{ $choice.manufacture }} - {{ $choice.craftype }}
+                                                            </lx-select-choices>
+                                                        </lx-select>
+                                                        <div ng-messages="AircraftForm.aircraftmodel.$error"
+                                                             ng-if="AircraftForm.aircraftmodel.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">Escoge tu Aeronave</div>
+                                                        </div>
+                                                    <!--</div>
+                                                </div>-->
+                                            </div>
+
+                                        </div>
+                                        <div flex-container="row">
+                                            <div class="p+" flex-item="2">
+                                            </div>
+                                            <div flex-item="8">
+                                                <div flex-item>
+                                                    <lx-text-field lx-label="Tail Number"
+                                                                   lx-valid="editFormAir.tailnumber.$valid"
+                                                                   lx-error="editFormAir.tailnumber.$invalid && editFormAir.name.$touched">
+                                                        <input type="text"
+                                                               name="tailnumber"
+                                                               ng-model="faircrafts.tailnumber"
+                                                               ng-required="true">
+                                                    </lx-text-field>
+                                                    <div ng-messages="editFormAir.tailnumber.$error"
+                                                         ng-if="editFormAir.tailnumber.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">No Olvides de colocar Tail Number</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div style="position: relative;">
+                    <lx-progress lx-type="linear" lx-color="teal"
+                                 ng-if="LinearProgress">
+                    </lx-progress>
+                </div>
+                <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
+                    <lx-button lx-color="red"
+                               ng-click="reset()"
+                    >Limpiar</lx-button>
+                    <lx-button lx-color="green"
+                               ng-click="addAircraft($event, faircrafts)"
+                               ng-disabled="sendbutton || AircraftForm.$invalid">
+                        Guardar</lx-button>
+                </div>
+            </form>
+        </lx-tab>
+
+        <lx-tab lx-icon="airplane" lx-label="Gestionar">
+
+            <div class="data-table-container">
+                <header class="data-table-header">
+                    <div class="data-table-header__label">
+                        <span class="fs-title">Aeronaves</span>
+                    </div>
+                </header>
+
+                <table class="data-table">
+                    <thead>
+                        <tr class="">
+                            <th >Nombre</th>
+                            <th >Modelo</th>
+                            <th >MTOW</th>
+                            <th >Estatus</th>
+                            <th  >Edit</th>
+                            <th  >Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="aircraft in listAircraft" class=" ">
+                            <td >{{aircraft.name}}</td>
+                            <td >{{aircraft.model}}</td>
+                            <td >{{aircraft.mtow}}</td>
+                            <td >{{aircraft.active}}</td>
+                            <td >
+                                <lx-icon ng-click="openDialogAircraft(aircraft)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+                            </td>
+                            <td >
+                                <lx-icon ng-click="deleteAircraft(aircraft)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <lx-dialog id="{{ dialogAircraft }}">
+                <lx-dialog-header>
+                    <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Aeronave
+            </span>
+
+                    </div>
+                </lx-dialog-header>
+
+                <lx-dialog-content>
+                    <form name="editFormAir" novalidate>
+                        <!--{{user.user_id}}-->
+                        {{editaircrafts}}
+                        <!--{{paymethod}}-->
+                        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                            <div class="p+" flex-item="2">
+                            </div>
+                            <div flex-item="12">
+                                <div class="card" >
+                                    <div class="p+">
+                                        <strong class="fs-headline display-block">Editar Aeronave</strong>
+                                        <div class="paragraph fs-body-1 mt+" >
+                                            <div class="p+ pt0">
+                                                <div flex-container="row">
+                                                    <div class="p+" flex-item="2">
+                                                    </div>
+                                                    <div flex-item="8">
+                                                        <lx-select
+                                                                name="aircraftmodel"
+                                                                ng-model="editaircrafts.aircraftmodel"
+                                                                lx-allow-clear="true"
+                                                                lx-choices="selectAjax.aircraftOpts"
+                                                                lx-display-filter="true"
+                                                                lx-fixed-label="true"
+                                                                lx-filter="searchAircrafts(newValue)"
+                                                                lx-valid="editFormAir.$valid"
+                                                                lx-error="editFormAir.$invalid && editFormAir.$touched"
+                                                                lx-loading="selectAjax.loading"
+                                                                ng-required="true"
+                                                                lx-label="Aeronaves">
+                                                            <lx-select-selected>
+                                                                {{ $selected.name }} - {{ $selected.manufacture }} - {{ $selected.craftype }}
+                                                            </lx-select-selected>
+
+                                                            <lx-select-choices>
+                                                                {{ $choice.name }} - {{ $choice.manufacture }} - {{ $choice.craftype }}
+                                                            </lx-select-choices>
+                                                        </lx-select>
+                                                        <div ng-messages="editFormAir.$error"
+                                                             ng-if="editFormAir.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">Escoge tu Aeronave</div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div flex-container="row">
+                                                    <div class="p+" flex-item="2">
+                                                    </div>
+                                                        <div flex-item="8">
+                                                            <div flex-item>
+                                                                <lx-text-field lx-label="Tail Number"
+                                                                   lx-valid="editFormAir.tailnumber.$valid"
+                                                                   lx-error="editFormAir.tailnumber.$invalid && editFormAir.name.$touched">
+                                                                    <input type="text"
+                                                                           name="tailnumber"
+                                                                           ng-model="editaircrafts.tailnumber"
+                                                                           ng-required="true">
+                                                                </lx-text-field>
+                                                                <div ng-messages="editFormAir.tailnumber.$error"
+                                                                     ng-if="editFormAir.tailnumber.$touched"
+                                                                     style="color:maroon"
+                                                                     role="alert">
+                                                                    <div ng-message="required">No Olvides de colocar Tail Number</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div style="position: relative;">
+                            <lx-progress lx-type="linear" lx-color="teal"
+                                         ng-if="LinearProgress">
+                            </lx-progress>
+                        </div>
+                        <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
+                            <lx-button lx-color="red"
+                                       ng-click="editReset(editaircrafts.id)"
+                            >Limpiar</lx-button>
+                            <lx-button lx-color="green"
+                                       ng-click="updateAircraft($event, editaircrafts)"
+                                       ng-disabled="sendbutton || editFormAir.$invalid">
+                                Actualizar</lx-button>
+                        </div>
+                    </form>
+
+                </lx-dialog-content>
+
+                <lx-dialog-footer>
+                    <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
+                </lx-dialog-footer>
+            </lx-dialog>
+
+        </lx-tab>
+
+    </lx-tabs>
+
+    </div>
+
+</div>
+
