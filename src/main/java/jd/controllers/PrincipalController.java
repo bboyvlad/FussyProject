@@ -81,6 +81,9 @@ public class PrincipalController {
     AircraftypeRepository aircraftypeRepository;
 
     @Autowired
+    ServicerequestRepository servicerequestRepository;
+
+    @Autowired
     PriceRepository price;
 
     @Autowired
@@ -1279,6 +1282,24 @@ public class PrincipalController {
 
 
     }
+
+    /*
+    *SERVICES REQUESTS
+    * */
+
+    @RequestMapping(value = "/servicerequest", method = RequestMethod.GET)
+    public @ResponseBody List<Servicerequest> shoyMyServicesRequests(Authentication auth ){
+        try{
+            Principal Pp = principalRepository.findByEmail(auth.getName());
+            List<Servicerequest> svc=servicerequestRepository.findByPrincipal(Pp.getId());
+
+            return svc;
+        }catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
 
     //Tarjeta de Coordenadas
     String getLetra(int numero){
