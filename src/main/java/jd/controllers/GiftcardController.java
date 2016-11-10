@@ -209,7 +209,7 @@ public class GiftcardController {
 
             if(!giftcard.isRegistered()){
                 Tranpay newtransaction=new Tranpay();
-                newtransaction.setTranstatus("SUCCESS");
+                newtransaction.setTranstatus("SUCCEEDED");
                 newtransaction.setTranamount(giftcard.getAmount());
                 newtransaction.setTrandate(fechaActual);
                 newtransaction.setTrantoken("gift_"+giftcard.getClaimcode());

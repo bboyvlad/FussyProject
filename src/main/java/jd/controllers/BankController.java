@@ -131,6 +131,7 @@ public class BankController {
     public @ResponseBody String[] sendPayment(@RequestBody Receivedpay pay, Authentication auth){
 
         try{
+
             Principal Pp = principal.findByEmail(auth.getName());
 
             final Paymethod[] inspaymethod = new Paymethod[1];
@@ -152,6 +153,7 @@ public class BankController {
 
             Rp.setPaymethod(pay.getPaymethod()); //el paymethod(jdcard)donde será aplicado el pago
             Rp.setAmount(pay.getAmount()); //monto depositado
+            Rp.setDcreate(pay.getDcreate());
             Rp.setDupdate(new Date()); // el dia que se registro en "dcreate" es cuando el tipo depositó
             Rp.setApproved(false);
 
@@ -186,7 +188,7 @@ public class BankController {
                 tranpay.setTrandate(pay.getDcreate());
                 tranpay.setTranupdate(new Date());
                 tranpay.setTrantoken(pay.getRelatedref());
-                tranpay.setTranstatus("APPROVED");
+                tranpay.setTranstatus("SUCCEEDED");
 
                 //añado la transaccion al metodo de pago
                 paymethod.getTransactionspayments().add(tranpay);

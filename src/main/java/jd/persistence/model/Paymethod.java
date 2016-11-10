@@ -21,7 +21,7 @@ public class Paymethod {
     private String paycardname;
     private String paycardtype;
     private double paybalance;
-    private double payblocked;
+    private double paylocked;
     private double payavailable;
     private boolean deleted;
     private Date paycreate;
@@ -32,23 +32,6 @@ public class Paymethod {
     private Set<Tranpay> transactionspayments = new HashSet<Tranpay>(0);
 
     public Paymethod() {}
-
-    public Paymethod(Long payid, String paytype, String paystatus, boolean payenabled, String payacctnum, String paycardname, double paybalance, double payblocked, double payavailable, Date paycreate, Date payvalid, String paycardrandomcode, String paycardseccode, String notes) {
-        this.payid = payid;
-        this.paytype = paytype;
-        this.paystatus = paystatus;
-        this.payenabled = false;
-        this.payacctnum = payacctnum;
-        this.paycardname = paycardname;
-        this.paybalance = paybalance;
-        this.payblocked = payblocked;
-        this.payavailable = payavailable;
-        this.paycreate = paycreate;
-        this.payvalid = payvalid;
-        this.paycardrandomcode = paycardrandomcode;
-        this.paycardseccode = paycardseccode;
-        this.notes = notes;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -162,12 +145,12 @@ public class Paymethod {
         this.transactionspayments = transactionspayments;
     }
 
-    public double getPayblocked() {
-        return payblocked;
+    public double getPaylocked() {
+        return paylocked;
     }
 
-    public void setPayblocked(double payblocked) {
-        this.payblocked = payblocked;
+    public void setPaylocked(double paylocked) {
+        this.paylocked = paylocked;
     }
 
     public String getPaycardtype() {
@@ -188,8 +171,7 @@ public class Paymethod {
 
     @Transient
     public double getPayavailable() {
-        double available=this.paybalance-this.payblocked;
-        return available;
+        return this.paybalance-this.paylocked;
     }
 
     public void setPayavailable(double payavailable) {
