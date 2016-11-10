@@ -71,6 +71,9 @@ public class ServicerequestController {
     @Autowired
     PricedateRepository pricedate;
 
+    @Autowired
+    DeferedpayRepository deferedpay;
+
     Date fechaActual = new Date();
 
     @Autowired
@@ -85,7 +88,7 @@ public class ServicerequestController {
                                          @PathVariable long shopcart_id,
                                           HttpServletResponse httpServletResponse,
                                                        HttpServletRequest request) throws IOException, JRException, MessagingException {
-        try{
+        //try{
                 Hashtable<String, String> message= new Hashtable<String, String>();
                 final boolean[] owmpay = {false};
                 final boolean[] owncart = {false};
@@ -125,12 +128,23 @@ public class ServicerequestController {
                     }
                 });
 
+                System.out.println("aircraft del shopcart es "+shopcart[0].getMyaircraft());
+
+                if (aircraftGo[0]== null){
+                    message.put("messaje","algo pasa, esta aeronave al parecer no le pertenece a este usuario");
+                    return message;
+                }
+
+
+
                 Set<Itemcart> cartitems = new HashSet<Itemcart>(0); //Items del carro de compra (servicios)
                 Set<Itemrequest> itemsrequest = new HashSet<Itemrequest>(0); //Items del service request, su fuente es el caritems
                 Set <rptServiceItemRequestDTO> irequestDTOs = new HashSet<rptServiceItemRequestDTO>(0);
                 Servicerequest servicerequest = new Servicerequest();
 
                 final double[] serviceamount={0};
+                final double serviceGuarantee;
+
                 cartitems= shopcart[0].getItems();
 
                 cartitems.forEach((citem)->{
@@ -198,9 +212,11 @@ public class ServicerequestController {
 
                 });
 
+            serviceGuarantee= serviceamount[0]*0.30;
+
             servicerequest.setPrincipal(Pp.getId());
             servicerequest.setPaymethod(paymethod[0].getPayid());
-            servicerequest.setGuarantee((serviceamount[0]*30)/100);
+            servicerequest.setGuarantee(serviceGuarantee);
             servicerequest.setAmount(serviceamount[0]);
             servicerequest.setLocation(shopcart[0].getLocation());
             servicerequest.setAviationtype(shopcart[0].getAviationtype());
@@ -235,14 +251,19 @@ public class ServicerequestController {
 
                 Location airport=loc.findOne(shopcart[0].getLocation());
                 servicerequest.setItems(itemsrequest);
-                servicerequestRepository.save(servicerequest);
+
+                //servicerequestRepository.save(servicerequest);
+                servicerequestRepository.saveAndFlush(servicerequest);
+
 
                 /*genera el pdf*/
 
                 Map<String,Object> params = new HashMap<String,Object>();
+
                 params.put("fcreate",fechaActual);
                 params.put("client",Pp.getName().toUpperCase());
                 params.put("email",Pp.getEmail());
+                params.put("guarantee",serviceGuarantee);
                 params.put("locationiata",airport.getIATA());
                 params.put("airport",airport.getName().toUpperCase());
                 params.put("city",airport.getCity().toUpperCase());
@@ -282,18 +303,30 @@ public class ServicerequestController {
 
                 /*endmail*/
 
-                /*Cobro de la transaccion a la JDcard*/
+                /*Genero el Bloqueo del pago*/
+                Deferedpay defered=new Deferedpay();
+                defered.setDescription("Service Request # "+serialcode);
+                defered.setPaymethod(paymethod[0].getPayid());
+                defered.setServicerequest(servicerequest.getId());
+                defered.setDefertype("JDEBIT");
+                defered.setAmount(serviceamount[0]+serviceGuarantee);
+                defered.setDcreate(new Date());
+                defered.setPending(true);
 
+                deferedpay.save(defered);
+
+                /*Cobro de la transaccion a la JDcard*/
+                /*
                     Tranpay jd_etpm = new Tranpay();
                     jd_etpm.setTrantype("JDEBIT");
                     jd_etpm.setTranamount(-(serviceamount[0]));
                     jd_etpm.setTrandate(fechaActual);
                     jd_etpm.setTranupdate(fechaActual);
                     jd_etpm.setTrantoken("jd_" + utils.getCadenaAlfaNumAleatoria(9));
-                    jd_etpm.setTranstatus("SUCCEEDED");
+                    jd_etpm.setTranstatus("ON HOLD");
                     paymethod[0].getTransactionspayments().add(jd_etpm);
-
                     paymethodRepository.save(paymethod[0]);
+                 */
 
                 message.put("message","Service request generado");
 
@@ -301,10 +334,18 @@ public class ServicerequestController {
                 message.put("message","Saldo insuficiente");
             }
             return message;
-
+        /*
         }catch(Exception e){
             return e.getMessage();
-        }
+        }*/
+    }
+
+    @RequestMapping(value = "/manage/prepareticket/{servicerequest}",method = RequestMethod.GET)
+    public @ResponseBody Object prepareTicket(@PathVariable long servicerequest){
+
+        //Servicerequest srv= servicerequestRepository.findOne(servicerequest);
+        return null;
+
     }
 
     @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
@@ -339,6 +380,7 @@ public class ServicerequestController {
 
     String getAviationname(int aviationtype){
 
+        System.out.println("Aviation type number to name: "+aviationtype);
         if(aviationtype==1){
             return "Commercial aviation";
         }
