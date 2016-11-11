@@ -562,6 +562,26 @@ public class PrincipalController {
                     roleselected="ROLE_SYSADMIN";
                     break;
 
+                case "G":
+                    roleselected="ROLE_GUEST";
+                    break;
+
+                case "M":
+                    roleselected="ROLE_MANAGER";
+                    break;
+
+                case "O":
+                    roleselected="ROLE_OPER";
+                    break;
+
+                case "PA":
+                    roleselected="ROLE_PARTNER";
+                    break;
+
+                case "SU":
+                    roleselected="ROLE_SUPER";
+                    break;
+
                 default:
                     roleselected="ROLE_USER";
             }
