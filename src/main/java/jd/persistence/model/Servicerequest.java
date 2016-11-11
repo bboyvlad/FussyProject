@@ -22,28 +22,12 @@ public class Servicerequest {
     private Date dexpired;
     private Date dlanding;
     private boolean released;
+    private boolean ticket;
     private boolean closed;
     private String serialcode;
     private Set<Itemrequest> items;
 
     public Servicerequest() {
-    }
-
-    public Servicerequest(long id, long principal, long location, long aviationtype, long paymethod, double guarantee, double amount, Date dcreate, Date dupdate, Date dexpired, Date dlanding, boolean released, boolean closed, Set<Itemrequest> items) {
-        this.id = id;
-        this.principal = principal;
-        this.location = location;
-        this.aviationtype = aviationtype;
-        this.paymethod = paymethod;
-        this.guarantee = guarantee;
-        this.amount = amount;
-        this.dcreate = dcreate;
-        this.dupdate = dupdate;
-        this.dexpired = dexpired;
-        this.dlanding = dlanding;
-        this.released = released;
-        this.closed = closed;
-        this.items = items;
     }
 
     @Id
@@ -152,6 +136,14 @@ public class Servicerequest {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public boolean isTicket() {
+        return ticket;
+    }
+
+    public void setTicket(boolean ticket) {
+        this.ticket = ticket;
     }
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

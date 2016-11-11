@@ -131,6 +131,7 @@ public class BankController {
     public @ResponseBody String[] sendPayment(@RequestBody Receivedpay pay, Authentication auth){
 
         try{
+
             Principal Pp = principal.findByEmail(auth.getName());
 
             final Paymethod[] inspaymethod = new Paymethod[1];
@@ -145,6 +146,7 @@ public class BankController {
 
             Rp.setBank(pay.getBank()); //Banco donde se depositó
             Rp.setRelatedref(pay.getRelatedref()); //numero de referencia del deposito
+            Rp.setInsname(pay.getInsname());
 
             Rp.setInspaymethod(pay.getInspaymethod()); //metodo de pago que usó el usuario
             Rp.setInsbank(inspaymethod[0].getPaycardname()); //nombre del banco o nombre que uso el usuario al momento de definir sus metodos de pago
@@ -152,6 +154,7 @@ public class BankController {
 
             Rp.setPaymethod(pay.getPaymethod()); //el paymethod(jdcard)donde será aplicado el pago
             Rp.setAmount(pay.getAmount()); //monto depositado
+            Rp.setDcreate(pay.getDcreate());
             Rp.setDupdate(new Date()); // el dia que se registro en "dcreate" es cuando el tipo depositó
             Rp.setApproved(false);
 
@@ -186,7 +189,7 @@ public class BankController {
                 tranpay.setTrandate(pay.getDcreate());
                 tranpay.setTranupdate(new Date());
                 tranpay.setTrantoken(pay.getRelatedref());
-                tranpay.setTranstatus("APPROVED");
+                tranpay.setTranstatus("SUCCEEDED");
 
                 //añado la transaccion al metodo de pago
                 paymethod.getTransactionspayments().add(tranpay);
@@ -226,6 +229,11 @@ public class BankController {
             return new String[] {"message","failure"};
         }
 
+    }
+
+    @RequestMapping(value = "/showreceived", method = RequestMethod.GET)
+    public @ResponseBody List<Receivedpay> showPaymentsReceived(){
+        return received.findByApprovedFalse();
     }
 
 }

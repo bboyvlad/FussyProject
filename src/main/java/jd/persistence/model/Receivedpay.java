@@ -19,6 +19,7 @@ public class Receivedpay {
     private long inspaymethod;
     private String insbank; //instructing bank
     private String insacctnum; //instructing acct num
+    private String insname;
 
     private double amount;
     private Date dcreate;
@@ -121,4 +122,11 @@ public class Receivedpay {
         this.approved = approved;
     }
 
+    public String getInsname() {
+        return insname;
+    }
+
+    public void setInsname(String insname) {
+        this.insname = insname;
+    }
 }

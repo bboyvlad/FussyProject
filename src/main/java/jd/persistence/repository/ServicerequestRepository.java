@@ -11,4 +11,5 @@ import java.util.List;
 public interface ServicerequestRepository extends JpaRepository<Servicerequest,Long> {
     List<Servicerequest> findByClosedFalse();
     List<Servicerequest> findByClosedTrue();
+    List<Servicerequest> findByPrincipal(long id);
 }

@@ -39,7 +39,7 @@ public class PaymethodController {
         this.paymethodRepository = paymethodRepository;
     }
 
-    @RequestMapping(value = "",  method = RequestMethod.POST)
+    @RequestMapping( method = RequestMethod.POST)
     public @ResponseBody Object addpayment(@RequestBody Paymethod payadd){
 
         try{
@@ -51,6 +51,7 @@ public class PaymethodController {
             pay.setPaycardseccode(payadd.getPaycardseccode());
             pay.setPaycreate(payadd.getPaycreate());
             pay.setPayvalid(payadd.getPayvalid());
+            pay.setPaylocked(0.00);
             pay.setPaycardrandomcode(payadd.getPaycardrandomcode());
 
             return paymethodRepository.save(pay);
@@ -60,16 +61,14 @@ public class PaymethodController {
     }
 
     @RequestMapping(value="/{card_id}/refill",  method = RequestMethod.POST)
-    public @ResponseBody Object refillCard(@RequestBody RegisterPayTransactionDTO refill, @PathVariable Long card_id){
-
+    public @ResponseBody Object refillCard(@RequestBody RegisterPayTransactionDTO refill,
+                                           @PathVariable Long card_id){
 
         //Tarjeta a Debitar
-        Paymethod paySelected = new Paymethod();
-        paySelected= paymethodRepository.findOne(refill.getIdpaymethod());
+        Paymethod paySelected = paymethodRepository.findOne(refill.getIdpaymethod());
 
         //JdCard para Acreditar
-        Paymethod cardToRefill = new Paymethod();
-        cardToRefill= paymethodRepository.findOne(card_id);
+        Paymethod cardToRefill = paymethodRepository.findOne(card_id);
 
 
         switch (paySelected.getPaytype()){
@@ -177,7 +176,7 @@ public class PaymethodController {
         return null;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<Paymethod> showall(){
         return paymethodRepository.findAll();
     }

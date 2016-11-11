@@ -81,6 +81,9 @@ public class PrincipalController {
     AircraftypeRepository aircraftypeRepository;
 
     @Autowired
+    ServicerequestRepository servicerequestRepository;
+
+    @Autowired
     PriceRepository price;
 
     @Autowired
@@ -230,7 +233,7 @@ public class PrincipalController {
         final Paymethod[] Ps = new Paymethod[1];
 
         Pp.getPayments().forEach((paymethod)->{
-            if(paymethod.getPayid()==regpay.getIdpaymethod()){
+            if(paymethod.getPayid().equals(regpay.getIdpaymethod())){
                 checked[0] =true;
                 Ps[0] =paymethod;
             }
@@ -252,7 +255,7 @@ public class PrincipalController {
                 Map<String, Object> chargeParams = new HashMap<String, Object>();
                 chargeParams.put("amount", amount); // Amount in cents
                 chargeParams.put("currency", "usd");
-                chargeParams.put("source", utils.getStripeToken(Ps[0], regpay.getPay_ccsec()));
+                chargeParams.put("source", utils.getStripeToken(Ps[0], regpay.getPay_ccsec())); //Ps[0] CARD
                 chargeParams.put("description", "BUYING A JDCARD");
 
                 Charge charge = Charge.create(chargeParams);
@@ -264,6 +267,7 @@ public class PrincipalController {
                     pay.setPaystatus("INACTIVE");
                     pay.setPayacctnum(utils.getCadenaNumAleatoria(16));//cardcode
                     pay.setPaycardname(regpay.getCardname());
+                    pay.setPaylocked(0.00);
                     pay.setPaycardseccode(utils.getCadenaNumAleatoria(3));
                     pay.setPaycreate(fechaActual);
                     pay.setPayvalid(utils.sumarMesesAFecha(fechaActual,24));
@@ -275,6 +279,7 @@ public class PrincipalController {
 
                     Paymethod paymentMethod = paymethodRepository.findBypayacctnum(pay.getPayacctnum());
 
+
                     Tranpay etpm = new Tranpay();
                     etpm.setTrantype("STRIPE");
                     etpm.setTranamount((Double.parseDouble(String.valueOf(charge.getAmount()))/100));
@@ -283,8 +288,7 @@ public class PrincipalController {
                     etpm.setTrantoken(charge.getId());
                     etpm.setTranstatus(charge.getStatus().toUpperCase());
 
-                    Paymethod paymentMethodActive = new Paymethod();
-                    paymentMethodActive= paymethodRepository.findOne(Ps[0].getPayid());
+                    Paymethod paymentMethodActive = paymethodRepository.findOne(paymentMethod.getPayid());
                     paymentMethodActive.getTransactionspayments().add(etpm);
 
                     paymethodRepository.save(paymentMethodActive);
@@ -295,6 +299,7 @@ public class PrincipalController {
                     email.setText("Hola "+Pp.getName()+", has comprado una JDCARD exitosamente, y estará " +
                                   "disponible en sus metodos de pago");
                     mailSender.send(email);
+
 
                     /* generando PDF si funciona
                     System.out.println("Generando PDF");
@@ -362,7 +367,7 @@ public class PrincipalController {
 
             SimpleMailMessage email=new SimpleMailMessage();
             email.setTo(Pp.getEmail());
-            email.setSubject("Felicidades has registrado un método de pago en nuestro sistema");
+            email.setSubject("Felicidades has registrado un método de pago");
             email.setText("Hola "+Pp.getName()+", has registrado con exito un metodo de pago " +
                           "en nuestra plataforma podrás verificarlo en tus métodos de pago.");
 
@@ -1279,6 +1284,24 @@ public class PrincipalController {
 
 
     }
+
+    /*
+    *SERVICES REQUESTS
+    * */
+
+    @RequestMapping(value = "/servicerequest", method = RequestMethod.GET)
+    public @ResponseBody List<Servicerequest> shoyMyServicesRequests(Authentication auth ){
+        try{
+            Principal Pp = principalRepository.findByEmail(auth.getName());
+            List<Servicerequest> svc=servicerequestRepository.findByPrincipal(Pp.getId());
+
+            return svc;
+        }catch (Exception e){
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
 
     //Tarjeta de Coordenadas
     String getLetra(int numero){
