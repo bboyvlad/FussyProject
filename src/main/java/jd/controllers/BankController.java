@@ -146,6 +146,7 @@ public class BankController {
 
             Rp.setBank(pay.getBank()); //Banco donde se depositó
             Rp.setRelatedref(pay.getRelatedref()); //numero de referencia del deposito
+            Rp.setInsname(pay.getInsname());
 
             Rp.setInspaymethod(pay.getInspaymethod()); //metodo de pago que usó el usuario
             Rp.setInsbank(inspaymethod[0].getPaycardname()); //nombre del banco o nombre que uso el usuario al momento de definir sus metodos de pago
@@ -228,6 +229,11 @@ public class BankController {
             return new String[] {"message","failure"};
         }
 
+    }
+
+    @RequestMapping(value = "/showreceived", method = RequestMethod.GET)
+    public @ResponseBody List<Receivedpay> showPaymentsReceived(){
+        return received.findByApprovedFalse();
     }
 
 }

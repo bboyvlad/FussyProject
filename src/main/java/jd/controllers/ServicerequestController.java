@@ -9,6 +9,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.omg.IOP.ExceptionDetailMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
@@ -74,6 +75,9 @@ public class ServicerequestController {
     @Autowired
     DeferedpayRepository deferedpay;
 
+    @Autowired
+    ServiceticketRepository ticketrepo;
+
     Date fechaActual = new Date();
 
     @Autowired
@@ -88,7 +92,7 @@ public class ServicerequestController {
                                          @PathVariable long shopcart_id,
                                           HttpServletResponse httpServletResponse,
                                                        HttpServletRequest request) throws IOException, JRException, MessagingException {
-        //try{
+        try{
                 Hashtable<String, String> message= new Hashtable<String, String>();
                 final boolean[] owmpay = {false};
                 final boolean[] owncart = {false};
@@ -334,18 +338,24 @@ public class ServicerequestController {
                 message.put("message","Saldo insuficiente");
             }
             return message;
-        /*
+
         }catch(Exception e){
             return e.getMessage();
-        }*/
+        }
     }
 
     @RequestMapping(value = "/manage/prepareticket/{servicerequest}",method = RequestMethod.GET)
     public @ResponseBody Object prepareTicket(@PathVariable long servicerequest){
+        try{
+            return servicerequestRepository.findOne(servicerequest);
+        }catch(Exception e){
+            return e.getLocalizedMessage();
+        }
+    }
 
-        //Servicerequest srv= servicerequestRepository.findOne(servicerequest);
+    @RequestMapping(value = "/manage/generateticket",method = RequestMethod.GET)
+    public  @ResponseBody String[] geneateTicket(@RequestBody Servicerequest srv){
         return null;
-
     }
 
     @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
@@ -378,9 +388,9 @@ public class ServicerequestController {
         }
     }
 
+
     String getAviationname(int aviationtype){
 
-        System.out.println("Aviation type number to name: "+aviationtype);
         if(aviationtype==1){
             return "Commercial aviation";
         }
