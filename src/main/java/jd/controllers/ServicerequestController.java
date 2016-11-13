@@ -1,7 +1,9 @@
 package jd.controllers;
 
 import jd.Util.AppUtils;
+import jd.persistence.dto.generateTicketDto;
 import jd.persistence.dto.rptServiceItemRequestDTO;
+import jd.persistence.dto.showServicesRequestDto;
 import jd.persistence.model.*;
 import jd.persistence.repository.*;
 import net.sf.jasperreports.engine.JRException;
@@ -28,6 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -67,6 +73,9 @@ public class ServicerequestController {
     PriceRepository price;
 
     @Autowired
+    LocationRepository locationRepository;
+
+    @Autowired
     PricepoundRepository pricepound;
 
     @Autowired
@@ -77,6 +86,7 @@ public class ServicerequestController {
 
     @Autowired
     ServiceticketRepository ticketrepo;
+
 
     Date fechaActual = new Date();
 
@@ -347,15 +357,66 @@ public class ServicerequestController {
     @RequestMapping(value = "/manage/prepareticket/{servicerequest}",method = RequestMethod.GET)
     public @ResponseBody Object prepareTicket(@PathVariable long servicerequest){
         try{
-            return servicerequestRepository.findOne(servicerequest);
+
+            Servicerequest sr=servicerequestRepository.findOne(servicerequest);
+            Principal Pp=principalRepository.findOne(sr.getPrincipal());
+            Location loc= locationRepository.findOne(sr.getLocation());
+
+            generateTicketDto prepare=new generateTicketDto();
+
+            prepare.setServicerequest(sr.getId());
+            prepare.setPrincipal(sr.getPrincipal());
+            prepare.setPrincipalname(Pp.getName().toUpperCase()+" "+Pp.getLastname().toUpperCase());
+            prepare.setLocation(sr.getLocation());
+            prepare.setLocationname(loc.getIATA()+" "+loc.getName().toUpperCase()+" - "+loc.getCity().toUpperCase());
+            prepare.setDlanding(sr.getDlanding());
+            prepare.setDcreate(sr.getDcreate());
+            prepare.setDupdate(sr.getDupdate());
+            prepare.setSerialcode(sr.getSerialcode());
+            prepare.setItems(sr.getItems());
+
+            return prepare;
+
         }catch(Exception e){
             return e.getLocalizedMessage();
         }
     }
 
     @RequestMapping(value = "/manage/generateticket",method = RequestMethod.GET)
-    public  @ResponseBody String[] geneateTicket(@RequestBody Servicerequest srv){
-        return null;
+    public  @ResponseBody Object geneateTicket(){
+        //@RequestBody Servicerequest srv
+
+        List<Object[]> results= servicerequestRepository.findPending();
+
+        Set<showServicesRequestDto> shw = new HashSet<showServicesRequestDto>(0);
+
+        results.stream().forEach((record) -> {
+            showServicesRequestDto dto = new showServicesRequestDto();
+
+            try {
+
+                dto.setServicerequest(((BigInteger) record[0]).longValue());
+                dto.setPrincipalname(((String) record[1]).toUpperCase());
+                dto.setLocationname(((String) record[2]).toUpperCase());
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date createDate = df.parse((String) record[3]);
+                Date landingDate = df.parse((String) record[4]);
+
+                dto.setDcreate(createDate);
+                dto.setDlanding(landingDate);
+                dto.setSerialcode((String) record[5]);
+
+                shw.add(dto);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        return shw;
     }
 
     @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
@@ -371,6 +432,11 @@ public class ServicerequestController {
     @RequestMapping(value = "/manage/open",method = RequestMethod.GET)
     public @ResponseBody List<Servicerequest> showServicesRequestsOpen(){
         try{
+
+            Set<Servicerequest>srs=new HashSet<>();
+            srs.addAll(servicerequestRepository.findByClosedFalse());
+
+
             return servicerequestRepository.findByClosedFalse();
         }catch (Exception e){
             System.out.println(e.getLocalizedMessage());
