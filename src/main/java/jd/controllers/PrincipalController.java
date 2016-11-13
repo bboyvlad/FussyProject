@@ -813,30 +813,34 @@ public class PrincipalController {
             /*Servicios precios por unidad*/
             List<Price> prices=price.findByLocationAndAviationAndValidtoGreaterThanEqual(flight.getLocation(), aircraft[0].getAviationtype(),flight.getLanding());
             prices.forEach((svcprice)->{
-                PrepareflightpriceDTO price=new PrepareflightpriceDTO();
-                price.setId(svcprice.getId());
-                price.setPricetype("U");
-                price.setPricename(svcprice.getName().toUpperCase());
-                price.setPricedesc(svcprice.getUnitdesc().toUpperCase());
-                price.setPrice(svcprice.getPrice1());
-                price.setCurrency(svcprice.getCurrency().toUpperCase());
+                if(!svcprice.isFeesenable()){
+                    PrepareflightpriceDTO price=new PrepareflightpriceDTO();
+                    price.setId(svcprice.getId());
+                    price.setPricetype("U");
+                    price.setPricename(svcprice.getName().toUpperCase());
+                    price.setPricedesc(svcprice.getUnitdesc().toUpperCase());
+                    price.setPrice(svcprice.getPrice1());
+                    price.setCurrency(svcprice.getCurrency().toUpperCase());
 
-                svcprices.add(price);
+                    svcprices.add(price);
+                }
             });
 
             /*Servicios precios por rango de fecha*/
             List<Pricedate> pricesdate=pricedate.findByLocationAndAviationAndFromdateLessThanEqualAndTodateGreaterThanEqual(flight.getLocation(),aircraft[0].getAviationtype(),flight.getLanding(),flight.getLanding());
 
             pricesdate.forEach((pricedate)->{
-                PrepareflightpriceDTO price=new PrepareflightpriceDTO();
-                price.setId(pricedate.getId());
-                price.setPricetype("D");
-                price.setPricename(pricedate.getName().toUpperCase());
-                price.setPricedesc(pricedate.getUnitdesc().toUpperCase());
-                price.setPrice(pricedate.getPrice1());
-                price.setCurrency(pricedate.getCurrency().toUpperCase());
+                if(!pricedate.isFeesenable()) {
+                    PrepareflightpriceDTO price = new PrepareflightpriceDTO();
+                    price.setId(pricedate.getId());
+                    price.setPricetype("D");
+                    price.setPricename(pricedate.getName().toUpperCase());
+                    price.setPricedesc(pricedate.getUnitdesc().toUpperCase());
+                    price.setPrice(pricedate.getPrice1());
+                    price.setCurrency(pricedate.getCurrency().toUpperCase());
 
-                svcprices.add(price);
+                    svcprices.add(price);
+                }
             });
 
             /*Servicios por rango de pounds*/
@@ -844,22 +848,25 @@ public class PrincipalController {
             List<Pricepound> pricespounds=pricepound.findByLocationAndAviationAndFrompoundLessThanEqualAndTopoundGreaterThanEqual(flight.getLocation(),aircraft[0].getAviationtype(),aircraft[0].getMtow(),aircraft[0].getMtow());
 
             pricespounds.forEach((pricepound)->{
-                PrepareflightpriceDTO price=new PrepareflightpriceDTO();
-                price.setId(pricepound.getId());
-                price.setPricetype("P");
-                price.setPricename(pricepound.getName().toUpperCase());
-                price.setPricedesc(pricepound.getUnitdesc().toUpperCase());
-                price.setPrice(pricepound.getPrice1());
-                price.setCurrency(pricepound.getCurrency().toUpperCase());
 
-                svcprices.add(price);
+                if(!pricepound.isFeesenable()) {
+                    PrepareflightpriceDTO price = new PrepareflightpriceDTO();
+                    price.setId(pricepound.getId());
+                    price.setPricetype("P");
+                    price.setPricename(pricepound.getName().toUpperCase());
+                    price.setPricedesc(pricepound.getUnitdesc().toUpperCase());
+                    price.setPrice(pricepound.getPrice1());
+                    price.setCurrency(pricepound.getCurrency().toUpperCase());
+
+                    svcprices.add(price);
+                }
             });
 
             return svcprices;
 
         }
 
-        return "faltan parametros para establecer un criterio";
+        return "faltan parametros para planificarte un vuelo";
 
     }
     //ShoppingCart - add shopcart
