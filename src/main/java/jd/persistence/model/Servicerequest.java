@@ -25,6 +25,8 @@ public class Servicerequest {
     private boolean ticket;
     private boolean closed;
     private String serialcode;
+    private String principalname;
+    private String locationname;
     private Set<Itemrequest> items;
 
     public Servicerequest() {
