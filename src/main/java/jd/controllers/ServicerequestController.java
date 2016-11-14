@@ -171,8 +171,8 @@ public class ServicerequestController {
                             Price Pc= price.findOne(citem.getProduct());
                             ir.setProduct(Pc.getId());//sourceID
                             ir.setQuantity(citem.getQuantity());
-                            ir.setUnitprice(Pc.getCost1());
-                            ir.setTotalprice(citem.getQuantity()*Pc.getCost1());
+                            ir.setUnitprice(Pc.getPrice1());
+                            ir.setTotalprice(citem.getQuantity()*Pc.getPrice1());
                             ir.setChecked(true);
                             ir.setPricename(Pc.getName());
                             ir.setPricedesc(citem.getPricedesc());
@@ -188,8 +188,8 @@ public class ServicerequestController {
                             Pricedate Pd= pricedate.findOne(citem.getProduct());
                             ir.setProduct(Pd.getId());//sourceID
                             ir.setQuantity(citem.getQuantity());
-                            ir.setUnitprice(Pd.getCost1());
-                            ir.setTotalprice(citem.getQuantity()*Pd.getCost1());
+                            ir.setUnitprice(Pd.getPrice1());
+                            ir.setTotalprice(citem.getQuantity()*Pd.getPrice1());
                             ir.setChecked(true);
                             ir.setPricename(Pd.getName());
                             ir.setPricedesc(citem.getPricedesc());
@@ -205,8 +205,8 @@ public class ServicerequestController {
                             Pricepound Po= pricepound.findOne(citem.getProduct());
                             ir.setProduct(Po.getId());//sourceID
                             ir.setQuantity(citem.getQuantity());
-                            ir.setUnitprice(Po.getCost1());
-                            ir.setTotalprice(citem.getQuantity()*Po.getCost1());
+                            ir.setUnitprice(Po.getPrice1());
+                            ir.setTotalprice(citem.getQuantity()*Po.getPrice1());
                             ir.setChecked(true);
                             ir.setPricename(Po.getName());
                             ir.setPricedesc(citem.getPricedesc());
@@ -251,7 +251,7 @@ public class ServicerequestController {
 
 
 
-            if(serviceamount[0]<= paymethod[0].getPaybalance()){ //verifico si tiene saldo disponible
+            if(serviceamount[0]<= paymethod[0].getPayavailable()){ //verifico si tiene saldo disponible
 
                 //String[] classpathEntries = classpath.split(File.pathSeparator);
 
@@ -328,19 +328,6 @@ public class ServicerequestController {
                 defered.setPending(true);
 
                 deferedpay.save(defered);
-
-                /*Cobro de la transaccion a la JDcard*/
-                /*
-                    Tranpay jd_etpm = new Tranpay();
-                    jd_etpm.setTrantype("JDEBIT");
-                    jd_etpm.setTranamount(-(serviceamount[0]));
-                    jd_etpm.setTrandate(fechaActual);
-                    jd_etpm.setTranupdate(fechaActual);
-                    jd_etpm.setTrantoken("jd_" + utils.getCadenaAlfaNumAleatoria(9));
-                    jd_etpm.setTranstatus("ON HOLD");
-                    paymethod[0].getTransactionspayments().add(jd_etpm);
-                    paymethodRepository.save(paymethod[0]);
-                 */
 
                 message.put("message","Service request generado");
 
@@ -458,10 +445,26 @@ public class ServicerequestController {
         }
     }
 
-    @RequestMapping(value = "/manage/generateticket",method = RequestMethod.GET)
+    @RequestMapping(value = "/manage/generateticket",method = RequestMethod.POST)
     public  @ResponseBody String[] geneateTicket(@RequestBody newTicketDto rdto){
 
         Servicerequest sr=servicerequestRepository.findOne(rdto.getServicerequest());
+        Principal Pp = principalRepository.findOne(sr.getPrincipal());
+
+        /*Recuerda verificar que ya haya sido cerrado el sr.*/
+
+        //Verifico si el paymethod es del usuario
+        final boolean[] owmpay = {false};
+        final Paymethod[] paymethod = new Paymethod[1];
+        Pp.getPayments().forEach((pay)->{
+            if(pay.getPayid()==sr.getPaymethod() && pay.getPaytype().equals("JDCARD")){
+                owmpay[0] =true;
+                paymethod[0] =pay; //Metodo de pago que ha seleccionado el usuario
+            }
+        });
+        if (!owmpay[0]){
+            return new String[]{"messaje","algo pasa, esta tarjeta no esta relacionada con este usuario"};
+        }
 
         Serviceticket st=new Serviceticket();
         Set<Itemticket> ticketitems = new HashSet<Itemticket>(0);
@@ -516,12 +519,53 @@ public class ServicerequestController {
 
                     break;
             }
-
             ticketitems.add(it);
             serviceamount[0]=serviceamount[0]+it.getTotalprice();
         });
 
-        return null;
+        /*Preparo y guardo el service ticket*/
+        Serviceticket ticket=new Serviceticket();
+
+        ticket.setAmount(serviceamount[0]);
+        ticket.setPaymethod(sr.getPaymethod());
+        ticket.setAviationtype(sr.getAviationtype());
+        ticket.setLocation(sr.getLocation());
+        ticket.setDcreate(sr.getDcreate());
+        ticket.setDupdate(new Date());
+        ticket.setDlanding(sr.getDlanding());
+        ticket.setPrincipal(sr.getPrincipal());
+        ticket.setSerialcode(sr.getSerialcode());
+        ticket.setClosed(true);
+
+        ticket.setItems(ticketitems);
+        ticketrepo.saveAndFlush(ticket);
+
+        /*Desbloqueo el pago del service request*/
+        Deferedpay defered=deferedpay.findByServicerequestIs(sr.getId());
+
+        deferedpay.delete(defered);
+
+        /*Realizo el Cobro del Monto Correspondiente a la JDcard*/
+
+         Tranpay jd_etpm = new Tranpay();
+         jd_etpm.setTrantype("JDEBIT");
+         jd_etpm.setTranamount(-(serviceamount[0]));
+         jd_etpm.setTrandate(fechaActual);
+         jd_etpm.setTranupdate(fechaActual);
+         jd_etpm.setTrantoken("JD_" + utils.getCadenaAlfaNumAleatoria(9));
+         jd_etpm.setTranstatus("SUCCEEDED");
+         paymethod[0].getTransactionspayments().add(jd_etpm);  //Guardo la transacción justo aqui.
+        //paymethodRepository.save(paymethod[0]); /*Creo que esto no es necesario*/
+
+        /*Actualizo el Service request*/
+        sr.setClosed(true);
+        sr.setDupdate(new Date());
+        servicerequestRepository.save(sr);
+
+        /*Genero el PDF del ServiceTicket*/
+
+
+        return new String[]{"message","success"};
 
     }
 
@@ -594,7 +638,6 @@ public class ServicerequestController {
             return null;
         }
     }
-
 
     String getAviationname(int aviationtype){
 
