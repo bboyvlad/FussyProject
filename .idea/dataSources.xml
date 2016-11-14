@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="2761442909">
-    <data-source source="LOCAL" name="SQL Server (jTds) - JD_Prices@192.168.24.10" uuid="057762c4-c03a-476a-b5e5-578e3c816aec">
+  <component name="DataSourceManagerImpl" format="xml" hash="2087163448">
+    <data-source source="LOCAL" name="JD_Prices" uuid="057762c4-c03a-476a-b5e5-578e3c816aec">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:jtds:sqlserver://192.168.24.10:1433/JD_Prices</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="SQL Server VladPc" uuid="5dbd940e-5db6-4a9b-ae38-38f4e4476839">
+    <data-source source="LOCAL" name="JD_PricesTest" uuid="3dde645e-10d1-4f9d-a713-317eeec10683">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:jtds:sqlserver://192.168.1.109:1433/JD_PricesTest</jdbc-url>
+      <jdbc-url>jdbc:jtds:sqlserver://192.168.1.115:1433/JD_PricesTest</jdbc-url>
     </data-source>
   </component>
 </project>

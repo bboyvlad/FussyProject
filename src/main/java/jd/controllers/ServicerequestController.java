@@ -1,7 +1,10 @@
 package jd.controllers;
 
 import jd.Util.AppUtils;
+import jd.persistence.dto.generateTicketDto;
+import jd.persistence.dto.newTicketDto;
 import jd.persistence.dto.rptServiceItemRequestDTO;
+import jd.persistence.dto.showServicesRequestDto;
 import jd.persistence.model.*;
 import jd.persistence.repository.*;
 import net.sf.jasperreports.engine.JRException;
@@ -28,6 +31,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -67,6 +74,9 @@ public class ServicerequestController {
     PriceRepository price;
 
     @Autowired
+    LocationRepository locationRepository;
+
+    @Autowired
     PricepoundRepository pricepound;
 
     @Autowired
@@ -77,6 +87,7 @@ public class ServicerequestController {
 
     @Autowired
     ServiceticketRepository ticketrepo;
+
 
     Date fechaActual = new Date();
 
@@ -138,8 +149,6 @@ public class ServicerequestController {
                     message.put("messaje","algo pasa, esta aeronave al parecer no le pertenece a este usuario");
                     return message;
                 }
-
-
 
                 Set<Itemcart> cartitems = new HashSet<Itemcart>(0); //Items del carro de compra (servicios)
                 Set<Itemrequest> itemsrequest = new HashSet<Itemrequest>(0); //Items del service request, su fuente es el caritems
@@ -224,6 +233,7 @@ public class ServicerequestController {
             servicerequest.setAmount(serviceamount[0]);
             servicerequest.setLocation(shopcart[0].getLocation());
             servicerequest.setAviationtype(shopcart[0].getAviationtype());
+            servicerequest.setMyaircraft(aircraftGo[0].getId());
 
             servicerequest.setDcreate(fechaActual);
             servicerequest.setDupdate(fechaActual);
@@ -347,15 +357,172 @@ public class ServicerequestController {
     @RequestMapping(value = "/manage/prepareticket/{servicerequest}",method = RequestMethod.GET)
     public @ResponseBody Object prepareTicket(@PathVariable long servicerequest){
         try{
-            return servicerequestRepository.findOne(servicerequest);
+
+            Servicerequest sr=servicerequestRepository.findOne(servicerequest);
+            Principal Pp=principalRepository.findOne(sr.getPrincipal());
+
+            final Myaircraft[] PpAir = {new Myaircraft()};
+
+            Pp.getMyaircrafts().forEach((aircft)->{
+                if(aircft.getId()==sr.getMyaircraft()){
+                    PpAir[0] =aircft;
+                }
+            });
+
+            Location loc= locationRepository.findOne(sr.getLocation());
+
+            generateTicketDto prepare=new generateTicketDto();
+
+            prepare.setServicerequest(sr.getId());
+            prepare.setPrincipal(sr.getPrincipal());
+            prepare.setPrincipalname(Pp.getName().toUpperCase()+" "+Pp.getLastname().toUpperCase());
+            prepare.setLocation(sr.getLocation());
+            prepare.setLocationname(loc.getIATA()+" "+loc.getName().toUpperCase()+" - "+loc.getCity().toUpperCase());
+            prepare.setDlanding(sr.getDlanding());
+            prepare.setDcreate(sr.getDcreate());
+            prepare.setDupdate(sr.getDupdate());
+            prepare.setSerialcode(sr.getSerialcode());
+
+
+            /*Feeds and Taxes from fly*/
+            Set<Itemrequest> feeds= new HashSet<>();
+             /*por unidad*/
+            List<Price> prices=price.findByLocationAndAviationAndValidtoGreaterThanEqual(sr.getLocation(), sr.getAviationtype(),sr.getDlanding());
+            prices.forEach((svcprice)->{
+                if(svcprice.isFeesenable()){
+
+                    Itemrequest feed= new Itemrequest();
+
+                    feed.setProduct(svcprice.getId());
+                    feed.setPricetype("U");
+                    feed.setPricename(svcprice.getName().toUpperCase());
+                    feed.setPricedesc(svcprice.getUnitdesc().toUpperCase());
+                    feed.setUnitprice(svcprice.getPrice1());
+                    feed.setQuantity(0);
+                    feed.setCatalog(5);
+
+                    feeds.add(feed);
+                }
+            });
+
+            /*por rango de fecha*/
+            List<Pricedate> pricesdate=pricedate.findByLocationAndAviationAndFromdateLessThanEqualAndTodateGreaterThanEqual(sr.getLocation(),sr.getAviationtype(),sr.getDlanding(),sr.getDlanding());
+
+            pricesdate.forEach((pricedate)->{
+                if(pricedate.isFeesenable()) {
+                    Itemrequest feed= new Itemrequest();
+
+                    feed.setProduct(pricedate.getId());
+                    feed.setPricetype("D");
+                    feed.setPricename(pricedate.getName().toUpperCase());
+                    feed.setPricedesc(pricedate.getUnitdesc().toUpperCase());
+                    feed.setUnitprice(pricedate.getPrice1());
+                    feed.setQuantity(0);
+                    feed.setCatalog(5);
+
+                    feeds.add(feed);
+                }
+            });
+
+            /*rango de pounds*/
+
+            List<Pricepound> pricespounds=pricepound.findByLocationAndAviationAndFrompoundLessThanEqualAndTopoundGreaterThanEqual(sr.getLocation(),sr.getAviationtype(),PpAir[0].getMtow(),PpAir[0].getMtow());
+
+            pricespounds.forEach((pricepound)->{
+
+                if(pricepound.isFeesenable()) {
+                    Itemrequest feed= new Itemrequest();
+
+                    feed.setProduct(pricepound.getId());
+                    feed.setPricetype("P");
+                    feed.setPricename(pricepound.getName().toUpperCase());
+                    feed.setPricedesc(pricepound.getUnitdesc().toUpperCase());
+                    feed.setUnitprice(pricepound.getPrice1());
+                    feed.setQuantity(0);
+                    feed.setCatalog(5);
+
+                    feeds.add(feed);
+                }
+            });
+
+            Set<Itemrequest> prepareItems=new HashSet<>();
+            prepareItems.addAll(sr.getItems());
+            prepareItems.addAll(feeds);
+
+            prepare.setItems(prepareItems);
+
+            return prepare;
+
         }catch(Exception e){
             return e.getLocalizedMessage();
         }
     }
 
     @RequestMapping(value = "/manage/generateticket",method = RequestMethod.GET)
-    public  @ResponseBody String[] geneateTicket(@RequestBody Servicerequest srv){
+    public  @ResponseBody String[] geneateTicket(@RequestBody newTicketDto rdto){
+
+        Servicerequest sr=servicerequestRepository.findOne(rdto.getServicerequest());
+
+        Serviceticket st=new Serviceticket();
+        Set<Itemticket> ticketitems = new HashSet<Itemticket>(0);
+        final double[] serviceamount={0};
+
+        rdto.getItems().forEach((titem)->{
+            Itemticket it=new Itemticket();
+
+            switch (titem.getPricetype()){
+                case "U":
+                    Price Pc= price.findOne(titem.getProduct());
+
+                    it.setProduct(Pc.getId()); //sourceID
+                    it.setCatalog(titem.getCatalog());
+                    it.setPricename(Pc.getName());
+                    it.setPricedesc(Pc.getUnitdesc());
+                    it.setPricetype("U");
+                    it.setProvider(Pc.getProvider());
+                    it.setQuantity(titem.getQuantity());
+                    it.setUnitprice(Pc.getPrice1());
+                    it.setTotalprice(it.getQuantity()*it.getUnitprice());
+
+                    break;
+
+                case "D":
+                    Pricedate Pd= pricedate.findOne(titem.getProduct());
+
+                    it.setProduct(Pd.getId()); //sourceID
+                    it.setCatalog(titem.getCatalog());
+                    it.setPricename(Pd.getName());
+                    it.setPricedesc(Pd.getUnitdesc());
+                    it.setPricetype("D");
+                    it.setProvider(Pd.getProvider());
+                    it.setQuantity(titem.getQuantity());
+                    it.setUnitprice(Pd.getPrice1());
+                    it.setTotalprice(it.getQuantity()*it.getUnitprice());
+
+                    break;
+
+                case "P":
+                    Pricepound Po= pricepound.findOne(titem.getProduct());
+
+                    it.setProduct(Po.getId()); //sourceID
+                    it.setCatalog(titem.getCatalog());
+                    it.setPricename(Po.getName());
+                    it.setPricedesc(Po.getUnitdesc());
+                    it.setPricetype("P");
+                    it.setProvider(Po.getProvider());
+                    it.setQuantity(titem.getQuantity());
+                    it.setUnitprice(Po.getPrice1());
+                    it.setTotalprice(it.getQuantity()*it.getUnitprice());
+
+                    break;
+            }
+
+            ticketitems.add(it);
+            serviceamount[0]=serviceamount[0]+it.getTotalprice();
+        });
+
         return null;
+
     }
 
     @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
@@ -368,9 +535,49 @@ public class ServicerequestController {
         }
     }
 
+    @RequestMapping(value = "/manage/pending",method = RequestMethod.GET)
+    public @ResponseBody Object showServicesRequestsPending(){
+        List<Object[]> results= servicerequestRepository.findPending();
+
+        Set<showServicesRequestDto> shw = new HashSet<showServicesRequestDto>(0);
+
+        results.stream().forEach((record) -> {
+            showServicesRequestDto dto = new showServicesRequestDto();
+
+            try {
+
+                dto.setServicerequest(((BigInteger) record[0]).longValue());
+                dto.setPrincipalname(((String) record[1]).toUpperCase());
+                dto.setLocationname(((String) record[2]).toUpperCase());
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date createDate = df.parse((String) record[3]);
+                Date landingDate = df.parse((String) record[4]);
+
+                dto.setDcreate(createDate);
+                dto.setDlanding(landingDate);
+                dto.setSerialcode((String) record[5]);
+
+                shw.add(dto);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        return shw;
+    }
+
     @RequestMapping(value = "/manage/open",method = RequestMethod.GET)
     public @ResponseBody List<Servicerequest> showServicesRequestsOpen(){
         try{
+
+            Set<Servicerequest>srs=new HashSet<>();
+            srs.addAll(servicerequestRepository.findByClosedFalse());
+
+
             return servicerequestRepository.findByClosedFalse();
         }catch (Exception e){
             System.out.println(e.getLocalizedMessage());

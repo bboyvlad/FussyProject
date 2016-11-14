@@ -14,6 +14,7 @@ public class Servicerequest {
     private long principal;
     private long location;
     private long aviationtype;
+    private long myaircraft;
     private long paymethod;
     private double guarantee;
     private double amount;
@@ -25,6 +26,8 @@ public class Servicerequest {
     private boolean ticket;
     private boolean closed;
     private String serialcode;
+    private String principalname;
+    private String locationname;
     private Set<Itemrequest> items;
 
     public Servicerequest() {
@@ -48,6 +51,15 @@ public class Servicerequest {
 
     public void setPrincipal(long principal) {
         this.principal = principal;
+    }
+
+    @Column(name = "MYAIRCRAFT_ID")
+    public long getMyaircraft() {
+        return myaircraft;
+    }
+
+    public void setMyaircraft(long myaircraft) {
+        this.myaircraft = myaircraft;
     }
 
     public long getLocation() {
