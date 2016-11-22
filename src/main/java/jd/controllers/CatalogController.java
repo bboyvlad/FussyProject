@@ -80,9 +80,9 @@ public class CatalogController {
         Hashtable<String, String> message = new Hashtable<String, String>();
         try{
             svcgroupRepository.delete(id);
-            return message.put("messaje","Registro eliminado con exito");
+            return message.put("message","Registro eliminado con exito");
         }catch (Exception e){
-            return message.put("messaje","Lo sentimos, no se pudo eliminar porque "+e.getCause());
+            return message.put("message","Lo sentimos, no se pudo eliminar porque "+e.getCause());
         }
     }
 

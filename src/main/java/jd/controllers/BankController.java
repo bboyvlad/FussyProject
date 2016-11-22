@@ -61,7 +61,6 @@ public class BankController {
             b.setDeleted(false);
 
             return bank.save(b);
-
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -175,6 +174,7 @@ public class BankController {
         try{
 
             Receivedpay pay = received.findOne(dto.getPayment()); //Me traigo el pago reportado
+
             pay.setApproved(dto.isApproved());
 
             if(dto.isApproved()){
@@ -185,7 +185,7 @@ public class BankController {
                 //preparo la transacción de abono al metodo de pago que apuntó el usuario
                 Tranpay tranpay=new Tranpay();
                 tranpay.setTrantype("BANK");
-                tranpay.setTranamount(pay.getAmount());
+                tranpay.setTranamount(dto.getFamount());
                 tranpay.setTrandate(pay.getDcreate());
                 tranpay.setTranupdate(new Date());
                 tranpay.setTrantoken(pay.getRelatedref());
@@ -218,6 +218,11 @@ public class BankController {
 
                 //Guarda la transaccion en el paymethod
                 paymethodRepository.save(paymethod);
+
+                //Actualizo el registro de los pagos
+                pay.setDupdate(new Date());
+                pay.setFamount(dto.getFamount());
+                received.save(pay);
 
             }
 

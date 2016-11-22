@@ -192,7 +192,17 @@
 			<version>2.2.11</version>
 		</dependency>
 
-		<!-- Velocity email template -->
+		<!-- com.twocheckout  -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.5</version>
+		</dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.3</version>
+        </dependency>
 
 	</dependencies>
 

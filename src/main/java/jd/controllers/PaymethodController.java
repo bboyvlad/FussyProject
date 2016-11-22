@@ -107,7 +107,7 @@ public class PaymethodController {
                 } catch (APIConnectionException e) {
                     e.printStackTrace();
                 } catch (CardException e) {
-                    String[] messaje={"messaje", e.getMessage()};
+                    String[] messaje={"message", e.getMessage()};
                     return messaje;
                 } catch (APIException e) {
                     e.printStackTrace();
@@ -185,6 +185,18 @@ public class PaymethodController {
     public @ResponseBody Object showById(@PathVariable Long payid){
         try {
             return paymethodRepository.findOne(payid);
+        }catch (Exception e){
+            return e.getLocalizedMessage();
+        }
+    }
+
+    @RequestMapping(value = "/tcocredentials", method = RequestMethod.GET)
+    public @ResponseBody Object getTcoCredentials(){
+        try {
+            HashMap<String,String> keys= new HashMap<String,String>();
+            keys.put("sellerid",utils.getTcoSellerId());
+            keys.put("publishablekey",utils.getTcoPublishableKey());
+            return keys;
         }catch (Exception e){
             return e.getLocalizedMessage();
         }

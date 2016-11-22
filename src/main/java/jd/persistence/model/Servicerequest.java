@@ -22,12 +22,12 @@ public class Servicerequest {
     private Date dupdate;
     private Date dexpired;
     private Date dlanding;
+    private Date rdate;
     private boolean released;
     private boolean ticket;
     private boolean closed;
     private String serialcode;
-    private String principalname;
-    private String locationname;
+
     private Set<Itemrequest> items;
 
     public Servicerequest() {
@@ -156,6 +156,14 @@ public class Servicerequest {
 
     public void setTicket(boolean ticket) {
         this.ticket = ticket;
+    }
+
+    public Date getRdate() {
+        return rdate;
+    }
+
+    public void setRdate(Date rdate) {
+        this.rdate = rdate;
     }
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

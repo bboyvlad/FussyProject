@@ -9,6 +9,7 @@ import java.util.Set;
  */
 public class newTicketDto {
     private long servicerequest;
+    private String ticket;
     private Set<Itemrequest> items;
 
     public newTicketDto() {
@@ -28,5 +29,13 @@ public class newTicketDto {
 
     public void setItems(Set<Itemrequest> items) {
         this.items = items;
+    }
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
     }
 }

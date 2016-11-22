@@ -23,6 +23,7 @@ public class Tranpay {
     private Date trandate;
     private Date tranupdate;
     private String trantoken;
+    private String trandescription;
 
 
     public Tranpay() {
@@ -96,5 +97,13 @@ public class Tranpay {
 
     public void setTrantoken(String trantoken) {
         this.trantoken = trantoken;
+    }
+
+    public String getTrandescription() {
+        return trandescription;
+    }
+
+    public void setTrandescription(String trandescription) {
+        this.trandescription = trandescription;
     }
 }

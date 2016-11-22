@@ -74,7 +74,7 @@ public class GiftcardController {
 
             //Verifico si la tarjeta le pertenece al principal
             if (!principal.getPayments().contains(paymethod)){
-                message.put("messaje","algo pasa, esta tarjeta no es de este usuario");
+                message.put("message","algo pasa, esta tarjeta no es de este usuario");
                 return message;
             }
 
@@ -108,11 +108,11 @@ public class GiftcardController {
                             paymethodRepository.save(paymethod);
 
                             success=true;
-                            message.put("messaje","Transaccion Exitosa");
+                            message.put("message","Transaccion Exitosa");
                         }
 
                     }else{
-                        message.put("messaje","Tarjeta rechazada");
+                        message.put("message","Tarjeta rechazada");
                     }
                 break;
 
@@ -132,10 +132,10 @@ public class GiftcardController {
                         paymethodRepository.save(paymethod);
 
                         success=true;
-                        message.put("messaje","Transaccion Exitosa");
+                        message.put("message","Transaccion Exitosa");
 
                     }else{
-                        message.put("messaje","Saldo insuficiente");
+                        message.put("message","Saldo insuficiente");
                     }
 
                 break;

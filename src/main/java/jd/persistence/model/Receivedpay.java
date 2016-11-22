@@ -22,6 +22,8 @@ public class Receivedpay {
     private String insname;
 
     private double amount;
+    private double famount;
+
     private Date dcreate;
     private Date dupdate;
     private boolean approved;
@@ -128,5 +130,13 @@ public class Receivedpay {
 
     public void setInsname(String insname) {
         this.insname = insname;
+    }
+
+    public double getFamount() {
+        return famount;
+    }
+
+    public void setFamount(double famount) {
+        this.famount = famount;
     }
 }

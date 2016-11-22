@@ -8,6 +8,8 @@ public class rptServiceItemRequestDTO {
     private String description;
     private Double amount;
     private String pricedesc;
+    private int quantity;
+    private String measure;
 
     public rptServiceItemRequestDTO() {
     }
@@ -34,5 +36,21 @@ public class rptServiceItemRequestDTO {
 
     public void setPricedesc(String pricedesc) {
         this.pricedesc = pricedesc;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
     }
 }
