@@ -1,5 +1,7 @@
 package jd.persistence.dto;
 
+import com.auth0.jwt.internal.com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 /**
@@ -8,10 +10,12 @@ import java.util.Date;
 public class showServicesRequestDto {
 
     private long servicerequest;
+    private long principal;
     private String principalname;
     private String locationname;
     private Date dcreate;
     private Date dlanding;
+    private Date rdate;
     private String serialcode;
 
     public showServicesRequestDto() {
@@ -72,5 +76,22 @@ public class showServicesRequestDto {
 
     public void setSerialcode(String serialcode) {
         this.serialcode = serialcode;
+    }
+
+    @JsonIgnore
+    public long getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(long principal) {
+        this.principal = principal;
+    }
+
+    public Date getRdate() {
+        return rdate;
+    }
+
+    public void setRdate(Date rdate) {
+        this.rdate = rdate;
     }
 }

@@ -17,11 +17,13 @@ public class Shopcart {
     private Long id;
     private String name;
     private long location;
+    private long captain;
     private double amount;
     private long aviationtype;
     private Date dcreate;
     private Date dupdate;
     private Date dlanding;
+    private Date rdate; //Return date
     private long myaircraft;
     private Set<Itemcart> items = new HashSet<Itemcart>(0);
 
@@ -106,6 +108,23 @@ public class Shopcart {
 
     public void setDlanding(Date dlanding) {
         this.dlanding = dlanding;
+    }
+
+    @Column(name = "MYCAPTAIN_ID")
+    public long getCaptain() {
+        return captain;
+    }
+
+    public void setCaptain(long captain) {
+        this.captain = captain;
+    }
+
+    public Date getRdate() {
+        return rdate;
+    }
+
+    public void setRdate(Date rdate) {
+        this.rdate = rdate;
     }
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -25,6 +25,10 @@ public class AppUtils {
 
     private static final String secret = "ZDQ3ZmRmZTM1MjIxODk0MWUxNDRlMGQ4YmMzZTBlZjI=";
 
+    private static final String tcoSellerId="901332927"; //Sandbox
+    private static final String tcoPublishableKey="2E342104-E120-4B1F-A943-A6569479891B"; //Sandbox
+    private static final String tcoPrivateKey="38353F1C-0A4B-47DE-8751-2E3B9EB54388"; //Sandbox
+
     private  Date fechaActual = new Date();
 
     public int servicerequest_guarantee=30; //percent
@@ -176,5 +180,15 @@ public class AppUtils {
         return fechaActual;
     }
 
+    public  String getTcoSellerId() {
+        return tcoSellerId;
+    }
 
+    public  String getTcoPublishableKey() {
+        return tcoPublishableKey;
+    }
+
+    public  String getTcoPrivateKey() {
+        return tcoPrivateKey;
+    }
 }
