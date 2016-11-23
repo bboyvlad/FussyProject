@@ -1,6 +1,7 @@
 package jd.persistence.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,10 @@ public class Product {
     private String pricetype;
     private Date dcreate;
     private boolean active;
+
+    ArrayList<Price> pricesUnit= new ArrayList<>();
+    ArrayList<Pricedate> pricesDate= new ArrayList<>();
+    ArrayList<Pricepound> pricesPound= new ArrayList<>();
 
 
     public Product() {  }
@@ -72,5 +77,30 @@ public class Product {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Transient
+    public ArrayList<Price> getPricesUnit() {
+        return pricesUnit;
+    }
+
+    public void setPricesUnit(ArrayList<Price> pricesUnit) {
+        this.pricesUnit = pricesUnit;
+    }
+    @Transient
+    public ArrayList<Pricedate> getPricesDate() {
+        return pricesDate;
+    }
+
+    public void setPricesDate(ArrayList<Pricedate> pricesDate) {
+        this.pricesDate = pricesDate;
+    }
+    @Transient
+    public ArrayList<Pricepound> getPricesPound() {
+        return pricesPound;
+    }
+
+    public void setPricesPound(ArrayList<Pricepound> pricesPound) {
+        this.pricesPound = pricesPound;
     }
 }
