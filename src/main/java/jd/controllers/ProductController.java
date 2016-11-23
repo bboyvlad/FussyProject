@@ -53,16 +53,6 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    //show all products
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Product> showAllProducts(){
-        try{
-            return productRepository.findAll();
-        }catch(Exception e){
-            return null;
-        }
-    }
-
     //show all products by group id
     @RequestMapping(value = "/group/{group_id}", method = RequestMethod.GET)
     public Set<Product> showProductsGroup(@PathVariable Long group_id){
@@ -70,18 +60,6 @@ public class ProductController {
             return svcgroupRepository.findOne(group_id).getProducts();
         }catch(Exception e){
             return null;
-        }
-    }
-
-    //show products by id
-    @RequestMapping(value = "/{product_id}", method = RequestMethod.GET)
-    public Object showProduct(@PathVariable Long product_id){
-        Hashtable<String, String> message = new Hashtable<String, String>();
-        try{
-            return productRepository.findOne(product_id);
-        }catch(Exception e){
-            message.put("message","Producto no encontrado");
-            return message;
         }
     }
 
@@ -98,7 +76,9 @@ public class ProductController {
         }
     }
 
+    /*CRUD de productos*/
 
+    //Create a product with prices
     @RequestMapping(method = RequestMethod.POST)
     public String[] addProduct(@RequestBody newProductDto nproduct){
 
@@ -262,6 +242,58 @@ public class ProductController {
         }
 
     }
+
+    //retrieve all products
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Product> showProducts(){
+        try{
+            return productRepository.findAll();
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    //Retieve a product
+    @RequestMapping(value = "/{product}",method = RequestMethod.GET)
+    public Product showProduct(@PathVariable long product){
+
+        ArrayList<Price> pricesUnit= new ArrayList<>();
+        ArrayList<Pricedate> pricesDate= new ArrayList<>();
+        ArrayList<Pricepound> pricesPound= new ArrayList<>();
+
+        Product pro=productRepository.findOne(product);
+
+        Product shProduct = new Product();
+
+        shProduct.setId(pro.getId());
+        shProduct.setName(pro.getName());
+        shProduct.setDetaildesc(pro.getDetaildesc());
+        shProduct.setDcreate(pro.getDcreate());
+        shProduct.setPricetype(pro.getPricetype());
+
+        switch (pro.getPricetype()){
+
+            case "U":
+                pricesUnit=priceRepository.findByProduct(pro.getId());
+                shProduct.setPricesUnit(pricesUnit);
+                break;
+
+            case "P":
+                pricesPound=pricepound.findByProduct(pro.getId());
+                shProduct.setPricesPound(pricesPound);
+                break;
+
+            case "D":
+                pricesDate=pricedate.findByProduct(pro.getId());
+                shProduct.setPricesDate(pricesDate);
+                break;
+        }
+
+        return shProduct;
+
+    }
+
+    /*End CRUD*/
 
     //update a product
     @RequestMapping(method = RequestMethod.PUT)
