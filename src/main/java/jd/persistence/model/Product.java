@@ -15,6 +15,7 @@ public class Product {
     private Long id;
     private String name;
     private String detaildesc;
+    private String pricetype;
     private Date dcreate;
     private boolean active;
 
@@ -55,6 +56,14 @@ public class Product {
 
     public void setDcreate(Date dcreate) {
         this.dcreate = dcreate;
+    }
+
+    public String getPricetype() {
+        return pricetype;
+    }
+
+    public void setPricetype(String pricetype) {
+        this.pricetype = pricetype;
     }
 
     public boolean isActive() {

@@ -692,7 +692,8 @@ public class ServicerequestController {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
                 Date createDate = df.parse((String) record[3]);
-                Date landingDate = df.parse((String) record[4]);
+                Date landingDate = new Date(((Timestamp)record[4]).getTime());
+
 
                 dto.setDcreate(createDate);
                 dto.setDlanding(landingDate);
@@ -756,7 +757,6 @@ public class ServicerequestController {
                 dto.setRdate(returnDate);
                 dto.setSerialcode((String) record[7]);
                 shw.add(dto);
-
             } catch (ParseException e) {
                 e.printStackTrace();
             }
