@@ -21,6 +21,7 @@ public class Location {
     private int timezone;
     private char dst;
     private String region;
+    private boolean available;
 
     public Location() {
     }
@@ -137,5 +138,13 @@ public class Location {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }

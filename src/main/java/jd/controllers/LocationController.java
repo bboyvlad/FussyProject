@@ -41,7 +41,7 @@ public class LocationController {
     @ApiMethod(description = "Recupera una lista de todos las localidades disponibles")
     public @ResponseBody List<Location> showLocations(){
         try{
-            return locationRepository.findAll();
+            return locationRepository.findByAvailable(true);
         }catch(Exception e){
             System.out.println(e.getMessage());
             return null;
