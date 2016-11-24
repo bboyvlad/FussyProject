@@ -96,6 +96,7 @@ public class ProductController {
             pro.setPricetype(nproduct.getPricetype());
             productRepository.saveAndFlush(pro);
 
+            /*Este codigo esta optimizado en el update., pero aqui ya esta asi XD*/
             switch (nproduct.getPricetype()){
 
                 case "U":
@@ -293,19 +294,52 @@ public class ProductController {
 
     }
 
-    /*End CRUD*/
+    @RequestMapping(method = RequestMethod.PATCH)
+    public String[] updateProduct(@RequestBody Product pro){
 
-    //update a product
-    @RequestMapping(method = RequestMethod.PUT)
-    public Object updateProduct(@RequestBody Product product){
-        Hashtable<String, String> message = new Hashtable<String, String>();
-        try {
-            return productRepository.save(product);
+        ArrayList<Price> pricesUnit= new ArrayList<>();
+        ArrayList<Pricedate> pricesDate= new ArrayList<>();
+        ArrayList<Pricepound> pricesPound= new ArrayList<>();
+
+        Product p= new Product();
+
+        p.setId(pro.getId());
+        p.setName(pro.getName());
+        p.setDetaildesc(pro.getDetaildesc());
+        p.setPricetype(pro.getPricetype());
+        p.setDcreate(pro.getDcreate());
+        p.setDupdate(new Date());
+        p.setActive(pro.isActive());
+
+        try{
+            switch (p.getPricetype()){
+
+                case "U":
+                    pricesUnit=pro.getPricesUnit();
+                    priceRepository.save(pricesUnit);
+                    break;
+                case "P":
+                    pricesPound=pro.getPricesPound();
+                    pricepound.save(pricesPound);
+                    break;
+                case "D":
+                    pricesDate=pro.getPricesDate();
+                    pricedate.save(pricesDate);
+                    break;
+            }
+            productRepository.saveAndFlush(p);
+            return new String[]{"message","success"};
         }catch (Exception e){
-            message.put("message","Producto no pudo ser actualizado err: "+e.getCause());
-            return null;
+            return new String[]{"message","failure"};
         }
     }
+
+    @RequestMapping(value = "/{product}",method = RequestMethod.DELETE)
+    public Object softDeleteProduct(@PathVariable long product){
+        return priceRepository.expireProduct(product);
+    }
+
+    /*End CRUD*/
 
     //retrieve a price from product
     @RequestMapping(value = "/prices/{location}/{aviationtype}/{myaircraft}/{landingdate}", method = RequestMethod.GET)

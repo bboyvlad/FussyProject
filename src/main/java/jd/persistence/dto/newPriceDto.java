@@ -9,7 +9,7 @@ public class newPriceDto {
     private long location;
     private long provider;
     private long aviation;
-    private String name;
+    private String pricename;
     private boolean prepaid;
     private Date validto;
     private double frompound;
@@ -65,12 +65,12 @@ public class newPriceDto {
         this.aviation = aviation;
     }
 
-    public String getName() {
-        return name;
+    public String getPricename() {
+        return pricename;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPricename(String pricename) {
+        this.pricename = pricename;
     }
 
     public boolean isPrepaid() {
