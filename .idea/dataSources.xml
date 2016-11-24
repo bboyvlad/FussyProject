@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1726424566">
+  <component name="DataSourceManagerImpl" format="xml" hash="488611719">
     <data-source source="LOCAL" name="JD_Prices" uuid="057762c4-c03a-476a-b5e5-578e3c816aec">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>

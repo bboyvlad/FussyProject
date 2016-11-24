@@ -17,9 +17,5 @@ public interface PriceRepository extends JpaRepository<Price,Long>{
     List<Price> findByLocationAndAviationAndValidtoGreaterThanEqual(long location,long aviation, Date validto);
     ArrayList<Price> findByProduct(long product);
 
-    @Query(value = "UPDATE Pricedate SET expired='true' " +
-            "WHERE PRODUCT_ID=?1",nativeQuery = true)
-    Object expireProduct(long product);
-
 }
 
