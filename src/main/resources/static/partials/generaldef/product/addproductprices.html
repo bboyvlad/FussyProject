@@ -2,48 +2,110 @@
 <!-------------------------->
 <!-- START - PRODUCT FORM -->
 <!-------------------------->
-<form name="AddProductForm" novalidate>
+<div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+    <form name="AddProductForm" novalidate>
     <!--{{user.user_id}}
 
     {{paymethod}}-->{{fproduct}}
     <div class="p+" >
-        <div flex-item="12">
+        <div flex-item="16">
             <div class="card" >
                 <div class="p+">
                     <strong class="fs-headline display-block">Nuevo Producto</strong>
                     <div class="paragraph fs-body-1 mt+">
                         <div class="p+ pt0">
                             <div flex-container="row">
-                                <div flex-item>
+                                <div flex-item="4">
                                     <lx-text-field
-                                            lx-label="Codigo del Product"
-                                            lx-valid="AddProductForm.productcode.$valid"
-                                            lx-error="AddProductForm.productcode.$invalid && AddProductForm.productcode.$touched">
-                                        <input type="text" name="productcode" ng-required="true"
-                                               ng-model="fproduct.productcode" ng-minlength="3" ng-maxlength="3"/>
+                                            lx-label="Product name"
+                                            lx-valid="AddProductForm.productname.$valid"
+                                            lx-error="AddProductForm.productname.$invalid && AddProductForm.productname.$touched">
+                                        <input type="text" name="productname" ng-required="true"
+                                               ng-model="fproduct.productname" />
                                     </lx-text-field>
-                                    <div ng-messages="AddProductForm.productcode.$error"
-                                         ng-if="AddProductForm.productcode.$touched"
+                                    <div ng-messages="AddProductForm.productname.$error"
+                                         ng-if="AddProductForm.productname.$touched"
                                          style="color:maroon"
                                          role="alert">
                                         <div ng-message="required">Introduce el Nombre del Producto</div>
-                                        <div ng-message="minlength">Introduce 3 digitos para el producto</div>
-                                        <div ng-message="maxlength">Introduce 3 digitos para el producto</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Descripción del Producto"
+                                            lx-valid="AddProductForm.detail.$valid"
+                                            lx-error="AddProductForm.detail.$invalid && AddProductForm.detail.$touched">
+                                    <textarea type="text" name="detail" ng-required="true"
+                                              ng-model="fproduct.detail" ></textarea>
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.detail.$error"
+                                         ng-if="AddProductForm.detail.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce la Descripción del Producto</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Medida de unidad"
+                                            lx-valid="AddProductForm.unit.$valid"
+                                            lx-error="AddProductForm.unit.$invalid && AddProductForm.unit.$touched">
+                                        <input type="text" name="unit" ng-required="true"
+                                               ng-model="fproduct.unit" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.unit.$error"
+                                         ng-if="AddProductForm.unit.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce la Medida de unidad</div>
                                     </div>
                                 </div>
                             </div>
+
                             <div flex-container="row">
-                                <div flex-item>
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Descripción de medida de unidad"
+                                            lx-valid="AddProductForm.unitdesc.$valid"
+                                            lx-error="AddProductForm.unitdesc.$invalid && AddProductForm.unitdesc.$touched">
+                                        <input type="text" name="unitdesc" ng-required="true"
+                                               ng-model="fproduct.unitdesc" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.unitdesc.$error"
+                                         ng-if="AddProductForm.unitdesc.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce la Descripción de medida de unidad</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4">
+                                    <span style="margin-left: 65px; margin-top: 20px;" class="fs-body-2 display-block">
+                                    Enable Product:
+                                        <lx-checkbox
+                                            ng-model="fproduct.active"
+                                            lx-color="blue"
+                                            name="enabled"
+                                            ng-true-value="true"
+                                            ng-false-value="false">
+                                            Enabled
+                                        </lx-checkbox>
+                                    </span>
+                                </div>
+
+                                <div flex-item="4">
                                     <lx-select
-                                            name="id_grp"
-                                            ng-model="id_grp"
+                                            name="pricetype"
+                                            ng-model="fproduct.pricetype"
                                             lx-allow-clear="true"
-                                            lx-choices="groupOpts"
+                                            lx-choices="pricetypeOpts"
                                             lx-fixed-label="true"
-                                            lx-valid="id_grp.$valid"
-                                            lx-error="id_grp.$invalid && id_grp.$touched"
+                                            lx-valid="pricetype.$valid"
+                                            lx-error="pricetype.$invalid && pricetype.$touched"
                                             ng-required="true"
-                                            lx-label="Grupo de Sevicios">
+                                            lx-label="Price type">
                                         <lx-select-selected>
                                             {{ $selected.description }}
                                         </lx-select-selected>
@@ -52,136 +114,423 @@
                                             {{ $choice.description }}
                                         </lx-select-choices>
                                     </lx-select>
-                                    <div ng-messages="id_grp.$error"
-                                         ng-if="id_grp.$touched"
+                                    <div ng-messages="pricetype.$error"
+                                         ng-if="pricetype.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">Escoge el tipo de Metodo</div>
+                                        <div ng-message="required">Escoge el tipo de Precio</div>
                                     </div>
                                 </div>
                             </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PRICES -->
+            <div flex-item="16">
+                <div class="card" >
+                    <div class="p+">
+                        <strong class="fs-headline display-block">Precio</strong>
+                        <div class="paragraph fs-body-1 mt+">
                             <div flex-container="row">
-                                <div flex-item>
-                                    <lx-text-field
-                                            lx-label="Nombre del Producto"
-                                            lx-valid="AddProductForm.description.$valid"
-                                            lx-error="AddProductForm.description.$invalid && AddProductForm.description.$touched">
-                                        <input type="text" name="description" ng-required="true"
-                                               ng-model="fproduct.description" />
-                                    </lx-text-field>
-                                    <div ng-messages="AddProductForm.description.$error"
-                                         ng-if="AddProductForm.description.$touched"
-                                         style="color:maroon"
-                                         role="alert">
-                                        <div ng-message="required">Introduce el Nombre del Producto</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div flex-container="row">
-                                <div flex-item>
-                                    <lx-text-field
-                                            lx-label="Descripción del Producto"
-                                            lx-valid="AddProductForm.detaildesc.$valid"
-                                            lx-error="AddProductForm.detaildesc.$invalid && AddProductForm.detaildesc.$touched">
-                                    <textarea type="text" name="detaildesc" ng-required="true"
-                                          ng-model="fproduct.detaildesc" ></textarea>
-                                    </lx-text-field>
-                                    <div ng-messages="AddProductForm.detaildesc.$error"
-                                         ng-if="AddProductForm.detaildesc.$touched"
-                                         style="color:maroon"
-                                         role="alert">
-                                        <div ng-message="required">Introduce la Descripción del Producto</div>
-                                    </div>
-                                </div>
-                            </div>
-                            1{{selectAjax}} 2{{selectAjax}}
-                            <!--3{{fproduct}}-->
-                            <div flex-container="row">
-                                <div flex-item>
+                                <div flex-item="4" class="p+" >
                                     <lx-select
                                             name="location"
                                             ng-model="fproduct.location"
+                                            ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 700, 'blur': 0 } }"
                                             lx-allow-clear="true"
                                             lx-choices="selectAjax.locationOpts"
                                             lx-display-filter="true"
                                             lx-fixed-label="true"
                                             lx-filter="searchLocation(newValue)"
-                                            lx-valid="location.$valid"
-                                            lx-error="location.$invalid && location.$touched"
+                                            lx-valid="AddProdutForm.location.$valid"
+                                            lx-error="AddProdutForm.location.$invalid && AddProdutForm.location.$touched"
                                             lx-loading="selectAjax.loading"
                                             ng-required="true"
-                                            lx-label="Locaciones">
+                                            lx-label="Locations">
                                         <lx-select-selected>
-                                            <img src="../css/img/flags/{{$selected.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.airport }}
+                                            <img src='../css/img/flags/{{$selected.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
                                         </lx-select-selected>
 
                                         <lx-select-choices>
-                                            <img src="../css/img/flags/{{$choice.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" /> {{ $choice.airport }}
+                                            <img src='../css/img/flags/{{$choice.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $choice.name }}
                                         </lx-select-choices>
                                     </lx-select>
-                                    <div ng-messages="location.$error"
-                                         ng-if="location.$touched"
+                                    <div ng-messages="AddProdutForm.location.$error"
+                                         ng-if="AddProdutForm.location.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">Escoge tu Localidad</div>
+                                        <div ng-message="required">Choose your location</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4" class="p+" >
+                                    <lx-select
+                                            name="provider"
+                                            ng-model="fproduct.provider"
+                                            ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 700, 'blur': 0 } }"
+                                            lx-allow-clear="true"
+                                            lx-choices="selectAjax.providerOpts"
+                                            lx-display-filter="true"
+                                            lx-fixed-label="true"
+                                            lx-filter="searchLocation(newValue)"
+                                            lx-valid="AddProdutForm.provider.$valid"
+                                            lx-error="AddProdutForm.provider.$invalid && AddProdutForm.provider.$touched"
+                                            lx-loading="selectAjax.loading"
+                                            ng-required="true"
+                                            lx-label="Locations">
+                                        <lx-select-selected>
+                                            <img src='../css/img/flags/{{$selected.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
+                                        </lx-select-selected>
+
+                                        <lx-select-choices>
+                                            <img src='../css/img/flags/{{$choice.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $choice.name }}
+                                        </lx-select-choices>
+                                    </lx-select>
+                                    <div ng-messages="AddProdutForm.provider.$error"
+                                         ng-if="AddProdutForm.provider.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Choose your location</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4" style="margin-top: 16px;">
+                                    <lx-select
+                                            name="aviationtype"
+                                            ng-model="fproduct.aviationtype"
+                                            lx-allow-clear="true"
+                                            lx-choices="aviationOpts"
+                                            lx-fixed-label="true"
+                                            lx-valid="AddProdutForm.aviationtype.$valid"
+                                            lx-error="AddProdutForm.aviationtype.$invalid && AddProdutForm.aviationtype.$touched"
+                                            ng-required="true"
+                                            lx-label="Aviation type">
+                                        <lx-select-selected>
+                                            {{ $selected.value }}
+                                        </lx-select-selected>
+
+                                        <lx-select-choices>
+                                            {{ $choice.value }}
+                                        </lx-select-choices>
+                                    </lx-select>
+                                    <div ng-messages="AddProdutForm.aviationtype.$error"
+                                         ng-if="AddProdutForm.aviationtype.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Choose an aviation type</div>
                                     </div>
                                 </div>
                             </div>
+
                             <div flex-container="row">
-                                <div flex-item>
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Price name"
+                                            lx-valid="AddProductForm.pricename.$valid"
+                                            lx-error="AddProductForm.pricename.$invalid && AddProductForm.pricename.$touched">
+                                        <input type="text" name="pricename" ng-required="true"
+                                               ng-model="fproduct.pricename" ui-number-mask/>
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.pricename.$error"
+                                         ng-if="AddProductForm.pricename.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el Nombre del precio</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4">
+                                    <span style="margin-left: 65px; margin-top: 20px;" class="fs-body-2 display-block">
+                                    Prepaid:
+                                        <lx-checkbox
+                                                ng-model="fproduct.prepaid"
+                                                lx-color="blue"
+                                                name="enabled"
+                                                ng-true-value="true"
+                                                ng-false-value="false">
+                                            Enabled
+                                        </lx-checkbox>
+                                    </span>
+                                </div>
+
+                                <div flex-item="4">
+                                    <lx-date-picker
+                                            id="{{validtoDatePickerId}}"
+                                            ng-model="fproduct.validto"
+                                            lx-input-format="{{dateP.format}}"
+                                            lx-callback="datePickerCallback(newDate)"
+                                            lx-locale="{{dateP.locale}}"
+                                            lx-min-date="fproduct.validtodatePicker.minDate"
+                                    >
+                                        <lx-text-field
+                                                lx-allow-clear="true"
+                                                lx-label="Valid thru"
+                                                lx-valid="AddProductForm.validto.$valid"
+                                                lx-error="AddProductForm.validto.$invalid && AddProductForm.validto.$touched">
+                                            <input type="text" name="validto"
+                                                   ng-model="fproduct.validtodatePicker.dateFormated"
+                                                   ng-required="true" />
+                                        </lx-text-field>
+                                    </lx-date-picker>
+                                    <div ng-messages="AddProductForm.validto.$error"
+                                         ng-if="AddProductForm.validto.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Don't forget your Valid thru date</div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div flex-container="row">
+
+                                <div flex-item="3">
+                                    <lx-text-field
+                                            lx-label="Pounds range: from "
+                                            lx-valid="AddProductForm.frompound.$valid"
+                                            lx-error="AddProductForm.frompound.$invalid && AddProductForm.frompound.$touched">
+                                    <input type="number" name="frompound" ng-required="true"
+                                              ng-model="fproduct.frompound" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.frompound.$error"
+                                         ng-if="AddProductForm.frompound.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el rango de libras</div>
+                                    </div>
+                                </div>
+                                <div flex-item="3">
+                                    <lx-text-field
+                                            lx-label="Pounds range: to"
+                                            lx-valid="AddProductForm.topound.$valid"
+                                            lx-error="AddProductForm.topound.$invalid && AddProductForm.topound.$touched">
+                                    <input type="number" name="topound" ng-required="true"
+                                              ng-model="fproduct.topound" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.topound.$error"
+                                         ng-if="AddProductForm.topound.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el rango de libras</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="3">
+                                    <lx-date-picker
+                                            id="{{fromdateDatePickerId}}"
+                                            ng-model="fproduct.fromdate"
+                                            lx-input-format="{{dateP.format}}"
+                                            lx-callback="datePickerCallback(newDate)"
+                                            lx-locale="{{dateP.locale}}"
+                                            lx-min-date="fproduct.fromdatedatePicker.minDate"
+                                    >
+                                        <lx-text-field
+                                                lx-allow-clear="true"
+                                                lx-label="From date"
+                                                lx-valid="AddProductForm.fromdate.$valid"
+                                                lx-error="AddProductForm.fromdate.$invalid && AddProductForm.fromdate.$touched">
+                                            <input type="text" name="fromdate"
+                                                   ng-model="fproduct.fromdatedatePicker.dateFormated"
+                                                   ng-required="true" />
+                                        </lx-text-field>
+                                    </lx-date-picker>
+                                    <div ng-messages="AddProductForm.fromdate.$error"
+                                         ng-if="AddProductForm.fromdate.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Don't forget your starting date</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="3">
+                                    <lx-date-picker
+                                            id="{{todateDatePickerId}}"
+                                            ng-model="fproduct.todate"
+                                            lx-input-format="{{dateP.format}}"
+                                            lx-callback="datePickerCallback(newDate)"
+                                            lx-locale="{{dateP.locale}}"
+                                            lx-min-date="fproduct.todatedatePicker.minDate"
+                                    >
+                                        <lx-text-field
+                                                lx-allow-clear="true"
+                                                lx-label="From date"
+                                                lx-valid="AddProductForm.todate.$valid"
+                                                lx-error="AddProductForm.todate.$invalid && AddProductForm.todate.$touched">
+                                            <input type="text" name="todate"
+                                                   ng-model="fproduct.todatedatePicker.dateFormated"
+                                                   ng-required="true" />
+                                        </lx-text-field>
+                                    </lx-date-picker>
+                                    <div ng-messages="AddProductForm.todate.$error"
+                                         ng-if="AddProductForm.todate.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Don't forget your ending date</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div flex-container="row">
+                                <div flex-item="4">
                                     <lx-select
                                             name="currency"
                                             ng-model="fproduct.currency"
                                             lx-allow-clear="true"
-                                            lx-choices="proCurrency"
+                                            lx-choices="currencyOpts"
                                             lx-fixed-label="true"
-                                            lx-valid="AddProductForm.currency.$valid"
-                                            lx-error="AddProductForm.currency.$invalid && AddProductForm.currency.$touched"
+                                            lx-valid="AddProdutForm.currency.$valid"
+                                            lx-error="AddProdutForm.currency.$invalid && AddProdutForm.currency.$touched"
                                             ng-required="true"
-                                            lx-label="Moneda">
+                                            lx-label="Aviation type">
                                         <lx-select-selected>
-                                            {{ $selected.key }}
+                                            {{ $selected.value }}
                                         </lx-select-selected>
 
                                         <lx-select-choices>
-                                            {{ $choice.name }}
+                                            {{ $choice.value }}
                                         </lx-select-choices>
                                     </lx-select>
-                                    <div ng-messages="AddProductForm.currency.$error"
-                                         ng-if="AddProductForm.currency.$touched"
+                                    <div ng-messages="AddProdutForm.currency.$error"
+                                         ng-if="AddProdutForm.currency.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">Escoge el tipo de Metodo</div>
+                                        <div ng-message="required">Choose a currency</div>
                                     </div>
                                 </div>
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Measure"
+                                            lx-valid="AddProductForm.measure.$valid"
+                                            lx-error="AddProductForm.measure.$invalid && AddProductForm.measure.$touched">
+                                        <input type="text" name="measure" ng-required="true"
+                                               ng-model="fproduct.measure" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.measure.$error"
+                                         ng-if="AddProductForm.measure.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce la medida</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Unit"
+                                            lx-valid="AddProductForm.unit.$valid"
+                                            lx-error="AddProductForm.unit.$invalid && AddProductForm.unit.$touched">
+                                        <input type="text" name="unit" ng-required="true"
+                                               ng-model="fproduct.unit" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.unit.$error"
+                                         ng-if="AddProductForm.unit.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce la unidad</div>
+                                    </div>
+                                </div>
+
                             </div>
+
                             <div flex-container="row">
-                                <div class="p+ pt0">
-                                    <lx-date-picker ng-model="fproduct.datecreate"
-                                                    lx-input-format="YYYY-MM-DD"
-                                                    lx-locale="es"
-                                                    lx-valid="AddProductForm.datecreate.$valid"
-                                                    lx-error="AddProductForm.datecreate.$invalid && AddProductForm.datecreate.$touched">
-                                        <lx-text-field lx-allow-clear="true" lx-label="Fecha de Creación">
-                                            <input type="text" name="datecreate"
-                                                   ng-model="fproduct.datecreate" ng-required="true">
-                                        </lx-text-field>
-                                    </lx-date-picker>
-                                    <div ng-messages="AddProductForm.datecreate.$error"
-                                         ng-if="AddProductForm.datecreate.$touched"
+
+                                <div flex-item="4">
+                                    <lx-text-field
+                                            lx-label="Unit description"
+                                            lx-valid="AddProductForm.unitdesc.$valid"
+                                            lx-error="AddProductForm.unitdesc.$invalid && AddProductForm.unitdesc.$touched">
+                                        <input type="text" name="unitdesc" ng-required="true"
+                                               ng-model="fproduct.unitdesc" />
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.unitdesc.$error"
+                                         ng-if="AddProductForm.unitdesc.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">No Olvides de colocar la Fecha de Expiracion</div>
+                                        <div ng-message="required">Introduce la descripcion de la unidad</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="2">
+                                    <lx-text-field
+                                            lx-label="Price"
+                                            lx-valid="AddProductForm.price1.$valid"
+                                            lx-error="AddProductForm.price1.$invalid && AddProductForm.price1.$touched">
+                                        <input type="text" name="price1" ng-required="true"
+                                               ng-model="fproduct.price1" ui-number-mask/>
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.price1.$error"
+                                         ng-if="AddProductForm.price1.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el precio</div>
+                                    </div>
+                                </div>
+
+                                <div flex-item="2">
+                                    <lx-text-field
+                                            lx-label="Cost"
+                                            lx-valid="AddProductForm.cost1.$valid"
+                                            lx-error="AddProductForm.cost1.$invalid && AddProductForm.cost1.$touched">
+                                        <input type="text" name="cost1" ng-required="true"
+                                               ng-model="fproduct.cost1" ui-number-mask/>
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.cost1.$error"
+                                         ng-if="AddProductForm.cost1.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el Nombre del Producto</div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div flex-container="row">
+                                <div flex-item="3">
+                                    <lx-text-field
+                                            lx-label="Diferencial"
+                                            lx-valid="AddProductForm.diff.$valid"
+                                            lx-error="AddProductForm.diff.$invalid && AddProductForm.diff.$touched">
+                                        <input type="text" name="diff" ng-required="true"
+                                               ng-model="fproduct.diff" ui-number-mask/>
+                                    </lx-text-field>
+                                    <div ng-messages="AddProductForm.diff.$error"
+                                         ng-if="AddProductForm.diff.$touched"
+                                         style="color:maroon"
+                                         role="alert">
+                                        <div ng-message="required">Introduce el Diferencial</div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div flex-item="4">
+                                    <span style="margin-left: 65px; margin-top: 20px;" class="fs-body-2 display-block">
+                                    Is this a fee?:
+                                        <lx-checkbox
+                                                ng-model="fproduct.feesenable"
+                                                lx-color="blue"
+                                                name="enabled"
+                                                ng-true-value="true"
+                                                ng-false-value="false">
+                                            Enabled
+                                        </lx-checkbox>
+                                    </span>
+                            </div>
+
+
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
     <div style="position: relative;">
         <lx-progress lx-type="linear" lx-color="teal"
                      ng-if="LinearProgress">
@@ -197,16 +546,16 @@
             Crear Producto</lx-button>
     </div>
 </form>
-
+</div>
 <!-------------------------->
 <!-- START - PRODUCT PRICES FORM -->
 <!-------------------------->
-<form name="AddProductPriceForm" ng-show="disablePrice" novalidate>
-    <!--{{user.user_id}}
+<!--<form name="AddProductPriceForm" ng-show="disablePrice" novalidate>
+    &lt;!&ndash;{{user.user_id}}
     1{{fprice}}
     2{{productId}}
     3{{productId}}
-    {{paymethod}}-->
+    {{paymethod}}&ndash;&gt;
     <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
         <div flex-item="16">
             <div class="card" >
@@ -294,8 +643,8 @@
         </div>
 
     </div>
-    <!--1{{productId}}2{{productId}}
-    1{{sendbutton2 +" or "+ AddProductPriceForm.$invalid}}-->
+    &lt;!&ndash;1{{productId}}2{{productId}}
+    1{{sendbutton2 +" or "+ AddProductPriceForm.$invalid}}&ndash;&gt;
     <div style="position: relative;">
         <lx-progress lx-type="linear" lx-color="teal"
                      ng-if="LinearProgress2">
@@ -310,4 +659,4 @@
                    ng-disabled="sendbutton2 || AddProductPriceForm.$invalid">
             Registrar Precio</lx-button>
     </div>
-</form>
+</form>-->

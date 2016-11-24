@@ -5,18 +5,21 @@
 
 var mycaptain = angular.module('MyCaptain', ['ngRoute', 'jdmenu', 'ngMessages']);
 
-mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'mycaptainResource',
-    function MyCaptainController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, mycaptainResource) {
+mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'mycaptainResource', 'LxDialogService', 'LxDatePickerService',
+    function MyCaptainController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, mycaptainResource, LxDialogService, LxDatePickerService) {
+        $scope.cssClass = 'captain';
+        $scope.icon = '../css/icons/pilot-hat.png';
         var self = this;
 
-        $scope.fmycaptain = {};
+        $scope.fmycaptain = {datePicker: { dateFormated: null, locale: 'es', format: 'YYYY-MM-DD' }};
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
         $scope.listCaptain = mycaptainResource.query();
+        $scope.search = { mysearch:'' };
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
-            id: "", name: "", license: "", dateofbirth: "", address: "", city: "", country: "", phone: "", email: "", active: ""
+            id: "", name: "", license: "", dateofbirth: "", address: "", city: "", country: "", phone: "", email: "", active: "", datePicker: { dateFormated: new Date(), locale: 'es', format: 'YYYY-MM-DD' }
         };
         $scope.reset = function() {
             $scope.fmycaptain = angular.copy($scope.master);
@@ -24,6 +27,19 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
         };
         /***************** TO RESET FORMS ********************/
 
+        /****************** DATEPICKER *********************/
+        $scope.datePickerId = 'dateofbirth';
+
+        $scope.datePickerCallback = function datePickerCallback(_newdate, action="add")
+        {
+            if(action=="add"){
+                $scope.fmycaptain.datePicker.dateFormated = moment(_newdate).locale($scope.fmycaptain.datePicker.locale).format($scope.fmycaptain.datePicker.format);
+            }else if(action=="update"){
+                $scope.feditcaptain.datePicker.dateFormated = moment(_newdate).locale($scope.feditcaptain.datePicker.locale).format($scope.feditcaptain.datePicker.format);
+            }
+            LxDatePickerService.close($scope.datePickerId);
+        };
+        /****************** DATEPICKER *********************/
 
         /********** saveMyCaptain ********/
 
@@ -37,12 +53,12 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             myCaptainSave.$promise.
             then(
                 function (data) {
-                    console.log("Guardado!!" + data.toSource());
+                    console.log("Saved!!" + data.toSource());
                     $scope.listCaptain = mycaptainResource.query();
                     $scope.reset();
 
                     //$rootScope.userInfo = data;
-                    LxNotificationService.success('Capitan, creado satisfactoriamente!!!');
+                    LxNotificationService.success('Captain, created successfully!!!');
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
 
@@ -65,7 +81,7 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
 
         $scope.editReset = function(id) {
             $scope.editMaster = {
-                id: id, name: "", license: "", dateofbirth: "", address: "", city: "", country: "", phone: "", email: "", active: ""
+                id: id, name: "", license: "", dateofbirth: "", address: "", city: "", country: "", phone: "", email: "", active: "", datePicker: { dateFormated: new Date(), locale: 'es', format: 'YYYY-MM-DD' }
             };
             $scope.feditcaptain = angular.copy($scope.editMaster);
         };
@@ -78,7 +94,7 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             console.log(ef_cap.id );
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
             $scope.editmaster = {
-                id: ef_cap.id, name: ef_cap.name, license: ef_cap.license, dateofbirth: ef_cap.dateofbirth, address: ef_cap.address, city: ef_cap.city, country: ef_cap.country, phone: ef_cap.phone, email: ef_cap.email, active: ef_cap.active
+                id: ef_cap.id, name: ef_cap.name, license: ef_cap.license, dateofbirth: ef_cap.dateofbirth, address: ef_cap.address, city: ef_cap.city, country: ef_cap.country, phone: ef_cap.phone, email: ef_cap.email, active: ef_cap.active ? 'true' : 'false', datePicker: { dateFormated: helperFunc.dateFromDB(ef_cap.dateofbirth, "YYYY-MM-DD"), locale: 'es', format: 'YYYY-MM-DD' }
             };
             $scope.feditcaptain = angular.copy($scope.editmaster);
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
@@ -98,15 +114,15 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             $event.preventDefault();
             var self = this;
 
-            console.log(fields[0].id+ ' / ' + fields[0]);
+            console.log(fields.id+ ' / ' + fields);
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
 
-            mycaptainResource.update({}, fields[0]).$promise.
+            mycaptainResource.update({}, fields).$promise.
             then(
                 function (data) {
-                    console.log("Actualizado!!" + data);
-                    LxNotificationService.success('Actualización realizada!!!');
+                    console.log("Updated!!" + data);
+                    LxNotificationService.success('Update successful!!!');
                     $scope.listCaptain = mycaptainResource.query();
                     $scope.reset();
                     //$location.path("/dashboard");
@@ -132,19 +148,19 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
             console.log(data.toSource());
-            LxNotificationService.confirm('Eliminar Capitan', 'Por favor confirme que desea eliminar este Capitan.',
+            LxNotificationService.confirm('Erased Pilot', 'Please confirm that your wish to erased this pilot.',
                 {
-                    cancel: 'Cancelar',
-                    ok: 'Eliminar'
+                    cancel: 'Cancel',
+                    ok: 'Delete'
                 }, function(answer)
                 {
                     if (answer)
                     {
-                        mycaptainResource.delete({id: data.id}).$promise.
+                        mycaptainResource.deleteMycaptain({captainId: data.id}).$promise.
                         then(
                             function (data) {
-                                console.log("Borrado!!" + data);
-                                LxNotificationService.success('Capitan, Eliminado satisfactoriamente!!!');
+                                console.log("Erased!!" + data);
+                                LxNotificationService.success('Captain, Erased successfully!!!');
                                 $scope.listCaptain = mycaptainResource.query();
                                 //$scope.faircrafts = [];
                                 //$location.path("/dashboard");
@@ -160,121 +176,14 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
                     else
                     {
                         LxNotificationService.error('Disagree');
-                        this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
-                        this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
+                        self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                        self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                     }
                 });
 
         }
         /********** deleteCaptain ********/
 
-
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],
-            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-
-        };
     }]);
 
 /*TO COMPARE FIELDS VALUES*/

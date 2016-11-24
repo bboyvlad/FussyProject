@@ -40,15 +40,15 @@
                         TOTAL: {{ total }}
 
                         <form name="checkOutForm" novalidate>
-                            user id: {{user.id}}
-                            {{fcheckout}}
+                            <!--user id: {{user.id}}
+                            {{fcheckout}}-->
                             <!--{{jdcardOpts}}-->
                             <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
-                                <div flex-item="8">
+                                <div flex-item="12">
 
                                     <div class="card">
                                         <div class="p+">
-                                            <strong class="fs-headline display-block">Escoga una J&amp;D Card</strong>
+                                            <strong class="fs-headline display-block">Choose a J&amp;D Card</strong>
                                             <!--1{{paymethod}} 2{{paymethod}}-->
                                             <div class="paragraph fs-body-1 mt+">
                                                 <div class="p+ pt0">
@@ -63,20 +63,20 @@
                                                                     lx-valid="checkOutForm.jdcard.$valid"
                                                                     lx-error="checkOutForm.jdcard.$invalid && checkOutForm.jdcard.$touched"
                                                                     ng-required="true"
-                                                                    lx-label="Escoja su metodo de pago">
+                                                                    lx-label="Choose a payment method">
                                                                 <lx-select-selected>
-                                                                    {{ $selected.payacctnum }}
+                                                                    {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                                                 </lx-select-selected>
 
                                                                 <lx-select-choices>
-                                                                    {{ $choice.payacctnum }}
+                                                                    {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }} - {{ $choice.payavailable | currency:"USD$"  }}
                                                                 </lx-select-choices>
                                                             </lx-select>
                                                             <div ng-messages="checkOutForm.jdcard.$error"
                                                                  ng-if="checkOutForm.jdcard.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                                                <div ng-message="required">Choose a payment method</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -86,53 +86,7 @@
                                         </div>
                                     </div>
 
-                                    <!--<div flex-item="8">
-                                        <div class="card" >
 
-                                            <div class="p+">
-                                                <strong class="fs-headline display-block">Personaliza tu Gift Card</strong>
-                                                <div class="paragraph fs-body-1 mt+">
-                                                    <div class="p+ pt0">
-
-                                                        <div flex-container="row">
-                                                            <div flex-item>
-
-                                                                <lx-text-field
-                                                                        lx-label="Gift Card Codigo"
-                                                                        lx-valid="checkOutForm.claimcode.$valid"
-                                                                        lx-error="checkOutForm.claimcode.$invalid && checkOutForm.claimcode.$touched">
-                                                                    <input type="name" name="claimcode" ng-model="fcheckout.claimcode"  ng-required="true" >
-                                                                </lx-text-field>
-                                                                <div ng-messages="checkOutForm.claimcode.$error"
-                                                                     ng-if="checkOutForm.claimcode.$touched"
-                                                                     style="color:maroon"
-                                                                     role="alert">
-                                                                    <div ng-message="required">Debes llenar este campo</div>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div style="position: relative;">
-                                        <lx-progress lx-type="linear" lx-color="teal"
-                                                     ng-if="LinearProgress">
-                                        </lx-progress>
-                                    </div>
-                                    <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
-                                        <lx-button lx-color="red"
-                                                   ng-click="reset()"
-                                        >Limpiar</lx-button>
-                                        <lx-button lx-color="green"
-                                                   ng-click="redeemGiftCard($event, fcheckout)"
-                                                   ng-disabled="sendbutton || checkOutForm.$invalid">
-                                            Reclamar Gift Card</lx-button>
-                                    </div>-->
                                 </div>
                             </div>
                         </form>
@@ -148,15 +102,17 @@
     </lx-dialog-content>
 
     <lx-dialog-footer>
-        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cancelar</lx-button>
+
         <div style="position: relative;">
             <lx-progress lx-type="linear" lx-color="teal"
                          ng-if="LinearProgress">
             </lx-progress>
         </div>
-        <lx-button lx-type="flat"lx-color="green"
+        <lx-button lx-color="black" lx-type="flat" ng-click="reset()"
+                   lx-dialog-close>Close</lx-button>
+        <lx-button lx-type="raised"lx-color="green"
                    ng-click="checkoutShopCart($event, fcheckout)"
                    ng-disabled="sendbutton || checkOutForm.$invalid">
-            Pagar</lx-button>
+            Pay</lx-button>
     </lx-dialog-footer>
 </lx-dialog>

@@ -4,11 +4,11 @@
         <div flex-item="10">
             <div class="card" >
                 <div class="p+">
-                    <strong class="fs-headline display-block">J&amp;D Oilfield</strong>
+                    <strong class="fs-headline display-block"> {{'index.card1.title' | translate}}</strong>
 
                     <div class="paragraph fs-body-1 mt+">
                         <p>
-                            Bienvenidos a la Nueva J&amp;D App
+                            {{'index.card1.text' | translate}}
                         </p>
                     </div>
                 </div>
@@ -16,20 +16,21 @@
                 <div class="card__actions">
                     <div class="p+">
                         <a href="" ng-href="/loginpage">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Mas info...</button>
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'index.card1.button' | translate}}</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div flex-item="6">
+
+        <div flex-item="5">
             <div class="card" >
                 <div class="p+">
-                    <strong class="fs-headline display-block">Productos</strong>
+                    <strong class="fs-headline display-block">{{'index.card2.title' | translate}}</strong>
 
                     <div class="paragraph fs-body-1 mt+">
                         <p>
-                            J&amp;D Productos
+                            {{'index.card2.text' | translate}}
                         </p>
                     </div>
                 </div>
@@ -37,7 +38,33 @@
                 <div class="card__actions">
                     <div class="p+">
                         <a href="" ng-href="/loginpage">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Catalogo</button>
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'index.card2.button' | translate}}</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+        <div flex-item="5">
+            <div class="card" ng-if=" user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'">
+                <div class="p+">
+                    <strong class="fs-headline display-block">Validator</strong>
+
+                    <div class="paragraph fs-body-1 mt+">
+                        <p>
+                            Validate a J&amp;D Card
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card__actions">
+                    <div class="p+">
+                        <a href="" ng-href="/dashboard/cardstatus">
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Validate</button>
                         </a>
                     </div>
                 </div>
@@ -46,36 +73,15 @@
     </div>
 
     <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
-        <div flex-item="6">
-            <div class="card" >
-                <div class="p+">
-                    <strong class="fs-headline display-block">Servicios</strong>
-
-                    <div class="paragraph fs-body-1 mt+">
-                        <p>
-                            Servicios J&amp;D App
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card__actions">
-                    <div class="p+">
-                        <a href="" ng-href="/info/servicios">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Nuestros Servicios</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div flex-item="5">
-            <div class="card" >
+            <div class="card" ng-if=" user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'">
                 <div class="p+">
                     <strong class="fs-headline display-block">Sing UP!</strong>
 
                     <div class="paragraph fs-body-1 mt+">
                         <p>
-                            Crea tu Cuenta J&amp;D App
+                            Create your J&amp;D Account
                         </p>
                     </div>
                 </div>
@@ -83,35 +89,15 @@
                 <div class="card__actions">
                     <div class="p+">
                         <a href="" ng-href="/users/sing-up">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Registrate</button>
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Sing Up</button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div flex-item="5">
-            <div class="card" >
-                <div class="p+">
-                    <strong class="fs-headline display-block">Log In</strong>
-
-                    <div class="paragraph fs-body-1 mt+">
-                        <p>
-                            Accede a tu J&amp;D App
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card__actions">
-                    <div class="p+">
-                        <a href="" ng-href="/loginpage">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Conectate</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+
 
     <!--END-->
 </div>

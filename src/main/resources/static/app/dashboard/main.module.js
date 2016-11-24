@@ -3,114 +3,42 @@
  */
 'use strict';
 
-var dashboard = angular.module('dashboard', ['ngRoute']);
+var dashboard = angular.module('dashboard', ['ngRoute', 'chart.js']);
 
-dashboard.controller('DashController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu',
-    function DashController($rootScope, $scope, $http, $location, myJdMenu) {
+dashboard.controller('DashController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'userResource', '$filter', 'helperFunc',
+    function DashController($rootScope, $scope, $http, $location, myJdMenu, userResource, $filter, helperFunc) {
+        $scope.cssClass = 'dashboard';
 
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
+        /*$rootScope.mainPieChart = {labels:[], data:[], payavailable: 0, paylocked:0, paybalance: 0 };
 
-        $scope.sharedMenu = myJdMenu;
+        $scope.calculateBalance = function calculateBalance() {
+            //console.log("payments: "+ $rootScope.userDetail.toSource());
+            var detailUser=userResource.detailUser();
+            detailUser.$promise.then( function (data) {
+                //console.log("data userDetails"+data);
+                $rootScope.userDetail = data;
+                $scope.items = $filter('orderBy')($rootScope.userDetail.payments, "payid");
+                var payments = $scope.items;
+                //console.log("data payments"+payments.toSource());
+                angular.forEach(payments, function (value, key) {
+                    console.log(value.payavailable);
+                    $rootScope.mainPieChart.payavailable +=value.payavailable;
+                    $rootScope.mainPieChart.paylocked +=value.paylocked;
+                    $rootScope.mainPieChart.paybalance +=value.paybalance;
 
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
+                })
+                $rootScope.mainPieChart.labels = ["Available Balance", "Balance Blocked"];
+                $rootScope.mainPieChart.data = [$rootScope.mainPieChart.payavailable, $rootScope.mainPieChart.paylocked];
+                /!*console.log("TOTAL" + $rootScope.mainPieChart.payavailable);
+                console.log($rootScope.datePicker.toSource());*!/
+            });
+
+        };*/
+        helperFunc.jdCardBalance(null, true);
+        //$rootScope.$emit('rootScope:emit', 'Emit!');
+
+        /*"paybalance":0.0,"paylocked":0.0,"payavailable":0.0*/
+
+
 
     }]);

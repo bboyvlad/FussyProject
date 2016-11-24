@@ -6,13 +6,18 @@
 var login = angular.module('login', ['ngRoute', 'ngResource', 'ngMessages']);
 
 
-    login.controller('LoginController', ['$rootScope','$scope', '$http', '$location', 'LxNotificationService', '$interval', 'myJdMenu', 'helperFunc', 'userResource', 'shopcartResource',
-        function LoginController($rootScope, $scope, $http, $location, LxNotificationService, $interval, myJdMenu, helperFunc, userResource, shopcartResource) {
+    login.controller('LoginController', ['$rootScope','$scope', '$http', '$location', 'LxNotificationService', '$interval', 'myJdMenu', 'helperFunc', 'userResource', 'shopcartResource', '$translate', '$filter',
+        function LoginController($rootScope, $scope, $http, $location, LxNotificationService, $interval, myJdMenu, helperFunc, userResource, shopcartResource, $translate, $filter) {
+            //$translate.use('en');
+            $scope.cssClass = 'loginpage';
             var self = this;
 
             $scope.flogin = {};
             $scope.sendbutton = false;
             $scope.LinearProgress = false;
+            $scope.loginFormImg = '../css/img/loginimage.png';
+
+            $scope.datePickerFromRoot = $rootScope.rootdatePicker;
 
             /***************** TO RESET FORMS ********************/
             $scope.master = {
@@ -63,7 +68,8 @@ var login = angular.module('login', ['ngRoute', 'ngResource', 'ngMessages']);
                         function (data) {
                             //self.helperFuncBar();
                             if (data.message == "Usuario no registrado"){
-                                LxNotificationService.error(data.message + ', Verifique su Datos!!!');
+                                $scope.sms1 = $filter('translate')('login.module.sms1');
+                                LxNotificationService.error($scope.sms1);
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                                 //self.helperFuncBar();
@@ -71,20 +77,26 @@ var login = angular.module('login', ['ngRoute', 'ngResource', 'ngMessages']);
                             }
                             var loggedUser=userResource.loggedUser();
                             loggedUser.$promise.then(function(data) {
-                                console.log("in data: "+data.toSource());
+                                //console.log("in data: "+data.toSource());
                                 if( !angular.isDefined(data.name) || data.name==""){
-                                    LxNotificationService.error(' Verifique sus Datos!!!');
+                                    $scope.sms1 = $filter('translate')('login.module.sms1');
+                                    LxNotificationService.error($scope.sms1);
                                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                                 }else {
                                     $rootScope.cart = shopcartResource.getCartUser();
                                     $rootScope.user = data;
-                                    $rootScope.userDetail = userResource.detailUser();
-                                    $location.path("/dashboard");
+                                    var detailUser=userResource.detailUser();
+                                    detailUser.$promise.then( function (data) {
+                                        $rootScope.userDetail = data;
+                                        /*console.log("$rootScope.userDetail from loginController userDetails: "+$rootScope.userDetail.toSource());*/
+                                        $location.path("/dashboard");
+                                    });
+
                                 }
 
                             }, function() {
-                                console.log(response.toSource());
+                                //console.log(response.toSource());
                             });
 
                             /*console.log(data.toSource());
@@ -93,68 +105,8 @@ var login = angular.module('login', ['ngRoute', 'ngResource', 'ngMessages']);
 
                             //self.helperFuncBar();
                         },function (data) {
-                            console.log("Error!!:"+data.toSource());
+                            console.log("Error!!:"/*+data.toSource()*/);
                         }
                     );
             }
-
-            $scope.userOpts = {
-                "usermenu":[
-                    {
-                        "link":"/users/sing-up",
-                        "text":"Registrate"
-                    },
-                    {
-                        "link":"/loginpage",
-                        "text":"Log In"
-                    }
-                ],
-                "useradmin":false,
-                "jdcard":false,
-                "giftcard": false,
-                "payments":false,
-                "defgen":false,
-                "aircraft":false,
-                "captain":false,
-                "mainmenu":{
-                    "main":[
-                        {
-                            "link":"/",
-                            "text":"Home"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Servicios"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Productos"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Promociones"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Contacto"
-                        }
-                    ]
-                }
-            };
-
-            $scope.sharedMenu = myJdMenu;
-
-            $scope.updateMenu = function () {
-                //alert(this.Opts.item1);
-                myJdMenu.userSection(this.userOpts.usermenu);
-                myJdMenu.userAdminSection(this.userOpts.useradmin);
-                myJdMenu.mainSection(this.userOpts.mainmenu);
-                myJdMenu.jdcardSection(this.userOpts.jdcard);
-                myJdMenu.giftcardSection(this.userOpts.giftcard);
-                myJdMenu.paymentsSection(this.userOpts.payments);
-                myJdMenu.defgenSection(this.userOpts.defgen);
-                myJdMenu.aircraftSection(this.userOpts.aircraft);
-                myJdMenu.captainSection(this.userOpts.captain);
-            };
-
         }]);

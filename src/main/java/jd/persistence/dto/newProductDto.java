@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class newProductDto {
     private String productname;
     private String detail;
-    private String unit;
-    private String unitdesc;
+    private String productunit;
+    private String productunitdesc;
     private boolean active;
     private String pricetype;
     private ArrayList<newPriceDto> prices;
@@ -33,20 +33,20 @@ public class newProductDto {
         this.detail = detail;
     }
 
-    public String getUnit() {
-        return unit;
+    public String getProductunit() {
+        return productunit;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setProductunit(String productunit) {
+        this.productunit = productunit;
     }
 
-    public String getUnitdesc() {
-        return unitdesc;
+    public String getProductunitdesc() {
+        return productunitdesc;
     }
 
-    public void setUnitdesc(String unitdesc) {
-        this.unitdesc = unitdesc;
+    public void setProductunitdesc(String productunitdesc) {
+        this.productunitdesc = productunitdesc;
     }
 
     public boolean isActive() {

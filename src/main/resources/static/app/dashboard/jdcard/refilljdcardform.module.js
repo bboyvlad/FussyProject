@@ -7,10 +7,11 @@ var refilljdcard = angular.module('reFillJdCard', ['ngRoute', 'ui.utils.masks', 
 
 refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc','jdCardResource', 'userPaymentResource', 'cardPaymentResource',
     function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, jdCardResource, userPaymentResource, cardPaymentResource) {
-
+        $scope.cssClass = 'refilljdcard';
         var self = this;
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
+        $scope.icon = '../css/icons/two-credit-cards.png';
 
         $scope.frfilljdcard = {};
         /***************** TO RESET FORMS ********************/
@@ -58,17 +59,20 @@ refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http
             cardPaymentResource.refill({card_id: fields.jdcardSelected.payid}, toSave).$promise.
             then(
                 function (data) {
-                    console.log("Guardado!!" + data);
+                    console.log("Saved!!" + data);
                     if (data.message == "conexionError"){
-                        LxNotificationService.error('Transacción cancelada! Verifique su conexión a Internet!!!');
+                        $scope.sms1 = $filter('translate')('jdcard.refill.module.sms1');
+                        LxNotificationService.error($scope.sms1);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                         //self.helperFuncBar();
                         return;
                     }
 
-                    LxNotificationService.alert('J&D Card Refill',
-                        "Refill Satisfactorio, han sido abonados \r\n $"+ fields.amount +" en su J&D Card...",
+                    $scope.sms2 = $filter('translate')('jdcard.refill.module.sms2');
+                    $scope.sms3 = $filter('translate')('jdcard.refill.module.sms3', fields);
+                    LxNotificationService.alert($scope.sms2,
+                        $scope.sms3,
                         'Ok',
                         function(answer)
                         {
@@ -87,108 +91,4 @@ refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http
         }
 
 
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
     }]);

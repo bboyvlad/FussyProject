@@ -21920,13 +21920,13 @@ var htmlAnchorDirective = valueFn({
           }, 5000, 'page should navigate to /123');
         });
 
-        it(name, function() {
+        it('should execute ng-click but not reload when href empty string and name specified', function() {
           element(by.id('link-4')).click();
           expect(element(by.model('value')).getAttribute('value')).toEqual('4');
           expect(element(by.id('link-4')).getAttribute('href')).toBe('');
         });
 
-        it(name, function() {
+        it('should execute ng-click but not reload when no href but name specified', function() {
           element(by.id('link-5')).click();
           expect(element(by.model('value')).getAttribute('value')).toEqual('5');
           expect(element(by.id('link-5')).getAttribute('href')).toBe(null);
@@ -24493,7 +24493,7 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
         var userLastInput = element(by.model('user.last'));
 
         it('should initialize to model', function() {
-          expect(user.getText()).toContain(name);
+          expect(user.getText()).toContain('{"name":"guest","last":"visitor"}');
           expect(userNameValid.getText()).toContain('true');
           expect(formValid.getText()).toContain('true');
         });
@@ -24511,7 +24511,7 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
           userLastInput.clear();
           userLastInput.sendKeys('');
 
-          expect(user.getText()).toContain(name);
+          expect(user.getText()).toContain('{"name":"guest","last":""}');
           expect(lastNameValid.getText()).toContain('true');
           expect(formValid.getText()).toContain('true');
         });
@@ -24520,7 +24520,7 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
           userLastInput.clear();
           userLastInput.sendKeys('xx');
 
-          expect(user.getText()).toContain(name);
+          expect(user.getText()).toContain('{"name":"guest"}');
           expect(lastNameValid.getText()).toContain('false');
           expect(lastNameError.getText()).toContain('minlength');
           expect(formValid.getText()).toContain('false');
@@ -24528,9 +24528,9 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
 
         it('should be invalid if longer than max length', function() {
           userLastInput.clear();
-          userLastInput.sendKeys(name);
+          userLastInput.sendKeys('some ridiculously long name');
 
-          expect(user.getText()).toContain(name);
+          expect(user.getText()).toContain('{"name":"guest"}');
           expect(lastNameValid.getText()).toContain('false');
           expect(lastNameError.getText()).toContain('maxlength');
           expect(formValid.getText()).toContain('false');

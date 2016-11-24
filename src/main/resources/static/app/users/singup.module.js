@@ -5,13 +5,18 @@
 
 var singup = angular.module('singup', ['ngRoute', 'jdmenu', 'ngMessages']);
 
-    singup.controller('singupController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'userResource',
-        function singupController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, userResource) {
+    singup.controller('singupController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'userResource', '$translate', '$filter',
+        function singupController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, userResource, $translate, $filter) {
+            $scope.cssClass = 'singup';
             var self = this;
 
             $scope.fsingup = {};
             $scope.sendbutton = false;
             $scope.LinearProgress = false;
+            $scope.emailExistance = true;
+            $scope.icon = '../css/icons/id-card.png';
+            $scope.passRegex = "/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/";
+
 
             /***************** TO RESET FORMS ********************/
             $scope.master = {
@@ -21,6 +26,30 @@ var singup = angular.module('singup', ['ngRoute', 'jdmenu', 'ngMessages']);
                 $scope.fsingup = angular.copy($scope.master);
             };
             /***************** TO RESET FORMS ********************/
+
+            /*$scope.emailCheck = function (email) {
+                console.log("Check Email "+email);
+                var chkemail = {
+                    email: email
+                };
+                console.log("Check Email "+chkemail.toSource());
+
+                userResource.checkEmail(chkemail).$promise.then(
+                    function (data) {
+                        if (data.message == "validEmail") {
+                            $scope.emailExistance = false;
+                            return;
+                        }
+                        if (data.message == "invalidEmail") {
+                            $scope.emailExistance = true;
+                            return;
+                        }
+                    },
+                    function (data) {
+                        console.log(data);
+                    }
+                );
+            };*/
 
             $scope.userCreate = function userCreate($event, fields) {
                 $event.preventDefault();
@@ -32,19 +61,28 @@ var singup = angular.module('singup', ['ngRoute', 'jdmenu', 'ngMessages']);
                 userSave.$promise.
                     then(
                         function (data) {
-                            console.log("Guardado!!" + data.toSource());
+                            //console.log("Guardado!!" + data.toSource());
+                            if (data.message == "Este email ya se encuentra registrado"){
+                                $scope.sms1 = $filter('translate')('singup.module.sms1');
+                                LxNotificationService.error($scope.sms1);
+                                self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                                self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                                //self.helperFuncBar();
+                                return;
+                            }
                             $scope.reset();
 
                             //$rootScope.userInfo = data;
-
-                            LxNotificationService.alert('Su cuenta ha sido creada',
-                                "Bienvenido "+data.firstname +" "+ data.lastname+",\r\nRevise su correo ("+data.email+")para activar su cuenta...\r\nA continuación sera redirigido al Login",
+                            $scope.sms2 = $filter('translate')('singup.module.sms2');
+                            $scope.sms3 = $filter('translate')('singup.module.sms3',data);
+                            LxNotificationService.alert($scope.sms2,
+                                $scope.sms3,
                                 'Ok',
                                 function(answer)
                             {
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                                $location.path("/users/log-in");
+                                $location.path("/loginpage");
                             });
 
                         }
@@ -52,64 +90,7 @@ var singup = angular.module('singup', ['ngRoute', 'jdmenu', 'ngMessages']);
 
             };
 
-            $scope.userOpts = {
-                "usermenu":[
-                    {
-                        "link":"/users/sing-up",
-                        "text":"Registrate"
-                    },
-                    {
-                        "link":"/loginpage",
-                        "text":"Log In"
-                    }
-                ],
-                "useradmin":false,
-                "jdcard":false,
-                "giftcard": false,
-                "payments":false,
-                "defgen":false,
-                "aircraft":false,
-                "captain":false,
-                "mainmenu":{
-                    "main":[
-                        {
-                            "link":"/",
-                            "text":"Home"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Servicios"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Productos"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Promociones"
-                        },
-                        {
-                            "link":"/",
-                            "text":"Contacto"
-                        }
-                    ]
-                }
-            };
 
-            $scope.sharedMenu = myJdMenu;
-
-            $scope.updateMenu = function () {
-                //alert(this.Opts.item1);
-                myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-                myJdMenu.mainSection(this.userOpts.mainmenu);
-                myJdMenu.jdcardSection(this.userOpts.jdcard);
-                myJdMenu.giftcardSection(this.userOpts.giftcard);
-                myJdMenu.paymentsSection(this.userOpts.payments);
-                myJdMenu.defgenSection(this.userOpts.defgen);
-                myJdMenu.aircraftSection(this.userOpts.aircraft);
-                myJdMenu.captainSection(this.userOpts.captain);
-            };
 }]);
 /*
 
