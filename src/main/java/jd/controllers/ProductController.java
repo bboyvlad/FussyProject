@@ -335,8 +335,15 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/{product}",method = RequestMethod.DELETE)
-    public Object softDeleteProduct(@PathVariable long product){
-        return priceRepository.expireProduct(product);
+    public String[] softDeleteProduct(@PathVariable long product){
+
+        Product pro=productRepository.findOne(product);
+        pro.setDupdate(new Date());
+        pro.setDeleted(true);
+        productRepository.save(pro);
+
+        return new String[]{"message","success"};
+
     }
 
     /*End CRUD*/
