@@ -1,11 +1,16 @@
 <div class="row" ng-init="updateMenu()">
     <form name="SignupForm" novalidate>
-        1{{fsingup}} 2{{master}}
+        <!--1{{fsingup}} 2{{master}}-->
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="4"></div>
             <div flex-item="8">
                 <div class="card" >
+                    <div class="card__img card__img--top bgc-jd">
+                        <img ng-src="{{icon}}" width="100px" class="p+">
+                        <p class="fs-headline tc-white-1 display-block" >{{'singup.card1.title' | translate}} </p>
+                    </div>
                     <div class="p+">
-                        <strong class="fs-headline display-block">Registrar Cuenta</strong>
+                        <strong class="fs-headline display-block">{{'singup.card1.subtitle' | translate}}</strong>
 
                         <div class="paragraph fs-body-1 mt+">
 
@@ -13,8 +18,8 @@
                             <div class="p+ pt0">
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Nombres"
-                                           lx-valid="SignupForm.name.$valid"
+                                        <lx-text-field lx-label="{{'singup.form1.f1' | translate}}"
+                                           lx-valid="SignupForm.name.$valid "
                                            lx-error="SignupForm.name.$invalid && SignupForm.name.$touched">
                                             <input type="text" name="name" ng-model="fsingup.name"
                                                    ng-required="true">
@@ -23,13 +28,13 @@
                                              ng-if="SignupForm.name.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">No Olvides de colocar tu Nombre</div>
+                                            <div ng-message="required">{{'singup.form1.f1error.e1' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Apellido"
+                                        <lx-text-field lx-label="{{'singup.form1.f2' | translate}}"
                                                        lx-valid="SignupForm.lastname.$valid"
                                                        lx-error="SignupForm.lastname.$invalid && SignupForm.lastname.$touched">
                                             <input type="text" name="lastname" ng-model="fsingup.lastname"
@@ -39,47 +44,59 @@
                                              ng-if="SignupForm.lastname.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">No Olvides de colocar tu Apellido</div>
+                                            <div ng-message="required">{{'singup.form1.f2error.e1' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Email"
-                                                       lx-valid="SignupForm.email.$valid"
+                                        <lx-text-field lx-label="{{'singup.form1.f3' | translate}}"
+                                                       lx-valid="SignupForm.email.$valid && emailExistance"
                                                        lx-error="SignupForm.email.$invalid && SignupForm.email.$touched">
 
-                                            <input type="email" name="email" ng-model="fsingup.email"
+                                            <input type="email" name="email"
+                                                   ng-model="fsingup.email"
                                                    ng-required="true" />
                                         </lx-text-field>
                                         <div ng-messages="SignupForm.email.$error"
                                              ng-if="SignupForm.email.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Es Necesario tu Correo</div>
-                                            <div ng-message="email">Tu correo no es valido!</div>
+                                            <div ng-message="required">{{'singup.form1.f3error.e1' | translate}}</div>
+                                            <div ng-message="email">{{'singup.form1.f3error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Contraseña"
+                                        <lx-text-field lx-label="{{'singup.form1.f4' | translate}}"
                                                        lx-valid="SignupForm.pass.$valid"
                                                        lx-error="SignupForm.pass.$invalid && SignupForm.pass.$touched">
                                             <input type="password" name="pass" ng-model="fsingup.password"
-                                                   ng-required="true" />
+                                                   ng-required="true" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/" />
                                         </lx-text-field>
                                         <div ng-messages="SignupForm.pass.$error"
                                              ng-if="SignupForm.pass.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">No puede estar vacia tu Contraseña</div>
+                                            <div ng-message="required">{{'singup.form1.f4error.e1' | translate}}</div>
+
+                                            <div ng-message="pattern">
+                                                <ul>
+                                                    <li>{{'singup.form1.f4error.e2' | translate}}</li>
+                                                    <li>{{'singup.form1.f4error.e3' | translate}}</li>
+                                                    <li>{{'singup.form1.f4error.e4' | translate}}</li>
+                                                    <li>{{'singup.form1.f4error.e5' | translate}}</li>
+                                                    <li>{{'singup.form1.f4error.e6' | translate}} $@$!%*#?&</li>
+                                                </ul>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Confirmar Contraseña"
+                                        <lx-text-field lx-label="{{'singup.form1.f5' | translate}}"
                                                        lx-valid="SignupForm.chkpass.$valid"
                                                        lx-error="SignupForm.chkpass.$invalid && SignupForm.chkpass.$touched">
                                             <input type="password" name="chkpass" ng-model="fsingup.chkpass"
@@ -89,8 +106,8 @@
                                              ng-if="SignupForm.chkpass.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Verifica tu Contraseña</div>
-                                            <div ng-message="compareTo">Revisa tu contraseña, No estan iguales...</div>
+                                            <div ng-message="required">{{'singup.form1.f5error.e1' | translate}}</div>
+                                            <div ng-message="compareTo">{{'singup.form1.f5error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -98,9 +115,9 @@
 
                         </div>
                     </div>
-
-                    <div class="card__actions">
-                        <div class="p+">
+                    <div class="card__actions" flex-container="row" flex-column="16" flex-gutter="24">
+                        <div class="p+" flex-item="5"></div>
+                        <div class="p+" >
                             <div style="position: relative;">
                                 <lx-progress lx-type="linear" lx-color="teal"
                                              ng-if="LinearProgress">
@@ -108,11 +125,11 @@
                             </div>
                             <lx-button lx-color="red"
                                        ng-click="reset()"
-                            >Limpiar</lx-button>
+                            >{{'singup.form1.button1' | translate}}</lx-button>
                             <lx-button lx-color="green"
                                        ng-click="userCreate($event, fsingup)"
                                        ng-disabled="sendbutton || SignupForm.$invalid"
-                            >REGISTRAR</lx-button>
+                            >{{'singup.form1.button2' | translate}}</lx-button>
                         </div>
                     </div>
                 </div>

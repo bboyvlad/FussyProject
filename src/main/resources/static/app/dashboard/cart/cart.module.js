@@ -3,11 +3,11 @@
  */
 'use strict';
 
-var addcart = angular.module('AddCart', ['ngRoute', 'ngMessages', 'ui.utils.masks']);
+var addcart = angular.module('AddCart', ['ngRoute', 'ngMessages', 'ui.utils.masks', 'ngAnimate', 'ngMaterialDatePicker']);
 
-addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', 'myJdMenu', 'helperFunc', 'shopcartResource', 'locationResource', 'aircraftResource',
-    function AddCartController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, myJdMenu, helperFunc, shopcartResource, locationResource, aircraftResource) {
-
+addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', 'myJdMenu', 'helperFunc', 'shopcartResource', 'locationResource', 'aircraftResource', 'mycaptainResource',
+    function AddCartController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, myJdMenu, helperFunc, shopcartResource, locationResource, aircraftResource, mycaptainResource) {
+        $scope.cssClass = 'cart';
         if($body.hasClass('sidebar_secondary_active')) {
             $body.removeClass('sidebar_secondary_active');
         }
@@ -17,20 +17,59 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
         $scope.LinearProgress = false;
         $scope.shopCartsendbutton = false;
         $scope.shopCartLinearProgress = false;
+        $scope.startDatePickerId = 'estimateArrival';
+        $scope.endDatePickerId = 'estimateDeparture';
+        $scope.icon = '../css/icons/airport-flight-info-signal.png';
 
-        $scope.fcart = {};
+        //$scope.fcart = {datePicker: { locale: 'es', format: 'YYYY-MM-DD' }, startdatePicker: { dateFormated: null, minDate: moment() }, enddatePicker: { dateFormated: null, minDate:  moment() };
+            $scope.fcart = {datePicker: { locale: 'es', format: 'YYYY-MM-DD' }, startdatePicker: { dateFormated: null, minDate: '' }, enddatePicker: { dateFormated: null, minDate:  '' }
+        };
+        $scope.itemQuantity = "";
         $scope.pPrice = '';
+
+        $scope.$on('lx-date-picker__close-end', function(_event, _dialogId)
+        {
+            //var self = this;
+            if ($scope.endDatePickerId === _dialogId)
+            {
+                if(moment($scope.fcart.enddatePicker.dateFormated).diff($scope.fcart.startdatePicker.dateFormated, 'days') < 0 ){
+                    $scope.fcart.enddatePicker.dateFormated = angular.copy($scope.fcart.startdatePicker.dateFormated);
+                    $scope.fcart.estimateDeparture = angular.copy($scope.fcart.startdatePicker.dateFormated);
+                    console.log($scope.fcart.toSource());
+                    console.log(moment($scope.fcart.enddatePicker.dateFormated).diff($scope.fcart.startdatePicker.dateFormated, 'days'));
+                    LxNotificationService.error('The departure date must be equal or grater than the arrival date, please select a new departure date' );
+                }
+            }
+        });
+
+
+        $scope.datePickerCallback = function datePickerCallback(_newdate, action=false)
+        {
+            if(action==true){
+                $scope.fcart.enddatePicker.dateFormated = moment(_newdate).locale($scope.fcart.datePicker.locale).format($scope.fcart.datePicker.format);
+
+
+                LxDatePickerService.close($scope.endDatePickerId);
+                return;
+            }
+            //console.log("_newdate: "+_newdate);
+                $scope.fcart.startdatePicker.dateFormated = moment(_newdate).locale($scope.fcart.datePicker.locale).format($scope.fcart.datePicker.format);
+            /*console.log("startdatePicker: "+$scope.fcart.startdatePicker.toSource());
+            $scope.fcart.enddatePicker.minDate = angular.copy(moment($scope.fcart.startdatePicker.dateFormated));
+            console.log("enddatePicker: "+$scope.fcart.enddatePicker.toSource());*/
+
+            LxDatePickerService.close($scope.startDatePickerId);
+        };
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
-            location: "", estimateArrival: "", time: "", myaircraft: ""
+            location: false, estimateArrival: null, time: "", myaircraft: "", datePicker: { locale: 'es', format: 'YYYY-MM-DD' }, startdatePicker: { dateFormated: new Date()}, enddatePicker: { dateFormated: new Date()}
         };
-        $scope.masteritem = {
-            itemQuantity: false
-        };
+        $scope.masteritem = "";
         $scope.reset = function() {
             $scope.fcart = angular.copy($scope.master);
             $scope.itemQuantity = angular.copy($scope.masteritem);
+            $scope.prepareFligthList = [];
         };
 
         $scope.$watch('fcart.location', function (newVal, oldVal, scope) {
@@ -43,7 +82,13 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
         });
         /***************** TO RESET FORMS ********************/
 
+        /***************** OPTIONS LIST ********************/
+
         $scope.listMyAirCrafts = aircraftResource.usersAircraft();
+        $scope.listCaptain = mycaptainResource.query();
+
+        /***************** OPTIONS LIST ********************/
+
         /****** Location Search ********/
         $scope.selectAjax = {
             loading: false,
@@ -73,42 +118,6 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
         };
 
 
-        /* OnStartDateCloseEvent
-        $scope.startDatePickerId = 'estimateArrival';
-        $scope.endDatePickerId = 'estimateDeparture'
-        $scope.minDate ={};
-        $scope.setMaxDepartureDate = function setMaxDepartureDate(_newDate){
-            console.log(_newDate.toSource());
-            $scope.minDate= _newDate;
-            console.log($scope.minDate.toSource());
-        }*/
-        /*$scope.$on('lx-date-picker__close-start', function(_event, _datePickerId)
-        {
-            //var self = this;
-            if ($scope.startDatePickerId === _datePickerId)
-            {
-                //LxDialogService.close(self.dialogProduct);
-                $scope.listPrices = [];
-            }
-
-            if ($scope.endDatePickerId === _datePickerId)
-            {
-                //LxDialogService.close(self.dialogPrice);
-            }
-        });*/
-
-        /*$scope.productOpts = [];
-        $scope.getproductOpts = function getproductOpts() {
-            var self = this;
-            $http.get('/products/showall').
-            then(
-                function (response) {
-                    self.productOpts = response.data;
-
-                }
-            )
-        };*/
-
         $scope.productInfo = function productInfo(info) {
 
             $scope.fcart.push(info.description);
@@ -126,14 +135,18 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
                 $scope.checkService.push(item);
             } else {
                 // remove item
-
+                $scope.servicesTotal = 0;
                 for(var i=0 ; i < $scope.checkService.length; i++) {
                     if($scope.checkService[i].id == item.id){
                         if(!itemQuantity){
                             $scope.checkService.splice(i,1);
                         }else{
                             $scope.checkService[i].quantity = itemQuantity;
+                            $scope.checkService[i].subtotal = itemQuantity * item.price;
                         }
+                    }
+                    if(angular.isDefined($scope.checkService[i].subtotal)){
+                        $scope.servicesTotal += $scope.checkService[i].subtotal;
                     }
                 }
             }
@@ -152,25 +165,25 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
         $scope.searchServices = function searchServices($event, fields, id) {
             $event.preventDefault();
             var self = this;
-            this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
-            this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
+            $scope.LinearProgress = helperFunc.toogleStatus($scope.LinearProgress);
+            $scope.sendbutton = helperFunc.toogleStatus($scope.sendbutton);
 
-            var toSave = '{"location":"'+fields.location.id+'", "myaircraft":"'+fields.myaircraft.id+'", "landing":"'+fields.estimateArrival+'"}';
+            var toSave = {location : fields.location.id ,  myaircraft : fields.myaircraft.id, landing: fields.estimateArrival,  mycaptain : fields.mycaptain.id };
 
             var prepareFlight = shopcartResource.prepareFlight({}, toSave);
             prepareFlight.$promise.
             then(
                 function (data) {
                     console.log("Productos: " + data.toSource());
+                    $scope.LinearProgress = helperFunc.toogleStatus($scope.LinearProgress);
+                    $scope.sendbutton = helperFunc.toogleStatus($scope.sendbutton);
                     $scope.prepareFligthList = data;
                     LxNotificationService.info('Seleccione los servicio que desea adquirir');
-                    self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
-                    self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                     //$location.path("/dashboard");
                 },function (data) {
                     console.log("Error!!" + data);
-                    self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
-                    self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                    $scope.LinearProgress = helperFunc.toogleStatus($scope.LinearProgress);
+                    $scope.sendbutton = helperFunc.toogleStatus($scope.sendbutton);
                 }
             )
         };
@@ -185,16 +198,19 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
             this.shopCartLinearProgress = helperFunc.toogleStatus(this.shopCartLinearProgress);
             this.shopCartsendbutton = helperFunc.toogleStatus(this.shopCartsendbutton);
 
-            var toSave = '{  "location":"'+fields.location.id+'",  "myaircraft":14, "captain":1, "landing":"'+fields.estimateArrival+'",  "description":"'+fields.description+'",  "generated":"false",  "items": '+ angular.toJson($scope.checkService) +'}';
+            /*var toSave = { location: fields.location.id, myaircraft: fields.myaircraft.id, captain: fields.mycaptain.id, landing: helperFunc.dateToDB(fields.estimateArrival), description: fields.description, generated: false, items: angular.toJson($scope.checkService) };*/
+            console.log(fields.toSource());
 
-            var addToCart = shopcartResource.addItemCart({}, toSave);
-            addToCart.$promise.
+            var toSave = '{ "location":"'+fields.location.id+'",  "myaircraft":14, "captain":1, "landing":"'+helperFunc.dateToDB(fields.startdatePicker.dateFormated+" "+fields.time+":00", "YYYY-MM-DD HH:mm:ss", true)+'",  "description":"'+fields.description+'",  "generated":"false",  "items": '+ angular.toJson($scope.checkService) +'}';
+
+            //var addToCart = shopcartResource.addItemCart({}, toSave);
+            shopcartResource.addItemCart({}, toSave).$promise.
             then(
                 function (data) {
                     console.log("cart: " + data.toSource());
                     //$rootScope.cart = data;
                     $rootScope.cart = shopcartResource.getCartUser();
-                    LxNotificationService.info('Guardado en el Carro');
+                    LxNotificationService.info('Saved en el Carro');
                     self.shopCartLinearProgress = helperFunc.toogleStatus(self.shopCartLinearProgress);
                     self.shopCartsendbutton = helperFunc.toogleStatus(self.shopCartsendbutton);
                     //$location.path("/dashboard");
@@ -208,109 +224,5 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
 
         /****************** addShopCart ******************/
 
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
 
     }]);

@@ -17,6 +17,8 @@ public class Product {
     private String name;
     private String detaildesc;
     private String pricetype;
+    private String unit;
+    private String unitdesc;
     private Date dcreate;
     private Date dupdate;
     private boolean active;
@@ -94,6 +96,22 @@ public class Product {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getUnitdesc() {
+        return unitdesc;
+    }
+
+    public void setUnitdesc(String unitdesc) {
+        this.unitdesc = unitdesc;
     }
 
     @Transient

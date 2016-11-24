@@ -3,23 +3,23 @@
  */
 'use strict';
 
-var aircrafts = angular.module('aircrafts', ['ngRoute', 'ngMessages']);
+var pilot = angular.module('pilot', ['ngRoute', 'ngMessages']);
 
-aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'grpServResource', 'LxDialogService', 'LxNotificationService',
-    function aircraftsController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, grpServResource, LxDialogService, LxNotificationService) {
-
+pilot.controller('pilotController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'grpServResource', 'LxDialogService', 'LxNotificationService',
+    function pilotsController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, grpServResource, LxDialogService, LxNotificationService) {
+        $scope.cssClass = 'pilot';
         var self = this;
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
 
-        $scope.faircrafts = {};
+        $scope.fpilots = {};
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
             groupcode: "", description: "", detailsdesc: ""
         };
         $scope.reset = function() {
-            $scope.faircrafts = angular.copy($scope.master);
+            $scope.fpilots = angular.copy($scope.master);
             $scope.editFieldsGS = angular.copy($scope.master);
         };
         /***************** TO RESET FORMS ********************/
@@ -29,10 +29,10 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
 
 
 
-        /********** editGrpServ ********/
+        /********** editPilot ********/
         $scope.listGS = grpServResource.query();
 
-        $scope.dialogGrpServ = "dialogGrpServ";
+        $scope.dialogPilot = "dialogPilot";
         $scope.editFieldsGS = {};
 
         /***************** TO RESET EDIT FORMS ********************/
@@ -47,9 +47,9 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
         /***************** TO RESET FORMS ********************/
         //$scope.reset();
 
-        $scope.openDialogGrpServ = function openDialogGrpServ(gs)
+        $scope.openDialogPilot = function openDialogPilot(gs)
         {
-            LxDialogService.open(this.dialogGrpServ);
+            LxDialogService.open(this.dialogPilot);
             console.log(gs.id );
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
             $scope.editmaster = {
@@ -77,13 +77,13 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
         $scope.$on('lx-dialog__open-start', function(_event, _dialogId)
         {
             //var self = this;
-            if ($scope.dialogGrpServ === _dialogId)
+            if ($scope.dialogPilot === _dialogId)
             {
 
             }
         });
 
-        $scope.updateGrpServ = function updateGrpServ($event, fields) {
+        $scope.updatePilot = function updatePilot($event, fields) {
             $event.preventDefault();
             var self = this;
 
@@ -94,12 +94,12 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
             grpServResource.update({id: fields[0].id}, fields[0]).$promise.
             then(
                 function (data) {
-                    console.log("Actualizado!!" + data);
-                    LxNotificationService.success('Actualización realizada!!!');
+                    console.log("Updated!!" + data);
+                    LxNotificationService.success('Update successful!!!');
                     $scope.listGS = grpServResource.query();
                     $scope.reset();
                     //$location.path("/dashboard");
-                    LxDialogService.close(self.dialogGrpServ);
+                    LxDialogService.close(self.dialogPilot);
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                 },function (data) {
@@ -110,10 +110,10 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
             )
         }
 
-        /********** editGrpServ ********/
+        /********** editPilot ********/
 
-        /********** addGrpServ ********/
-        $scope.addGrpServ = function addGrpServ($event, fields) {
+        /********** addPilot ********/
+        $scope.addPilot = function addPilot($event, fields) {
             $event.preventDefault();
             var self = this;
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
@@ -122,8 +122,8 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
             grpServResource.save({}, fields).$promise.
             then(
                 function (data) {
-                    console.log("Guardado!!" + data);
-                    LxNotificationService.success('Grupo de servicio, creado satisfactoriamente!!!');
+                    console.log("Saved!!" + data);
+                    LxNotificationService.success('Pilot, created successfully!!!');
                     $scope.listGS = grpServResource.query();
                     $scope.reset();
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
@@ -135,17 +135,17 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
                 }
             )
         }
-        /********** addGrpServ ********/
+        /********** addPilot ********/
 
-        /********** deleteGrpServ ********/
+        /********** deletePilot ********/
 
-        $scope.deleteGrpServ = function deleteGrpServ(data) {
+        $scope.deletePilot = function deletePilot(data) {
             //$event.preventDefault();
             var self = this;
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
             console.log(data.toSource());
-            LxNotificationService.confirm('Eliminar Grupo de Servicio', 'Por favor confirme que desea eliminar este grupo de servicio.',
+            LxNotificationService.confirm('Eliminar Pilot', 'Por favor confirme que desea eliminar este grupo de servicio.',
                 {
                     cancel: 'Cancelar',
                     ok: 'Eliminar'
@@ -157,9 +157,9 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
                         then(
                             function (data) {
                                 console.log("Borrado!!" + data);
-                                LxNotificationService.success('Grupo de servicio, Eliminado satisfactoriamente!!!');
+                                LxNotificationService.success('Pilot, Erased successfully!!!');
                                 $scope.listGS = grpServResource.query();
-                                $scope.faircrafts = [];
+                                $scope.fpilots = [];
                                 //$location.path("/dashboard");
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
@@ -179,7 +179,7 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
                 });
 
         }
-        /********** deleteGrpServ ********/
+        /********** deletePilot ********/
 
 
         $scope.userOpts = {
@@ -238,13 +238,13 @@ aircrafts.controller('aircraftsController', ['$rootScope','$scope', '$http', '$l
             "aircraft":[
                 {
                     "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
+                "text":"Aircrafts"
             }
         ],
             "captain":[
             {
                 "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
+                "text":"Captaines"
             }
         ],            "mainmenu":{
                 "main":[

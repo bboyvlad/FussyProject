@@ -1,14 +1,18 @@
 <div class="row" ng-init="updateMenu()">
 
     <form name="RefillJdForm" novalidate>
-        {{user.user_id}}
-        {{frfilljdcard}}
+        <!--{{user.user_id}}
+        {{frfilljdcard}}-->
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
 
             <div flex-item="8">
                 <div class="card" >
+                    <div class="card__img card__img--top bgc-jd">
+                        <img ng-src="{{icon}}" width="100px" class="p+">
+                        <p class="fs-headline tc-white-1 display-block" >{{'jdcard.refill.card1.headline' | translate}} J&amp;D Card </p>
+                    </div>
                     <div class="p+">
-                        <strong class="fs-headline display-block">Escogue tu metodo de pago</strong>
+                        <strong class="fs-headline display-block">{{'jdcard.refill.card1.title' | translate}}</strong>
                         <!--1{{paymethod}}-->
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
@@ -19,31 +23,31 @@
                                                 ng-model="frfilljdcard.idpaymethod"
                                                 lx-allow-clear="true"
                                                 lx-choices="paymethod"
-                                                lx-fixed-label="true"
+                                                lx-fixed-label="false"
                                                 lx-valid="RefillJdForm.idpaymethod.$valid"
                                                 lx-error="RefillJdForm.idpaymethod.$invalid && RefillJdForm.idpaymethod.$touched"
                                                 ng-required="true"
-                                                lx-label="Escoja su metodo de pago">
+                                                lx-label="{{'jdcard.refill.form1.f1' | translate}}" >
                                             <lx-select-selected>
-                                                {{ $selected.payacctnum }}
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                             </lx-select-selected>
 
                                             <lx-select-choices>
-                                                {{ $choice.payacctnum }}
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }}
                                             </lx-select-choices>
                                         </lx-select>
                                         <div ng-messages="RefillJdForm.idpaymethod.$error"
                                              ng-if="RefillJdForm.idpaymethod.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                            <div ng-message="required">{{'jdcard.refill.form1.f1error.e1' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="TDC Codigo de Seguridad"
+                                                lx-label="{{'jdcard.refill.form1.f2' | translate}}"
                                                 lx-valid="RefillJdForm.pay_ccsec.$valid"
                                                 lx-error="RefillJdForm.pay_ccsec.$invalid && RefillJdForm.pay_ccsec.$touched">
                                             <input type="text" name="pay_ccsec" ng-required="true"
@@ -55,9 +59,9 @@
                                              ng-if="RefillJdForm.pay_ccsec.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Introduce el numero de tu TDC</div>
-                                            <div ng-message="minlength">Introduce los 3 digitos del verso de tu tarjeta</div>
-                                            <div ng-message="maxlength">Introduce los 4 digitos del verso de tu tarjeta</div>
+                                            <div ng-message="required">{{'jdcard.refill.form1.f2error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'jdcard.refill.form1.f2error.e2' | translate}}</div>
+                                            <div ng-message="maxlength">{{'jdcard.refill.form1.f2error.e3' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -73,11 +77,11 @@
                         <img th:src="@{/css/img/Fuelcard.jpg}"
                              src="/css/img/Fuelcard.jpg"
                              ng-src="/css/img/Fuelcard.jpg" />
-                        <span class="fs-headline tc-white-1 display-block">Lorem Ipsum</span>
+                        <!--<span class="fs-headline tc-white-1 display-block">Lorem Ipsum</span>-->
                     </div>
                     <div class="p+">
-                        <strong class="fs-headline display-block">Personaliza tu J&amp;D Card</strong>
-                        1{{jdcardOpts}}
+                        <strong class="fs-headline display-block">{{'jdcard.refill.card2.title' | translate}} J&amp;D Card</strong>
+                        <!--1{{jdcardOpts}}-->
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
                                 <div flex-container="row">
@@ -92,27 +96,27 @@
                                                 lx-valid="jdcardSelected.$valid"
                                                 lx-error="jdcardSelected.$invalid && jdcardSelected.$touched"
                                                 ng-required="true"
-                                                lx-label="Escoja su metodo de pago">
+                                                lx-label="{{'jdcard.refill.form1.f3' | translate}} J&amp;D Card">
                                             <lx-select-selected>
-                                                {{ $selected.payacctnum }}
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                             </lx-select-selected>
 
                                             <lx-select-choices>
-                                                {{ $choice.payacctnum }}
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }} - {{ $choice.payavailable | currency:"USD$"  }}
                                             </lx-select-choices>
                                         </lx-select>
                                         <div ng-messages="jdcardSelected.$error"
                                              ng-if="jdcardSelected.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                            <div ng-message="required">{{'jdcard.refill.form1.f3error.e1' | translate}} J&amp;D Card</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="Monto"
+                                                lx-label="{{'jdcard.refill.form1.f4' | translate}}"
                                                 lx-valid="RefillJdForm.amount.$valid"
                                                 lx-error="RefillJdForm.amount.$invalid && RefillJdForm.amount.$touched">
                                             <input type="text" name="amount"
@@ -124,8 +128,8 @@
                                              ng-if="RefillJdForm.amount.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Introduce el Monto</div>
-                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                            <div ng-message="required">{{'jdcard.refill.form1.f4error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'jdcard.refill.form1.f4error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -143,11 +147,11 @@
         <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
             <lx-button lx-color="red"
                        ng-click="reset()"
-            >Limpiar</lx-button>
+            >{{'jdcard.refill.form1.button1' | translate}}</lx-button>
             <lx-button lx-color="green"
                        ng-click="refilljdCard($event, frfilljdcard)"
                        ng-disabled="sendbutton || RefillJdForm.$invalid">
-                Refill J&amp;D CARD</lx-button>
+                {{'jdcard.refill.form1.button2' | translate}}</lx-button>
         </div>
     </form>
 

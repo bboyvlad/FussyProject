@@ -1,5 +1,5 @@
 /*
- LumX v1.1.2
+ LumX v1.3.2
  (c) 2014-2016 LumApps http://ui.lumapps.com
  License: MIT
 */
@@ -21,6 +21,7 @@
 
     angular.module('lumx.button', []);
     angular.module('lumx.checkbox', []);
+    angular.module('lumx.data-table', []);
     angular.module('lumx.date-picker', []);
     angular.module('lumx.dialog', ['lumx.utils.event-scheduler']);
     angular.module('lumx.dropdown', ['lumx.utils.event-scheduler']);
@@ -41,6 +42,7 @@
     angular.module('lumx', [
         'lumx.button',
         'lumx.checkbox',
+        'lumx.data-table',
         'lumx.date-picker',
         'lumx.dialog',
         'lumx.dropdown',
@@ -485,6 +487,235 @@
     'use strict';
 
     angular
+        .module('lumx.data-table')
+        .directive('lxDataTable', lxDataTable);
+
+    function lxDataTable()
+    {
+        return {
+            restrict: 'E',
+            templateUrl: 'data-table.html',
+            scope:
+            {
+                border: '=?lxBorder',
+                selectable: '=?lxSelectable',
+                thumbnail: '=?lxThumbnail',
+                tbody: '=lxTbody',
+                thead: '=lxThead'
+            },
+            link: link,
+            controller: LxDataTableController,
+            controllerAs: 'lxDataTable',
+            bindToController: true,
+            transclude: true,
+            replace: true
+        };
+
+        function link(scope, element, attrs, ctrl)
+        {
+            attrs.$observe('id', function(_newId)
+            {
+                ctrl.id = _newId;
+            });
+        }
+    }
+
+    LxDataTableController.$inject = ['$rootScope', '$sce', '$scope'];
+
+    function LxDataTableController($rootScope, $sce, $scope)
+    {
+        var lxDataTable = this;
+
+        lxDataTable.areAllRowsSelected = areAllRowsSelected;
+        lxDataTable.border = angular.isUndefined(lxDataTable.border) ? true : lxDataTable.border;
+        lxDataTable.sort = sort;
+        lxDataTable.toggle = toggle;
+        lxDataTable.toggleAllSelected = toggleAllSelected;
+
+        lxDataTable.$sce = $sce;
+        lxDataTable.allRowsSelected = false;
+        lxDataTable.selectedRows = [];
+
+        $scope.$on('lx-data-table__select-all', function(event, id)
+        {
+            if (id === lxDataTable.id)
+            {
+                _selectAll();
+            }
+        });
+
+        $scope.$on('lx-data-table__unselect-all', function(event, id)
+        {
+            if (id === lxDataTable.id)
+            {
+                _unselectAll();
+            }
+        });
+
+        ////////////
+
+        function _selectAll()
+        {
+            lxDataTable.selectedRows.length = 0;
+
+            for (var i = 0, len = lxDataTable.tbody.length; i < len; i++)
+            {
+                if (!lxDataTable.tbody[i].lxDataTableDisabled)
+                {
+                    lxDataTable.tbody[i].lxDataTableSelected = true;
+                    lxDataTable.selectedRows.push(lxDataTable.tbody[i]);
+                }
+            }
+
+            lxDataTable.allRowsSelected = true;
+
+            $rootScope.$broadcast('lx-data-table__unselect', lxDataTable.selectedRows);
+        }
+
+        function _unselectAll()
+        {
+            for (var i = 0, len = lxDataTable.tbody.length; i < len; i++)
+            {
+                if (!lxDataTable.tbody[i].lxDataTableDisabled)
+                {
+                    lxDataTable.tbody[i].lxDataTableSelected = false;
+                }
+            }
+
+            lxDataTable.allRowsSelected = false;
+            lxDataTable.selectedRows.length = 0;
+
+            $rootScope.$broadcast('lx-data-table__select', lxDataTable.selectedRows);
+        }
+
+        ////////////
+
+        function areAllRowsSelected()
+        {
+            var displayedRows = 0;
+
+            for (var i = 0, len = lxDataTable.tbody.length; i < len; i++)
+            {
+                if (!lxDataTable.tbody[i].lxDataTableDisabled)
+                {
+                    displayedRows++;
+                }
+            }
+
+            if (displayedRows === lxDataTable.selectedRows.length)
+            {
+                lxDataTable.allRowsSelected = true;
+            }
+            else
+            {
+                lxDataTable.allRowsSelected = false;
+            }
+        }
+
+        function sort(_column)
+        {
+            if (!_column.sortable)
+            {
+                return;
+            }
+
+            for (var i = 0, len = lxDataTable.thead.length; i < len; i++)
+            {
+                if (lxDataTable.thead[i].sortable && lxDataTable.thead[i].name !== _column.name)
+                {
+                    lxDataTable.thead[i].sort = undefined;
+                }
+            }
+
+            if (!_column.sort || _column.sort === 'desc')
+            {
+                _column.sort = 'asc';
+            }
+            else
+            {
+                _column.sort = 'desc';
+            }
+
+            $rootScope.$broadcast('lx-data-table__sort', _column);
+        }
+
+        function toggle(_row)
+        {
+            if (_row.lxDataTableDisabled || !lxDataTable.selectable)
+            {
+                return;
+            }
+
+            _row.lxDataTableSelected = !_row.lxDataTableSelected;
+
+            if (_row.lxDataTableSelected)
+            {
+                lxDataTable.selectedRows.push(_row);
+                lxDataTable.areAllRowsSelected();
+
+                $rootScope.$broadcast('lx-data-table__select', lxDataTable.selectedRows);
+            }
+            else
+            {
+                if (lxDataTable.selectedRows.length)
+                {
+                    lxDataTable.selectedRows.splice(lxDataTable.selectedRows.indexOf(_row), 1);
+                }
+
+                lxDataTable.allRowsSelected = false;
+
+                $rootScope.$broadcast('lx-data-table__unselect', lxDataTable.selectedRows);
+            }
+        }
+
+        function toggleAllSelected()
+        {
+            if (lxDataTable.allRowsSelected)
+            {
+                _unselectAll();
+            }
+            else
+            {
+                _selectAll();
+            }
+        }
+    }
+})();
+(function()
+{
+    'use strict';
+
+    angular
+        .module('lumx.data-table')
+        .service('LxDataTableService', LxDataTableService);
+
+    LxDataTableService.$inject = ['$rootScope'];
+
+    function LxDataTableService($rootScope)
+    {
+        var service = this;
+
+        service.selectAll = selectAll;
+        service.unselectAll = unselectAll;
+
+        ////////////
+
+        function selectAll(_dataTableId)
+        {
+            $rootScope.$broadcast('lx-data-table__select-all', _dataTableId);
+        }
+
+        function unselectAll(_dataTableId)
+        {
+            $rootScope.$broadcast('lx-data-table__unselect-all', _dataTableId);
+        }
+    }
+})();
+(function()
+{
+    'use strict';
+
+    angular
         .module('lumx.date-picker')
         .directive('lxDatePicker', lxDatePicker);
 
@@ -533,9 +764,9 @@
         }
     }
 
-    LxDatePickerController.$inject = ['$element', '$scope', '$timeout', '$transclude', 'LxDatePickerService'];
+    LxDatePickerController.$inject = ['$element', '$scope', '$timeout', '$transclude', 'LxDatePickerService', 'LxUtils'];
 
-    function LxDatePickerController($element, $scope, $timeout, $transclude, LxDatePickerService)
+    function LxDatePickerController($element, $scope, $timeout, $transclude, LxDatePickerService, LxUtils)
     {
         var lxDatePicker = this;
         var input;
@@ -562,6 +793,7 @@
         lxDatePicker.isOpen = false;
         lxDatePicker.moment = moment;
         lxDatePicker.yearSelection = false;
+        lxDatePicker.uuid = LxUtils.generateUUID();
 
         $transclude(function(clone)
         {
@@ -805,10 +1037,7 @@
 
             $timeout(function()
             {
-                angular.element('body').css(
-                {
-                    overflow: 'visible'
-                });
+                angular.element('body').removeClass('no-scroll-date-picker-' + scopeMap[_datePickerId].uuid);
 
                 datePickerFilter.remove();
 
@@ -837,10 +1066,7 @@
 
             activeDatePickerId = _datePickerId;
 
-            angular.element('body').css(
-            {
-                overflow: 'hidden'
-            });
+            angular.element('body').addClass('no-scroll-date-picker-' + scopeMap[_datePickerId].uuid);
 
             datePickerFilter = angular.element('<div/>',
             {
@@ -903,17 +1129,16 @@
         .directive('lxDialogFooter', lxDialogFooter)
         .directive('lxDialogClose', lxDialogClose);
 
-    lxDialog.$inject = ['LxDialogService'];
-
-    function lxDialog(LxDialogService)
+    function lxDialog()
     {
         return {
             restrict: 'E',
-            template: '<div class="dialog dialog--l"><div ng-if="lxDialog.isOpen" ng-transclude></div></div>',
+            template: '<div class="dialog" ng-class="{ \'dialog--l\': !lxDialog.size || lxDialog.size === \'l\', \'dialog--s\': lxDialog.size === \'s\', \'dialog--m\': lxDialog.size === \'m\' }"><div ng-if="lxDialog.isOpen" ng-transclude></div></div>',
             scope:
             {
                 autoClose: '=?lxAutoClose',
-                escapeClose: '=?lxEscapeClose'
+                escapeClose: '=?lxEscapeClose',
+                size: '@?lxSize'
             },
             link: link,
             controller: LxDialogController,
@@ -923,26 +1148,261 @@
             transclude: true
         };
 
-        function link(scope, element, attrs)
+        function link(scope, element, attrs, ctrl)
         {
             attrs.$observe('id', function(_newId)
             {
-                LxDialogService.registerScope(_newId, scope);
+                ctrl.id = _newId;
             });
         }
     }
 
-    LxDialogController.$inject = ['$element'];
+    LxDialogController.$inject = ['$element', '$interval', '$rootScope', '$scope', '$timeout', '$window', 'LxDepthService', 'LxEventSchedulerService', 'LxUtils'];
 
-    function LxDialogController($element)
+    function LxDialogController($element, $interval, $rootScope, $scope, $timeout, $window, LxDepthService, LxEventSchedulerService, LxUtils)
     {
         var lxDialog = this;
+        var dialogFilter = angular.element('<div/>',
+        {
+            class: 'dialog-filter'
+        });
+        var dialogHeight;
+        var dialogInterval;
+        var dialogScrollable;
+        var elementParent = $element.parent();
+        var idEventScheduler;
+        var resizeDebounce;
+        var windowHeight;
 
         lxDialog.autoClose = angular.isDefined(lxDialog.autoClose) ? lxDialog.autoClose : true;
-        lxDialog.element = $element;
-        lxDialog.elementParent = $element.parent();
         lxDialog.escapeClose = angular.isDefined(lxDialog.escapeClose) ? lxDialog.escapeClose : true;
         lxDialog.isOpen = false;
+        lxDialog.uuid = LxUtils.generateUUID();
+
+        $scope.$on('lx-dialog__open', function(event, id)
+        {
+            if (id === lxDialog.id)
+            {
+                open();
+            }
+        });
+
+        $scope.$on('lx-dialog__close', function(event, id)
+        {
+            if (id === lxDialog.id)
+            {
+                close();
+            }
+        });
+
+        $scope.$on('$destroy', function()
+        {
+            close();
+        });
+
+        ////////////
+
+        function checkDialogHeight()
+        {
+            var dialog = $element;
+            var dialogHeader = dialog.find('.dialog__header');
+            var dialogContent = dialog.find('.dialog__content');
+            var dialogFooter = dialog.find('.dialog__footer');
+
+            if (!dialogFooter.length)
+            {
+                dialogFooter = dialog.find('.dialog__actions');
+            }
+
+            if (angular.isUndefined(dialogHeader))
+            {
+                return;
+            }
+
+            var heightToCheck = 60 + dialogHeader.outerHeight() + dialogContent.outerHeight() + dialogFooter.outerHeight();
+
+            if (dialogHeight === heightToCheck && windowHeight === $window.innerHeight)
+            {
+                return;
+            }
+
+            dialogHeight = heightToCheck;
+            windowHeight = $window.innerHeight;
+
+            if (heightToCheck >= $window.innerHeight)
+            {
+                dialog.addClass('dialog--is-fixed');
+
+                dialogScrollable
+                    .css(
+                    {
+                        top: dialogHeader.outerHeight(),
+                        bottom: dialogFooter.outerHeight()
+                    })
+                    .off('scroll', checkScrollEnd)
+                    .on('scroll', checkScrollEnd);
+            }
+            else
+            {
+                dialog.removeClass('dialog--is-fixed');
+
+                dialogScrollable
+                    .removeAttr('style')
+                    .off('scroll', checkScrollEnd);
+            }
+        }
+
+        function checkDialogHeightOnResize()
+        {
+            if (resizeDebounce)
+            {
+                $timeout.cancel(resizeDebounce);
+            }
+
+            resizeDebounce = $timeout(function()
+            {
+                checkDialogHeight();
+            }, 200);
+        }
+
+        function checkScrollEnd()
+        {
+            if (dialogScrollable.scrollTop() + dialogScrollable.innerHeight() >= dialogScrollable[0].scrollHeight)
+            {
+                $rootScope.$broadcast('lx-dialog__scroll-end', lxDialog.id);
+
+                dialogScrollable.off('scroll', checkScrollEnd);
+
+                $timeout(function()
+                {
+                    dialogScrollable.on('scroll', checkScrollEnd);
+                }, 500);
+            }
+        }
+
+        function onKeyUp(_event)
+        {
+            if (_event.keyCode == 27)
+            {
+                close();
+            }
+
+            _event.stopPropagation();
+        }
+
+        function open()
+        {
+            if (lxDialog.isOpen)
+            {
+                return;
+            }
+            
+            LxDepthService.register();
+
+            angular.element('body').addClass('no-scroll-dialog-' + lxDialog.uuid);
+
+            dialogFilter
+                .css('z-index', LxDepthService.getDepth())
+                .appendTo('body');
+
+            if (lxDialog.autoClose)
+            {
+                dialogFilter.on('click', function()
+                {
+                    close();
+                });
+            }
+
+            if (lxDialog.escapeClose)
+            {
+                idEventScheduler = LxEventSchedulerService.register('keyup', onKeyUp);
+            }
+
+            $element
+                .css('z-index', LxDepthService.getDepth() + 1)
+                .appendTo('body')
+                .show();
+
+            $timeout(function()
+            {
+                $rootScope.$broadcast('lx-dialog__open-start', lxDialog.id);
+
+                lxDialog.isOpen = true;
+
+                dialogFilter.addClass('dialog-filter--is-shown');
+                $element.addClass('dialog--is-shown');
+            }, 100);
+
+            $timeout(function()
+            {
+                if ($element.find('.dialog__scrollable').length === 0)
+                {
+                    $element.find('.dialog__content').wrap(angular.element('<div/>',
+                    {
+                        class: 'dialog__scrollable'
+                    }));
+                }
+
+                dialogScrollable = $element.find('.dialog__scrollable');
+            }, 200);
+
+            $timeout(function()
+            {
+                $rootScope.$broadcast('lx-dialog__open-end', lxDialog.id);
+            }, 700);
+
+            dialogInterval = $interval(function()
+            {
+                checkDialogHeight();
+            }, 500);
+
+            angular.element($window).on('resize', checkDialogHeightOnResize);
+        }
+
+        function close()
+        {
+            if (!lxDialog.isOpen)
+            {
+                return;
+            }
+            
+            if (angular.isDefined(idEventScheduler))
+            {
+                LxEventSchedulerService.unregister(idEventScheduler);
+                idEventScheduler = undefined;
+            }
+
+            angular.element($window).off('resize', checkDialogHeightOnResize);
+            $element.find('.dialog__scrollable').off('scroll', checkScrollEnd);
+
+            $rootScope.$broadcast('lx-dialog__close-start', lxDialog.id);
+
+            if (resizeDebounce)
+            {
+                $timeout.cancel(resizeDebounce);
+            }
+
+            $interval.cancel(dialogInterval);
+
+            dialogFilter.removeClass('dialog-filter--is-shown');
+            $element.removeClass('dialog--is-shown');
+
+            $timeout(function()
+            {
+                angular.element('body').removeClass('no-scroll-dialog-' + lxDialog.uuid);
+
+                dialogFilter.remove();
+
+                $element
+                    .hide()
+                    .removeClass('dialog--is-fixed')
+                    .appendTo(elementParent);
+
+                lxDialog.isOpen = false;
+                dialogHeight = undefined;
+                $rootScope.$broadcast('lx-dialog__close-end', lxDialog.id);
+            }, 600);
+        }
     }
     /*bboyvlad*/
     function lxDialogHeader()
@@ -996,6 +1456,7 @@
         };
     }
 })();
+
 (function()
 {
     'use strict';
@@ -1004,243 +1465,25 @@
         .module('lumx.dialog')
         .service('LxDialogService', LxDialogService);
 
-    LxDialogService.$inject = ['$interval', '$rootScope', '$timeout', '$window', 'LxDepthService', 'LxEventSchedulerService'];
+    LxDialogService.$inject = ['$rootScope'];
 
-    function LxDialogService($interval, $rootScope, $timeout, $window, LxDepthService, LxEventSchedulerService)
+    function LxDialogService($rootScope)
     {
         var service = this;
-        var activeDialogId;
-        var dialogFilter;
-        var dialogHeight;
-        var dialogInterval;
-        var dialogScrollable;
-        var idEventScheduler;
-        var resizeDebounce;
-        var scopeMap = {};
-        var windowHeight;
 
-        service.close = closeDialog;
-        service.open = openDialog;
-        service.registerScope = registerScope;
+        service.open = open;
+        service.close = close;
 
         ////////////
 
-        function closeDialog(_dialogId)
+        function open(_dialogId)
         {
-            if (angular.isDefined(idEventScheduler))
-            {
-                LxEventSchedulerService.unregister(idEventScheduler);
-                idEventScheduler = undefined;
-            }
-
-            angular.element($window).off('resize', checkDialogHeightOnResize);
-            angular.element('.dialog__scrollable').off('scroll', checkScrollEnd);
-
-            activeDialogId = undefined;
-
-            $rootScope.$broadcast('lx-dialog__close-start', _dialogId);
-
-            if (resizeDebounce)
-            {
-                $timeout.cancel(resizeDebounce);
-            }
-
-            $interval.cancel(dialogInterval);
-
-            dialogFilter.removeClass('dialog-filter--is-shown');
-            scopeMap[_dialogId].element.removeClass('dialog--is-shown');
-
-            $timeout(function()
-            {
-                angular.element('body').css(
-                {
-                    overflow: 'visible'
-                });
-
-                dialogFilter.remove();
-
-                scopeMap[_dialogId].element
-                    .hide()
-                    .removeClass('dialog--is-fixed')
-                    .appendTo(scopeMap[_dialogId].elementParent);
-
-                scopeMap[_dialogId].isOpen = false;
-                dialogHeight = undefined;
-                $rootScope.$broadcast('lx-dialog__close-end', _dialogId);
-            }, 600);
+            $rootScope.$broadcast('lx-dialog__open', _dialogId);
         }
 
-        function checkDialogHeight(_dialogId)
+        function close(_dialogId)
         {
-            var dialog = scopeMap[_dialogId].element;
-            var dialogHeader = dialog.find('.dialog__header');
-            var dialogContent = dialog.find('.dialog__content');
-            var dialogFooter = dialog.find('.dialog__footer');
-
-            if (!dialogFooter.length)
-            {
-                dialogFooter = dialog.find('.dialog__actions');
-            }
-
-            if (angular.isUndefined(dialogHeader))
-            {
-                return;
-            }
-
-            var heightToCheck = 60 + dialogHeader.outerHeight() + dialogContent.outerHeight() + dialogFooter.outerHeight();
-
-            if (dialogHeight === heightToCheck && windowHeight === $window.innerHeight)
-            {
-                return;
-            }
-
-            dialogHeight = heightToCheck;
-            windowHeight = $window.innerHeight;
-
-            if (heightToCheck >= $window.innerHeight)
-            {
-                dialog.addClass('dialog--is-fixed');
-
-                dialogScrollable
-                    .css(
-                    {
-                        top: dialogHeader.outerHeight(),
-                        bottom: dialogFooter.outerHeight()
-                    })
-                    .off('scroll', checkScrollEnd)
-                    .on('scroll', checkScrollEnd);
-            }
-            else
-            {
-                dialog.removeClass('dialog--is-fixed');
-
-                dialogScrollable
-                    .removeAttr('style')
-                    .off('scroll', checkScrollEnd);
-            }
-        }
-
-        function checkDialogHeightOnResize()
-        {
-            if (angular.isDefined(activeDialogId))
-            {
-                if (resizeDebounce)
-                {
-                    $timeout.cancel(resizeDebounce);
-                }
-
-                resizeDebounce = $timeout(function()
-                {
-                    checkDialogHeight(activeDialogId);
-                }, 200);
-            }
-        }
-
-        function checkScrollEnd()
-        {
-            if (angular.isDefined(scopeMap[activeDialogId]))
-            {
-                if (dialogScrollable.scrollTop() + dialogScrollable.innerHeight() >= dialogScrollable[0].scrollHeight)
-                {
-                    $rootScope.$broadcast('lx-dialog__scroll-end', activeDialogId);
-
-                    dialogScrollable.off('scroll', checkScrollEnd);
-
-                    $timeout(function()
-                    {
-                        dialogScrollable.on('scroll', checkScrollEnd);
-                    }, 500);
-                }
-            }
-        }
-
-        function onKeyUp(_event)
-        {
-            if (_event.keyCode == 27 && angular.isDefined(activeDialogId))
-            {
-                closeDialog(activeDialogId);
-            }
-
-            _event.stopPropagation();
-        }
-
-        function openDialog(_dialogId)
-        {
-            LxDepthService.register();
-
-            activeDialogId = _dialogId;
-
-            angular.element('body').css(
-            {
-                overflow: 'hidden'
-            });
-
-            dialogFilter = angular.element('<div/>',
-            {
-                class: 'dialog-filter'
-            });
-
-            dialogFilter
-                .css('z-index', LxDepthService.getDepth())
-                .appendTo('body');
-
-            if (scopeMap[activeDialogId].autoClose)
-            {
-                dialogFilter.on('click', function()
-                {
-                    closeDialog(activeDialogId);
-                });
-            }
-
-            if (scopeMap[activeDialogId].escapeClose)
-            {
-                idEventScheduler = LxEventSchedulerService.register('keyup', onKeyUp);
-            }
-
-            scopeMap[activeDialogId].element
-                .css('z-index', LxDepthService.getDepth() + 1)
-                .appendTo('body')
-                .show();
-
-            $timeout(function()
-            {
-                $rootScope.$broadcast('lx-dialog__open-start', activeDialogId);
-
-                scopeMap[activeDialogId].isOpen = true;
-
-                dialogFilter.addClass('dialog-filter--is-shown');
-                scopeMap[activeDialogId].element.addClass('dialog--is-shown');
-            }, 100);
-
-            $timeout(function()
-            {
-                if (scopeMap[activeDialogId].element.find('.dialog__scrollable').length === 0)
-                {
-                    scopeMap[activeDialogId].element.find('.dialog__content').wrap(angular.element('<div/>',
-                    {
-                        class: 'dialog__scrollable'
-                    }));
-                }
-
-                dialogScrollable = scopeMap[activeDialogId].element.find('.dialog__scrollable');
-            }, 200);
-
-            $timeout(function()
-            {
-                $rootScope.$broadcast('lx-dialog__open-end', activeDialogId);
-            }, 700);
-
-            dialogInterval = $interval(function()
-            {
-                checkDialogHeight(activeDialogId);
-            }, 500);
-
-            angular.element($window).on('resize', checkDialogHeightOnResize);
-        }
-
-        function registerScope(_dialogId, _dialogScope)
-        {
-            scopeMap[_dialogId] = _dialogScope.lxDialog;
+            $rootScope.$broadcast('lx-dialog__close', _dialogId);
         }
     }
 })();
@@ -1311,37 +1554,31 @@
                 }
             });
 
-            $document.on('click', closeDropdownMenu);
+            attrs.$observe('id', function(_newId)
+            {
+                ctrl.uuid = _newId;
+            });
 
             scope.$on('$destroy', function()
             {
-                ctrl.closeDropdownMenu();
-                $document.off('click', closeDropdownMenu);
+                if (ctrl.isOpen)
+                {
+                    ctrl.closeDropdownMenu();
+                }
+
                 $timeout.cancel(timer);
             });
-
-            function closeDropdownMenu()
-            {
-                if (scope.lxDropdown.isOpen)
-                {
-                    timer = $timeout(function()
-                    {
-                        scope.$apply(function()
-                        {
-                            ctrl.closeDropdownMenu();
-                        });
-                    });
-                }
-            }
         }
     }
 
-    LxDropdownController.$inject = ['$element', '$interval', '$scope', '$timeout', '$window', 'LxDepthService', 'LxEventSchedulerService', 'LxUtils'];
+    LxDropdownController.$inject = ['$element', '$scope', '$timeout', '$window', 'LxDepthService', 'LxDropdownService',
+        'LxEventSchedulerService', 'LxUtils'
+    ];
 
-    function LxDropdownController($element, $interval, $scope, $timeout, $window, LxDepthService, LxEventSchedulerService, LxUtils)
+    function LxDropdownController($element, $scope, $timeout, $window, LxDepthService, LxDropdownService,
+        LxEventSchedulerService, LxUtils)
     {
         var lxDropdown = this;
-        var dropdownInterval;
         var dropdownMenu;
         var dropdownToggle;
         var idEventScheduler;
@@ -1356,9 +1593,30 @@
 
         lxDropdown.effect = angular.isDefined(lxDropdown.effect) ? lxDropdown.effect : 'expand';
         lxDropdown.escapeClose = angular.isDefined(lxDropdown.escapeClose) ? lxDropdown.escapeClose : true;
+        lxDropdown.hasToggle = false;
         lxDropdown.isOpen = false;
         lxDropdown.overToggle = angular.isDefined(lxDropdown.overToggle) ? lxDropdown.overToggle : false;
         lxDropdown.position = angular.isDefined(lxDropdown.position) ? lxDropdown.position : 'left';
+
+        $scope.$on('lx-dropdown__open', function(_event, _params)
+        {
+            if (_params.uuid === lxDropdown.uuid && !lxDropdown.isOpen)
+            {
+                LxDropdownService.closeActiveDropdown();
+                LxDropdownService.registerActiveDropdownUuid(lxDropdown.uuid);
+
+                registerDropdownToggle(angular.element(_params.target));
+                openDropdownMenu();
+            }
+        });
+
+        $scope.$on('lx-dropdown__close', function(_event, _params)
+        {
+            if (_params.uuid === lxDropdown.uuid && lxDropdown.isOpen)
+            {
+                closeDropdownMenu();
+            }
+        });
 
         $scope.$on('$destroy', function()
         {
@@ -1369,10 +1627,12 @@
 
         function closeDropdownMenu()
         {
+            LxDropdownService.resetActiveDropdownUuid();
+
             var velocityProperties;
             var velocityEasing;
 
-            $interval.cancel(dropdownInterval);
+            angular.element('body').removeClass('no-scroll-dropdown-' + lxDropdown.uuid);
 
             dropdownMenu.css(
             {
@@ -1453,6 +1713,8 @@
                 {
                     enoughtHeight = false;
                     height = availableHeight;
+
+                    angular.element('body').addClass('no-scroll-dropdown-' + lxDropdown.uuid);
                 }
 
                 if (lxDropdown.effect === 'expand')
@@ -1513,11 +1775,6 @@
                             }
 
                             dropdownMenu.find('.dropdown-menu__content').removeAttr('style');
-
-                            dropdownInterval = $interval(function()
-                            {
-                                setDropdownMenuCss();
-                            }, 500);
                         }
                     });
                 }
@@ -1530,14 +1787,7 @@
                     {
                         duration: 200,
                         easing: 'linear',
-                        queue: false,
-                        complete: function()
-                        {
-                            dropdownInterval = $interval(function()
-                            {
-                                setDropdownMenuCss();
-                            }, 500);
-                        }
+                        queue: false
                     });
                 }
             });
@@ -1573,6 +1823,8 @@
             var dropdownMenuTopAvailable;
             var dropdownMenuBottomAvailable;
             var dropdownMenuWidth;
+            var dropdownMenuLeft;
+            var dropdownMenuRight;
 
             if (lxDropdown.overToggle)
             {
@@ -1601,10 +1853,26 @@
                 dropdownMenuWidth = 'auto';
             }
 
+            if (lxDropdown.position === 'left')
+            {
+                dropdownMenuLeft = dropdownToggle.offset().left;
+                dropdownMenuRight = 'auto';
+            }
+            else if (lxDropdown.position === 'right')
+            {
+                dropdownMenuLeft = 'auto';
+                dropdownMenuRight = windowWidth - dropdownToggle.offset().left - dropdownToggleWidth;
+            }
+            else if (lxDropdown.position === 'center')
+            {
+                dropdownMenuLeft = (dropdownToggle.offset().left + (dropdownToggleWidth / 2)) - (dropdownMenuWidth / 2);
+                dropdownMenuRight = 'auto';
+            }
+
             dropdownMenu.css(
             {
-                right: lxDropdown.position === 'right' ? (windowWidth - dropdownToggle.offset().left - dropdownToggleWidth) : 'auto',
-                left: lxDropdown.position === 'right' ? 'auto' : dropdownToggle.offset().left,
+                left: dropdownMenuLeft,
+                right: dropdownMenuRight,
                 width: dropdownMenuWidth
             });
 
@@ -1641,9 +1909,9 @@
         }
     }
 
-    lxDropdownToggle.$inject = ['$timeout'];
+    lxDropdownToggle.$inject = ['$timeout', 'LxDropdownService'];
 
-    function lxDropdownToggle($timeout)
+    function lxDropdownToggle($timeout, LxDropdownService)
     {
         return {
             restrict: 'AE',
@@ -1660,6 +1928,7 @@
             var timer1;
             var timer2;
 
+            ctrl.hasToggle = true;
             ctrl.registerDropdownToggle(element);
 
             element.on(ctrl.hover ? 'mouseenter' : 'click', function(_event)
@@ -1669,15 +1938,8 @@
                     _event.stopPropagation();
                 }
 
-                angular.element('.dropdown').each(function(index, dropdownElem)
-                {
-                    if (angular.isDefined(angular.element(dropdownElem).scope().lxDropdown) &&
-                        angular.element(dropdownElem).scope().lxDropdown.isOpen &&
-                        angular.element(dropdownElem).scope().lxDropdown.uuid !== ctrl.uuid)
-                    {
-                        angular.element(dropdownElem).scope().lxDropdown.closeDropdownMenu();
-                    }
-                });
+                LxDropdownService.closeActiveDropdown();
+                LxDropdownService.registerActiveDropdownUuid(ctrl.uuid);
 
                 if (ctrl.hover)
                 {
@@ -1838,6 +2100,67 @@
                 $timeout.cancel(timer);
                 element.off();
             });
+        }
+    }
+})();
+(function()
+{
+    'use strict';
+
+    angular
+        .module('lumx.dropdown')
+        .service('LxDropdownService', LxDropdownService);
+
+    LxDropdownService.$inject = ['$document', '$rootScope', '$timeout'];
+
+    function LxDropdownService($document, $rootScope, $timeout)
+    {
+        var service = this;
+        var activeDropdownUuid;
+
+        service.close = close;
+        service.closeActiveDropdown = closeActiveDropdown;
+        service.open = open;
+        service.registerActiveDropdownUuid = registerActiveDropdownUuid;
+        service.resetActiveDropdownUuid = resetActiveDropdownUuid;
+
+        $document.on('click', closeActiveDropdown);
+
+        ////////////
+
+        function close(_uuid)
+        {
+            $rootScope.$broadcast('lx-dropdown__close',
+            {
+                uuid: _uuid
+            });
+        }
+
+        function closeActiveDropdown()
+        {
+            $rootScope.$broadcast('lx-dropdown__close',
+            {
+                uuid: activeDropdownUuid
+            });
+        }
+
+        function open(_uuid, _target)
+        {
+            $rootScope.$broadcast('lx-dropdown__open',
+            {
+                uuid: _uuid,
+                target: _target
+            });
+        }
+
+        function registerActiveDropdownUuid(_uuid)
+        {
+            activeDropdownUuid = _uuid;
+        }
+
+        function resetActiveDropdownUuid()
+        {
+            activeDropdownUuid = undefined;
         }
     }
 })();
@@ -2367,8 +2690,7 @@
             {
                 class: 'dialog-filter'
             });
-
-            /*bboyvlad*/
+            /*bboyvlad class: 'dialog dialog--alert fs-title-bkgimg'*/
             dialog = angular.element('<div/>',
             {
                 class: 'dialog dialog--alert fs-title-bkgimg'
@@ -2984,7 +3306,8 @@
             {
                 allowClear: '=?lxAllowClear',
                 choices: '=?lxChoices',
-                customStyle: '@?lxCustomStyle',
+                choicesCustomStyle: '=?lxChoicesCustomStyle',
+                customStyle: '=?lxCustomStyle',
                 displayFilter: '=?lxDisplayFilter',
                 error: '=?lxError',
                 filter: '&?lxFilter',
@@ -3482,7 +3805,6 @@
         }
     }
 })();
-
 (function()
 {
     'use strict';
@@ -4228,9 +4550,17 @@
 
         function link(scope, element, attrs, ctrl)
         {
-            if (angular.isDefined(attrs.tooltipPosition))
+            if (angular.isDefined(attrs.lxTooltip))
             {
-                attrs.$observe('tooltipPosition', function(newValue)
+                attrs.$observe('lxTooltip', function(newValue)
+                {
+                    ctrl.updateTooltipText(newValue);
+                });
+            }
+
+            if (angular.isDefined(attrs.lxTooltipPosition))
+            {
+                attrs.$observe('lxTooltipPosition', function(newValue)
                 {
                     scope.lxTooltip.position = newValue;
                 });
@@ -4259,6 +4589,7 @@
 
         lxTooltip.hideTooltip = hideTooltip;
         lxTooltip.showTooltip = showTooltip;
+        lxTooltip.updateTooltipText = updateTooltipText;
 
         lxTooltip.position = angular.isDefined(lxTooltip.position) ? lxTooltip.position : 'top';
 
@@ -4267,6 +4598,7 @@
             if (angular.isDefined(tooltip))
             {
                 tooltip.remove();
+                tooltip = undefined;
             }
 
             $timeout.cancel(timer1);
@@ -4283,7 +4615,11 @@
 
                 timer1 = $timeout(function()
                 {
-                    tooltip.remove();
+                    if (angular.isDefined(tooltip))
+                    {
+                        tooltip.remove();
+                        tooltip = undefined;
+                    }
                 }, 200);
             }
         }
@@ -4336,40 +4672,52 @@
 
         function showTooltip()
         {
-            LxDepthService.register();
-
-            tooltip = angular.element('<div/>',
+            if (angular.isUndefined(tooltip))
             {
-                class: 'tooltip tooltip--' + lxTooltip.position
-            });
+                LxDepthService.register();
 
-            tooltipBackground = angular.element('<div/>',
+                tooltip = angular.element('<div/>',
+                {
+                    class: 'tooltip tooltip--' + lxTooltip.position
+                });
+
+                tooltipBackground = angular.element('<div/>',
+                {
+                    class: 'tooltip__background'
+                });
+
+                tooltipLabel = angular.element('<span/>',
+                {
+                    class: 'tooltip__label',
+                    text: lxTooltip.tooltip
+                });
+
+                setTooltipPosition();
+
+                tooltip
+                    .append(tooltipBackground)
+                    .append(tooltipLabel)
+                    .css('z-index', LxDepthService.getDepth())
+                    .appendTo('body');
+
+                timer2 = $timeout(function()
+                {
+                    tooltip.addClass('tooltip--is-active');
+                });
+            }
+        }
+
+        function updateTooltipText(_newValue)
+        {
+            if (angular.isDefined(tooltipLabel))
             {
-                class: 'tooltip__background'
-            });
-
-            tooltipLabel = angular.element('<span/>',
-            {
-                class: 'tooltip__label',
-                text: lxTooltip.tooltip
-            });
-
-            setTooltipPosition();
-
-            tooltip
-                .append(tooltipBackground)
-                .append(tooltipLabel)
-                .css('z-index', LxDepthService.getDepth())
-                .appendTo('body');
-
-            timer2 = $timeout(function()
-            {
-                tooltip.addClass('tooltip--is-active');
-            });
+                tooltipLabel.text(_newValue);
+            }
         }
     }
 })();
-angular.module("lumx.dropdown").run(['$templateCache', function(a) { a.put('dropdown.html', '<div class="dropdown" ng-transclude></div>\n' +
+
+angular.module("lumx.dropdown").run(['$templateCache', function(a) { a.put('dropdown.html', '<div class="dropdown" ng-class="{ \'dropdown--has-toggle\': lxDropdown.hasToggle }" ng-transclude></div>\n' +
     '');
 	a.put('dropdown-toggle.html', '<div class="dropdown-toggle" ng-transclude></div>\n' +
     '');
@@ -4437,7 +4785,9 @@ angular.module("lumx.select").run(['$templateCache', function(a) { a.put('select
     '                 \'lx-select--is-unique\': !lxSelect.multiple,\n' +
     '                 \'lx-select--theme-light\': !lxSelect.theme || lxSelect.theme === \'light\',\n' +
     '                 \'lx-select--theme-dark\': lxSelect.theme === \'dark\',\n' +
-    '                 \'lx-select--valid\': lxSelect.valid }">\n' +
+    '                 \'lx-select--valid\': lxSelect.valid,\n' +
+    '                 \'lx-select--custom-style\': lxSelect.customStyle,\n' +
+    '                 \'lx-select--default-style\': !lxSelect.customStyle }">\n' +
     '    <span class="lx-select-label">\n' +
     '        {{ ::lxSelect.label }}\n' +
     '    </span>\n' +
@@ -4470,8 +4820,8 @@ angular.module("lumx.select").run(['$templateCache', function(a) { a.put('select
     '</div>\n' +
     '');
 	a.put('select-choices.html', '<lx-dropdown-menu class="lx-select-choices"\n' +
-    '                  ng-class="{ \'lx-select-choices--custom-style\': lxSelectChoices.parentCtrl.customStyle,\n' +
-    '                              \'lx-select-choices--default-style\': !lxSelectChoices.parentCtrl.customStyle,\n' +
+    '                  ng-class="{ \'lx-select-choices--custom-style\': lxSelectChoices.parentCtrl.choicesCustomStyle,\n' +
+    '                              \'lx-select-choices--default-style\': !lxSelectChoices.parentCtrl.choicesCustomStyle,\n' +
     '                              \'lx-select-choices--is-multiple\': lxSelectChoices.parentCtrl.multiple,\n' +
     '                              \'lx-select-choices--is-unique\': !lxSelectChoices.parentCtrl.multiple, }">\n' +
     '    <ul>\n' +
@@ -4718,4 +5068,46 @@ angular.module("lumx.fab").run(['$templateCache', function(a) { a.put('fab.html'
     '');
 	 }]);
 angular.module("lumx.icon").run(['$templateCache', function(a) { a.put('icon.html', '<i class="icon mdi" ng-class="lxIcon.getClass()"></i>');
+	 }]);
+angular.module("lumx.data-table").run(['$templateCache', function(a) { a.put('data-table.html', '<div class="data-table-container">\n' +
+    '    <table class="data-table"\n' +
+    '           ng-class="{ \'data-table--no-border\': !lxDataTable.border,\n' +
+    '                       \'data-table--thumbnail\': lxDataTable.thumbnail }">\n' +
+    '        <thead>\n' +
+    '            <tr ng-class="{ \'data-table__selectable-row\': lxDataTable.selectable,\n' +
+    '                            \'data-table__selectable-row--is-selected\': lxDataTable.selectable && lxDataTable.allRowsSelected }">\n' +
+    '                <th ng-if="lxDataTable.thumbnail"></th>\n' +
+    '                <th ng-click="lxDataTable.toggleAllSelected()"\n' +
+    '                    ng-if="lxDataTable.selectable"></th>\n' +
+    '                <th ng-class=" { \'data-table__sortable-cell\': th.sortable,\n' +
+    '                                 \'data-table__sortable-cell--asc\': th.sortable && th.sort === \'asc\',\n' +
+    '                                 \'data-table__sortable-cell--desc\': th.sortable && th.sort === \'desc\' }"\n' +
+    '                    ng-click="lxDataTable.sort(th)"\n' +
+    '                    ng-repeat="th in lxDataTable.thead track by $index"\n' +
+    '                    ng-if="!lxDataTable.thumbnail || (lxDataTable.thumbnail && $index != 0)">\n' +
+    '                    <lx-icon lx-id="{{ th.icon }}" ng-if="th.icon"></lx-icon>\n' +
+    '                    <span>{{ th.label }}</span>\n' +
+    '                </th>\n' +
+    '            </tr>\n' +
+    '        </thead>\n' +
+    '\n' +
+    '        <tbody>\n' +
+    '            <tr ng-class="{ \'data-table__selectable-row\': lxDataTable.selectable,\n' +
+    '                            \'data-table__selectable-row--is-disabled\': lxDataTable.selectable && tr.lxDataTableDisabled,\n' +
+    '                            \'data-table__selectable-row--is-selected\': lxDataTable.selectable && tr.lxDataTableSelected }"\n' +
+    '                ng-repeat="tr in lxDataTable.tbody"\n' +
+    '                ng-click="lxDataTable.toggle(tr)">\n' +
+    '                <td ng-if="lxDataTable.thumbnail">\n' +
+    '                    <div ng-if="lxDataTable.thead[0].format" ng-bind-html="lxDataTable.$sce.trustAsHtml(lxDataTable.thead[0].format(tr))"></div>\n' +
+    '                </td>\n' +
+    '                <td ng-if="lxDataTable.selectable"></td>\n' +
+    '                <td ng-repeat="th in lxDataTable.thead track by $index"\n' +
+    '                    ng-if="!lxDataTable.thumbnail || (lxDataTable.thumbnail && $index != 0)">\n' +
+    '                    <span ng-if="!th.format">{{ tr[th.name] }}</span>\n' +
+    '                    <div ng-if="th.format" ng-bind-html="lxDataTable.$sce.trustAsHtml(th.format(tr))"></div>\n' +
+    '                </td>\n' +
+    '            </tr>\n' +
+    '        </tbody>\n' +
+    '    </table>\n' +
+    '</div>');
 	 }]);

@@ -5,12 +5,14 @@
 
 var addjdcard = angular.module('AddJdCard', ['ngRoute', 'ngMessages', 'ui.utils.masks', 'angularPayments']);
 
-addjdcard.controller('AddJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'jdCardResource', 'userPaymentResource',
-    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, LxNotificationService, jdCardResource, userPaymentResource) {
-
+addjdcard.controller('AddJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'jdCardResource', 'userPaymentResource', '$translate', '$filter',
+    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, LxNotificationService, jdCardResource, userPaymentResource, $translate, $filter) {
+        $scope.cssClass = 'addjdcard';
         var self = this;
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
+        $scope.icon = '../css/icons/two-credit-cards.png';
+
 
 
         /***************** TO RESET FORMS ********************/
@@ -59,24 +61,28 @@ addjdcard.controller('AddJdCardController', ['$rootScope','$scope', '$http', '$l
             buyJdCard.$promise.
             then(
                 function (data) {
-                    console.log("Guardado!!" + data.toSource());
+                    console.log("Saved!!" + data.toSource());
                     if (data.message == "conexionError"){
-                        LxNotificationService.error('Transacción cancelada! Verifique su conexión a Internet!!!');
+                        $scope.sms1 = $filter('translate')('jdcard.add.module.sms1');
+                        LxNotificationService.error($scope.sms1);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                         //self.helperFuncBar();
                         return;
                     }
-                    if (data.message == "Tarjeta Invalida"){
-                        LxNotificationService.error('Transacción cancelada! Verifique su metodo de Pago!!!');
+                    if (data.message == "Invalid Card"){
+                        $scope.sms2 = $filter('translate')('jdcard.add.module.sms2');
+                        LxNotificationService.error($scope.sms2);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                         //self.helperFuncBar();
                         return;
                     }
 
-                    LxNotificationService.alert('J&D Card Creada',
-                        "Recibira en su correo las instrucciones para,\r\nactivar su J&D Card...",
+                    $scope.sms3 = $filter('translate')('jdcard.add.module.sms3');
+                    $scope.sms4 = $filter('translate')('jdcard.add.module.sms4');
+                    LxNotificationService.alert($scope.sms4,
+                        $scope.sms5,
                         'Ok',
                         function(answer)
                         {
@@ -89,113 +95,10 @@ addjdcard.controller('AddJdCardController', ['$rootScope','$scope', '$http', '$l
                 },function (data) {
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                    console.log("Guardado!!" + data);
+                    console.log("Saved!!" + data);
                 }
             )
         }
 
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
 
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
     }]);

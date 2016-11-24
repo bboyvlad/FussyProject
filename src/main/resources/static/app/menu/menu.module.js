@@ -3,12 +3,12 @@
  */
 var menu = angular.module('jdmenu', []);
 menu.factory('myJdMenu', function() {
-    var myJdMenu = {};
-    myJdMenu = {
+    //var myJdMenu = {};
+    var myJdMenu = {
         "usermenu":[
             {
                 "link":"/users/sing-up",
-                "text":"Registrate"
+                "text":"Sing Up"
             },
             {
                 "link":"/loginpage",
@@ -18,13 +18,13 @@ menu.factory('myJdMenu', function() {
         "useradmin":[
             {
                 "link":"/users/admin",
-                "text":"Gestionar Usuarios"
+                "text":"Manage Users"
             }
         ],
         "jdcard":[
             {
                 "link":"/dashboard/buy/jdcard",
-                "text":"Comprar J&D Card"
+                "text":"Buy J&D Card"
             },
             {
                 "link":"/dashboard/refill/jdcard",
@@ -34,39 +34,75 @@ menu.factory('myJdMenu', function() {
         "giftcard":[
             {
                 "link":"/dashboard/giftcard/buy",
-                "text":"Comprar Gift Card"
+                "text":"Buy Gift Card"
             },
             {
                 "link":"/dashboard/giftcard/redeem",
-                "text":"Reclamar Gift Card"
+                "text":"Redeem Gift Card"
             }
         ],
         "payments":[
             {
                 "link":"/dashboard/paymentmethod-form",
-                "text":"Agregar Metodo de pago"
+                "text":"Add Payment Method"
+            },
+            {
+                "link":"/dashboard/sendpayment",
+                "text":"Notify Deposit / Transfer"
+            }
+        ],
+        "bankmanage":[
+            {
+                "link":"/dashboard/bankmanage",
+                "text":"Bank Account Manage"
+            },
+            {
+                "link":"/dashboard/showreceived",
+                "text":"Check Payment"
             }
         ],
         "defgen":[
-            {
+            /*{
                 "link":"/dashboard/groupserv/add",
-                "text":"Grupo de Servicios"
-            },
+                "text":"Group Service"
+            },*/
             {
                 "link":"/dashboard/products/add",
-                "text":"Productos"
+                "text":"Products"
             }
         ],
         "aircraft":[
             {
                 "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
+                "text":"Aircrafts"
             }
         ],
         "captain":[
             {
                 "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
+                "text":"Pilots"
+            }
+        ],
+        "cardvalidate":[
+            {
+                "link":"/dashboard/cardstatus",
+                "text":"Validator"
+            }
+        ],
+        "balance":[
+            {
+                "link":"/dashboard/balance_details",
+                "text":"Balance Details"
+            }
+        ],
+        "servrequest":[
+            {
+                "link":"/dashboard/defered_payments",
+                "text":"Pending Service Requests"
+            },
+            {
+                "link":"/dashboard/admin_pending_payments",
+                "text":"Admin Pending Requests"
             }
         ],
         "mainmenu":{
@@ -75,21 +111,21 @@ menu.factory('myJdMenu', function() {
                     "link":"/",
                     "text":"Home"
                 },
-                {
+                /*{
                     "link":"/",
-                    "text":"Servicios"
+                    "text":"Services"
                 },
                 {
                     "link":"/",
-                    "text":"Productos"
+                    "text":"Products"
                 },
                 {
                     "link":"/",
-                    "text":"Promociones"
-                },
+                    "text":"Promotions"
+                },*/
                 {
                     "link":"/",
-                    "text":"Contacto"
+                    "text":"Contact"
                 }
             ]
         }
@@ -114,6 +150,9 @@ menu.factory('myJdMenu', function() {
     myJdMenu.paymentsSection = function(menuOpt){
         myJdMenu.payments = menuOpt;
     };
+    myJdMenu.bankmanageSection = function(menuOpt){
+        myJdMenu.bankmanage = menuOpt;
+    };
     myJdMenu.defgenSection = function(menuOpt){
         myJdMenu.defgen = menuOpt;
     };
@@ -123,40 +162,90 @@ menu.factory('myJdMenu', function() {
     myJdMenu.captainSection = function(menuOpt){
         myJdMenu.captain = menuOpt;
     };
+    myJdMenu.cardvalidateSection = function(menuOpt){
+        myJdMenu.cardvalidate = menuOpt;
+    };
+    myJdMenu.balanceSection = function(menuOpt){
+        myJdMenu.balance = menuOpt;
+    };
+    myJdMenu.servrequestSection = function(menuOpt){
+        myJdMenu.servrequest = menuOpt;
+    };
 
     return myJdMenu;
 });
-menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$http', 'shopcartResource', 'userResource', '$location', 'LxNotificationService', 'LxDialogService', 'userPaymentResource', 'helperFunc', function($scope, $rootScope, myJdMenu, $http, shopcartResource, userResource, $location, LxNotificationService, LxDialogService, userPaymentResource, helperFunc) {
+menu.controller('MyJdMenuController', [ '$scope', '$rootScope', '$filter', 'myJdMenu', '$http', 'shopcartResource', 'userResource', '$location', 'LxNotificationService', 'LxDialogService', 'userPaymentResource', 'helperFunc', '$translate', function($scope, $rootScope, $filter, myJdMenu, $http, shopcartResource, userResource, $location, LxNotificationService, LxDialogService, userPaymentResource, helperFunc, $translate) {
     var self = this;
     $scope.sharedMenu = myJdMenu;
     //console.log("menu: "+$scope.sharedMenu.toSource());
     $scope.search ='';
     $scope.productlist = [];
+    $scope.jdcardOpts = [];
 
     $scope.sendbutton = false;
     $scope.LinearProgress = false;
 
+    /*$rootScope.$on('rootScope:emit', function (event, data) {
+        console.log(data); // 'Emit!'
+        $scope.updateMenu();
+    });*/
+
+    $scope.changeLanguage = function changeLanguage(_newValue) {
+        //console.log(_newValue);
+        $translate.use(_newValue);
+    };
+
+    $scope.checkRole = function checkRole(roles) {
+        helperFunc.hasRole(roles);
+    };
+
+    /* check user for credentials on page refresh */
     var loggedUser=userResource.loggedUser();
     loggedUser.$promise.then(function(data) {
-        console.log("in data: " + data.toSource());
+        //console.log("in data: " + data.toSource());
         if (!angular.isDefined(data.principal)) {
             $location.path("/");
         } else {
+            /* retrieve shop cart, Principal and User details */
             $rootScope.cart = shopcartResource.getCartUser();
             $rootScope.user = data;
+            var detailUser=userResource.detailUser();
+            detailUser.$promise.then( function (data) {
+                //console.log("data userDetails"+data);
+                $rootScope.userDetail = data;
+            });
             //$location.path("/dashboard");
         }
     });
-    //$rootScope.cart= shopcartResource.getCartUser();
-
 
     $scope.logout = function() {
         $http.post('/logout', {}).then(function() {
-            //$rootScope.authenticated = false;
+            $rootScope.cart = {};
+            $rootScope.user = {};
+            $rootScope.userDetail = {};
             $location.path("/");
         });
     }
 
+    $scope.newCoordinates = function newCoordinates() {
+        LxNotificationService.confirm('Generar Tarjeta de Coordenadas', 'Necesita una Tarjeta de Coordenadas nueva???.',
+            {
+                cancel: 'Cancelar',
+                ok: 'Aceptar'
+            }, function(answer)
+            {
+                if (answer)
+                {
+                    window.open('http://jdoilfield.net:8080/users/setcoordinates', '_blank');
+
+                    LxNotificationService.success('Tarjeta creada satisfactoriamente!!!.. en su correo tiene las instrucciones nesarias para su activación');
+                }
+                else
+                {
+                    LxNotificationService.error('Operación Cancelada');
+                }
+            });
+    }
     $scope.orderTotal = function orderTotal() {
         $scope.total = 0;
         //console.log("items" + $scope.sCart.items.toSource());
@@ -186,11 +275,7 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
         $body.removeClass('sidebar_secondary_active');
         //console.log("shopCart" + shopCart.toSource());
         $scope.sCart = shopCart;
-        //$scope.orderTotal();
-
-        $scope.jdcardOpts = [];
-        /*$scope.getPayments = function getPayments(id) {
-            var self = this;*/
+        $scope.orderTotal();
 
             userPaymentResource.get().$promise.
             then(
@@ -206,10 +291,34 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
                     });
                 }
             )
-        /*};*/
 
         LxDialogService.open($scope.checkoutDialogId);
     };
+
+    /*$scope.calculateBalance = function calculateBalance() {
+        //console.log("payments: "+ $rootScope.userDetail.toSource());
+        var detailUser=userResource.detailUser();
+        detailUser.$promise.then( function (data) {
+            //console.log("data userDetails"+data);
+            $rootScope.userDetail = data;
+            $scope.items = $filter('orderBy')($rootScope.userDetail.payments, "payid");
+            var payments = $scope.items;
+            //console.log("data payments"+payments.toSource());
+            angular.forEach(payments, function (value, key) {
+                console.log(value.payavailable);
+                $rootScope.mainPieChart.payavailable +=value.payavailable;
+                $rootScope.mainPieChart.paylocked +=value.paylocked;
+                $rootScope.mainPieChart.paybalance +=value.paybalance;
+
+            })
+            $rootScope.mainPieChart.labels = ["Available Balance", "Balance Blocked"];
+            $rootScope.mainPieChart.data = [$rootScope.mainPieChart.payavailable, $rootScope.mainPieChart.paylocked];
+            console.log("TOTAL" + $rootScope.mainPieChart.payavailable);
+            console.log($rootScope.datePicker.toSource());
+        });
+
+    };*/
+
 
     $scope.fcheckout={}
     $scope.checkoutShopCart = function checkoutShopCart($event, fields) {
@@ -228,31 +337,49 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
         checkoutShopCart.$promise.
         then(
             function (data) {
-                console.log("Guardado!!" + data);
-                LxDialogService.close($scope.checkoutDialogId);
-                /*if (data.message == "conexionError"){
-                    LxNotificationService.error('Transacción cancelada! Verifique su conexión a Internet!!!');
-                    self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
-                    self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                    //self.helperFuncBar();
-                    return;
-                }*/
+                //console.log("Guardado!!" + data);
+                if(data.message=="Saldo insuficiente"){
+                    LxNotificationService.alert('Saldo insuficiente',
+                        "Escoja otro metodo de pago o recargue su J&D Card para procesar este pago!",
+                        'Ok',
+                        function(answer)
+                        {
+                            self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                            self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                            return;
+                        });
+                };
+
+
+                shopcartResource.hardDelete({shopcart_id: $scope.sCart.id}).$promise.
+                then(
+                    function (data) {
+                        $rootScope.cart = shopcartResource.getCartUser();
+
+                    },function (data) {
+                        //console.log("Error!!" + data.toSource());
+                    }
+                );
+
+
 
                 LxNotificationService.alert('Service Request',
                     "Su Service Request ha sido Generado satisfactoriamente...",
                     'Ok',
                     function(answer)
                     {
-                        $scope.reset();
+                        //$scope.reset();
+                        helperFunc.jdCardBalance(null, true);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                        LxDialogService.close($scope.checkoutDialogId);
                         //$location.path("/dashboard");
                     });
 
             },function (data) {
                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                console.log("Guardado!!" + data);
+                console.log("Error!!" + data);
             }
         )
     };
@@ -284,15 +411,51 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
                 )
         }
     };*/
+       /********** deleteItem ********/
+
+    $scope.deleteItem = function deleteItem(cartId, itemId) {
+        var self = this;
+
+        console.log(cartId+"/"+itemId);
+        LxNotificationService.confirm('Eliminar Item del ShopCart', 'Por favor confirme que desea eliminar este Item...',
+            {
+                cancel: 'Cancelar',
+                ok: 'Eliminar'
+            }, function(answer)
+            {
+                if (answer)
+                {
+                    //console.log("Borrado!!" + data.toSource());
+                    shopcartResource.deleteCartItem({shopcart_id: cartId, itemcartid: itemId}).$promise.
+                    then(
+                        function (data) {
+                            //console.log("Borrado!!" + data);
+                            $scope.sCart.items.splice(itemId);
+                            LxDialogService.close($scope.shopCartDialogId);
+                            LxNotificationService.success('Item, Eliminado satisfactoriamente!!!');
+                            //$rootScope.cart = shopcartResource.getCartUser();
+
+                        },function (data) {
+                            //console.log("Error!!" + data.toSource());
+                        }
+                    );
+                }
+                else
+                {
+                    LxNotificationService.error('Operación Cancelada');
+                }
+            });
+
+    }
+    /********** deleteItem ********/
+
     /********** deleteShopCart ********/
 
     $scope.deleteShopCart = function deleteShopCart(data) {
-        //$event.preventDefault();
         var self = this;
-       /* this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
-        this.sendbutton = helperFunc.toogleStatus(this.sendbutton);*/
+
         console.log(data.toSource());
-        LxNotificationService.confirm('Eliminar ShopCart', 'Por favor confirme que desea eliminar esta Orden Completa.',
+        LxNotificationService.confirm('Eliminar ShopCart', 'Por favor confirme que desea eliminar esta Orden Completa...',
             {
                 cancel: 'Cancelar',
                 ok: 'Eliminar'
@@ -304,25 +467,18 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
                     shopcartResource.hardDelete({shopcart_id: data.id}).$promise.
                     then(
                         function (data) {
-                            console.log("Borrado!!" + data);
-                            LxNotificationService.success('Item, Eliminado satisfactoriamente!!!');
+                            //console.log("Borrado!!" + data);
+                            LxNotificationService.success('Carro, Eliminado satisfactoriamente!!!');
                             $rootScope.cart = shopcartResource.getCartUser();
-                            /*$scope.faircrafts = [];
-                             //$location.path("/dashboard");
-                             self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
-                             self.sendbutton = helperFunc.toogleStatus(self.sendbutton);*/
+
                         },function (data) {
-                            /*self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
-                             self.sendbutton = helperFunc.toogleStatus(self.sendbutton);*/
-                            console.log("Error!!" + data.toSource());
+                            //console.log("Error!!" + data.toSource());
                         }
                     );
                 }
                 else
                 {
-                    LxNotificationService.error('Disagree');
-                    /*this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
-                    this.sendbutton = helperFunc.toogleStatus(this.sendbutton);*/
+                    LxNotificationService.error('Operación Cancelada');
                 }
             });
 
@@ -333,15 +489,19 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', 'myJdMenu', '$ht
 
     $scope.updateMenu = function updateMenu() {
         //alert(this.Opts.item1);
-        //console.log(myJdMenu.jdcard);
+        console.log(myJdMenu.toSource());
         myJdMenu.userSection(myJdMenu.usermenu);
         myJdMenu.userAdminSection(myJdMenu.useradmin);
         myJdMenu.mainSection(myJdMenu.mainmenu);
         myJdMenu.jdcardSection(myJdMenu.jdcard);
         myJdMenu.giftcardSection(myJdMenu.giftcard);
         myJdMenu.paymentsSection(myJdMenu.payments);
+        myJdMenu.bankmanageSection = (myJdMenu.bankmanage);
         myJdMenu.defgenSection(myJdMenu.defgen);
         myJdMenu.aircraftSection(myJdMenu.aircraft);
         myJdMenu.captainSection(myJdMenu.captain);
+        myJdMenu.cardvalidateSection(myJdMenu.cardvalidate);
+        myJdMenu.balanceSection(myJdMenu.balance);
+        myJdMenu.servrequestSection(myJdMenu.servrequest);
     };
 }]);

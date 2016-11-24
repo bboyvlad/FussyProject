@@ -502,7 +502,7 @@
                     ],
                     render: {
                         option: function(data, escape) {
-                            return  '<div class="option">' +
+                            return  '<div class="option" ng-click="changeLanguage(\''+data.value+'\')">' +
                                 '<i class="item-icon flag-' + escape(data.value).toUpperCase() + '"></i>' +
                                 '<span>' + escape(data.title) + '</span>' +
                                 '</div>';

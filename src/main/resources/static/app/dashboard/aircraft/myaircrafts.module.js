@@ -7,24 +7,41 @@ var myaircrafts = angular.module('MyAirCraft', ['ngRoute', 'ngMessages']);
 
 myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'aircraftResource', 'LxDialogService', 'LxNotificationService', 'userResource',
     function MyAirCraftsController($rootScope, $scope, $http, $aircraft, myJdMenu, helperFunc, aircraftResource, LxDialogService, LxNotificationService, userResource) {
-
+        $scope.cssClass = 'aircraft';
+        $scope.icon = '../css/icons/plane-flying.png';
         var self = this;
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
         $scope.regex = "/[A-Z,\s]+/";
-
+        $scope.search = { mysearch:'' };
         $scope.faircrafts = {};
+        $scope.aviationOpts = [
+            { key: "1", value: "COMERCIAL" },{ key: "2", value: "GENERAL" }
+        ];
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
-            aircraftmodel: "", tailnumber: ""
+            aircraftmodel: "", tailnumber: "", aviationtype: {key:"", value:""} ,name:"" ,active:false
         };
         $scope.reset = function() {
             $scope.faircrafts = angular.copy($scope.master);
             $scope.editaircrafts = angular.copy($scope.master);
+            $scope.AircraftModelId = "";
         };
         /***************** TO RESET FORMS ********************/
         //$scope.reset();
+
+        /****** SetAircraftModelId ********/
+        $scope.AircraftModelId = "";
+        $scope.setAircraftModelId = function setAircraftModelId(_newValue) {
+            console.log(_newValue.toSource());
+            if(angular.isDefined(_newValue.aircraftype)){
+                $scope.AircraftModelId = _newValue.aircraftype;
+                return;
+            }
+            $scope.AircraftModelId = _newValue.id;
+        };
+        /****** SetAircraftModelId ********/
 
         /****** Aircraft Search ********/
         $scope.selectAjax = {
@@ -66,22 +83,38 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
 
         $scope.editReset = function(id) {
             $scope.editMaster = {
-                id: id, aircraftmodel: "", tailnumber: ""
+                id: id, aircraftmodel: "", tailnumber: "", aviationtype: {key:"", value:""} ,name:"" ,active:false
             };
+            $scope.AircraftModelId = "";
             $scope.editaircrafts = angular.copy($scope.editMaster);
         };
         /***************** TO RESET FORMS ********************/
-        //$scope.reset();
+
+        $scope.toEditAvType = function toEditAvType(data) {
+            switch (data) {
+                case "1":
+                    return { key: "1", value: "COMERCIAL" };
+                    break;
+                case "2":
+                    return { key: "2", value: "GENERAL" };
+                    break;
+                default:
+                    return { key: "1", value: "COMERCIAL" };
+            }
+        };
 
         $scope.openDialogAircraft = function openDialogAircraft(ef_air)
         {
             LxDialogService.open(this.dialogAircraft);
-            console.log(ef_air.id );
+            console.log(ef_air.toSource());
+
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
             $scope.editmaster = {
-                id: ef_air.id, aircraftmodel: ef_air, tailnumber: ef_air.tailnumber
+                id: ef_air.id, aircraftmodel: ef_air, tailnumber: ef_air.tailnumber, aviationtype: $scope.toEditAvType(ef_air.aviationtype.key) , name:ef_air.name , active:ef_air.active
             };
+            $scope.AircraftModelId = ef_air.aircraftype;
             $scope.editaircrafts = angular.copy($scope.editmaster);
+
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
 
         }
@@ -103,11 +136,16 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
 
-            aircraftResource.updateAircraft({},fields).$promise.
+            var toSave = {
+                id: fields.id, aircrafttype: $scope.AircraftModelId , tailnumber: fields.tailnumber, aviationtype:fields.aviationtype.key, name:fields.name , active:fields.active
+            };
+            console.log(toSave.toSource());
+
+            aircraftResource.updateAircraft(toSave).$promise.
             then(
                 function (data) {
-                    console.log("Actualizado!!" + data);
-                    LxNotificationService.success('Actualización realizada!!!');
+                    console.log("Updated!!" + data);
+                    LxNotificationService.success('Update successful!!!');
                     $scope.listAircraft = aircraftResource.usersAircraft();
                     $scope.reset();
                     //$location.path("/dashboard");
@@ -130,12 +168,22 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
             var self = this;
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
-            var toSave = '{"aircrafttype":"'+fields.aircraftmodel.id+'","tailnumber":"'+fields.tailnumber+'","name":"'+fields.aircraftmodel.name+'"}';
+            /*var toSave = '{"aircrafttype":"'+fields.aircraftmodel.id+'","tailnumber":"'+fields.tailnumber+'","name":"'+fields.aircraftmodel.name+'", aviationtype: {key:ef_air.aviationtype, value:ef_air.aviationtype} , name:ef_air.name , active:ef_air.active}';*/
+
+            var toSave = {aircrafttype: fields.aircraftmodel.id, tailnumber: fields.tailnumber, aviationtype:fields.aviationtype.key, name:fields.name , active:fields.active};
+
             userResource.myaircraft({principal_id: $rootScope.user.id}, toSave).$promise.
             then(
                 function (data) {
-                    console.log("Guardado!!" + data);
-                    LxNotificationService.success('Aeronave creada satisfactoriamente!!!');
+                    console.log("Saved!!" + data.toString());
+                    if(data.message == "Error en la operacion"){
+                        LxNotificationService.error('Error in the Operation , the update didn\'t complete !!!');
+                        self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                        self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                        //self.helperFuncBar();
+                        return;
+                    }
+                    LxNotificationService.success('Aircraft created successfully!!!');
                     $scope.listAircraft = aircraftResource.usersAircraft();
                     $scope.reset();
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
@@ -143,7 +191,7 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                 },function (data) {
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                    console.log("Error!!" + data.toSource());
+                    console.log("Error!!" + data.toString());
                 }
             );
         }
@@ -157,10 +205,10 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
             console.log(data.toSource());
-            LxNotificationService.confirm('Eliminar Aeronave', 'Por favor confirme que desea eliminar esta Aeronave.',
+            LxNotificationService.confirm('Erase Aircraft', 'Please confirm that you wish to erase this Aircraft.',
                 {
-                    cancel: 'Cancelar',
-                    ok: 'Eliminar'
+                    cancel: 'Cancel',
+                    ok: 'Delete'
                 }, function(answer)
                 {
                     if (answer)
@@ -168,8 +216,15 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                         aircraftResource.deleteAircraft({aircraftid: data.id}).$promise.
                         then(
                             function (data) {
-                                console.log("Borrado!!" + data);
-                                LxNotificationService.success('Aeronave, Eliminado satisfactoriamente!!!');
+                                console.log("Erased!!" + data.toString());
+                                if(data.message == "Error en la operation"){
+                                    LxNotificationService.error('Error in the operation, the elimination didn\'t complete !!!');
+                                    self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                                    self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                                    //self.helperFuncBar();
+                                    return;
+                                }
+                                LxNotificationService.success('Aircraft, Deleted successfully!!!');
                                 $scope.listAircraft = aircraftResource.usersAircraft();
                                 //$scope.faircrafts = [];
                                 //$location.path("/dashboard");
@@ -178,7 +233,7 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                             },function (data) {
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                                console.log("Error!!" + data.toSource());
+                                console.log("Error!!" + data.toString());
                             }
                         );
                     }
@@ -193,110 +248,4 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
         }
         /********** deleteAircraft ********/
 
-
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],
-            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
     }]);

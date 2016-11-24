@@ -1,23 +1,50 @@
+<style>
+    table label.text-field__label{
+        top: -20px !important;
+    }
+    table div.text-field{
+        padding-top: 0px !important;
+    }
+    .infoAnimation {
+        transition: all linear 0.8s;
+    }
+    .infoAnimation.ng-hide {
+        opacity: 0;
+    }
+    .listAnimation {
+        transition: all linear 0.5s;
+    }
+    .listAnimation.ng-hide-animate {
+        opacity: 0;
+    }
+</style>
+
 <div class="row" id="tabPrice" ng-init="updateMenu()">
         <!--{{user.user_id}}-->
-        {{fcart}}
-    {{listMyAirCrafts}}
-    <!--{{checkService}}-->
+        <!--{{fcart}}-->
+    <!--{{listMyAirCrafts}}-->
+    {{checkService}}
         <!--{{paymethod}}-->
-    <form name="CartForm" novalidate>
+
+        <div class="p+" flex-container="row" flex-column="16" flex-gutter="">
+            <div flex-item="16" class="card__img card__img--top bgc-jd">
+                <img ng-src="{{icon}}" width="100px" class="p+">
+                <p class="fs-headline tc-white-1 display-block" > Service request </p>
+            </div>
+        </div>
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="">
             <!--TOOLBAR SEARCH-->
-            <div flex-container="column">
-                <div class="p+ pt0" flex-item="3">
-                    <div class="card bgc-blue-grey-100 tc-black-1" style="min-width: 300px !important;">
+            <div flex-container="column" flex-item="5">
+                <div class="" >
+                    <div  class="card bgc-blue-grey-100 tc-black-1" >
                         <div flex-container="row">
                         <!--<div class="toolbar">-->
-                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="!fcart.location">Escoja su localidad...</span>
-                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="fcart.location">Su destino sera {{fcart.location.name}}</span>
+                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="!fcart.location">Choose a location</span>
+                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="fcart.location">Your destination will be <img ng-src="../css/img/flags/{{fcart.location.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" />{{fcart.location.name}}</span>
                         <!--<div class="toolbar__right">-->
-                   </div>
+                        </div>
                         <div flex-container="row">
-                            <div flex-item="12" class="p+">
+                            <div flex-item="12" class="p+" >
                                 <lx-select
                                         name="location"
                                         ng-model="fcart.location"
@@ -31,146 +58,339 @@
                                         lx-error="location.$invalid && location.$touched"
                                         lx-loading="selectAjax.loading"
                                         ng-required="true"
-                                        lx-label="Locaciones">
+                                        lx-label="Locations">
                                     <lx-select-selected>
-                                        <img src="../css/img/flags/{{$selected.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
+                                        <img src='../css/img/flags/{{$selected.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
                                     </lx-select-selected>
 
                                     <lx-select-choices>
-                                        <img src="../css/img/flags/{{$choice.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" /> {{ $choice.name }}
+                                        <img src='../css/img/flags/{{$choice.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $choice.name }}
                                     </lx-select-choices>
                                 </lx-select>
                                 <div ng-messages="location.$error"
                                      ng-if="location.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Escoge tu Localidad</div>
+                                    <div ng-message="required">Choose your location</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <!--</div>
                 </div>
 
-                <!--1{{location}}- 2{{fcart.location.name}}- 3{{fcart.location.id}}
-            <div flex-container="row" ng-show="fcart.location.id">-->
-            <!--<div flex-container="row" >-->
-                <div class="p+ pt0" flex-item="12" ng-show="fcart.location.id">
-                <div class="card bgc-blue-grey-100 tc-black-1" >
+                &lt;!&ndash;1{{location}}- 2{{fcart.location.name}}- 3{{fcart.location.id}}
+                <div flex-container="row" ng-show="fcart.location.id">&ndash;&gt;
+                &lt;!&ndash;<div flex-container="row" >&ndash;&gt;
+                <div class="infoAnimation" flex-item="12"  ng-show="fcart.location.id">
+                    <div class="card bgc-blue-grey-100 tc-black-1" >-->
+                        <section class="infoAnimation" flex-item="12"  ng-show="fcart.location.id" >
 
-                    <div class="tc-black-1 p+" flex-container="row">
-                        <div flex-item="12">
-                            <span class=" fs-subhead tc-black-1 ml">Detalles del viaje</span>
+                            <form name="CartForm" novalidate>
+                        <div class="tc-black-1 p+" flex-container="row">
+                            <div flex-item="12">
+                                <span class=" fs-subhead tc-black-1 ml">Flight details</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="tc-black-1 p+" flex-container="row">
-                        <div flex-item="12">
-                            <lx-date-picker
-                                    id="{{startDatePickerId}}"
-                                    ng-model="fcart.estimateArrival"
-                                    lx-input-format="YYYY-MM-DD"
-                                    lx-locale="es"
-                                    lx-valid="CartForm.estimateArrival.$valid"
-                                    lx-error="CartForm.estimateArrival.$invalid && CartForm.estimateArrival.$touched">
-                                <lx-text-field lx-allow-clear="true" lx-label="Fecha de Creación">
+                        <div class="tc-black-1 p+" flex-container="row">
+                            <div flex-item="6">
+                                <lx-date-picker
+                                        id="{{startDatePickerId}}"
+                                        ng-model="fcart.estimateArrival"
+                                        lx-input-format="YYYY-MM-DD"
+                                        lx-callback="datePickerCallback(newDate)"
+                                        lx-locale="{{fcart.datePicker.locale}}"
+                                        lx-min-date="fcart.startdatePicker.minDate"
+                                        >
+                                    <lx-text-field
+                                        lx-allow-clear="true"
+                                        lx-label="Estimated arrival"
+                                        lx-valid="CartForm.estimateArrival.$valid"
+                                        lx-error="CartForm.estimateArrival.$invalid && CartForm.estimateArrival.$touched">
                                     <input type="text" name="estimateArrival"
-                                           ng-model="fcart.estimateArrival" ng-required="true" />
+                                           ng-model="fcart.startdatePicker.dateFormated"
+                                           ng-required="true" />
+                                    </lx-text-field>
+                                </lx-date-picker>
+                                <div ng-messages="CartForm.estimateArrival.$error"
+                                     ng-if="CartForm.estimateArrival.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Don't forget your estimated arrival date</div>
+                                </div>
+                            </div>
+
+                            <div flex-item="6">
+                                <lx-text-field
+                                        lx-label="Time"
+                                        lx-valid="CartForm.time.$valid"
+                                        lx-error="CartForm.time.$invalid && CartForm.time.$touched">
+                                    <!--<input mdc-datetime-picker=""
+                                           date="false"
+                                           time="true"
+                                           id="time"
+                                           min-date="minDate"
+                                           format="HH:mm"
+                                           ng-model="fcart.time"
+
+                                           type="text" name="time"
+                                           ng-required="true">-->
+                                    <input type="text" name="time" ng-required="true"
+                                           ng-model="fcart.time" ui-time-mask="short"/>
                                 </lx-text-field>
-                            </lx-date-picker>
-                            <div ng-messages="CartForm.estimateArrival.$error"
-                                 ng-if="CartForm.estimateArrival.$touched"
-                                 style="color:maroon"
-                                 role="alert">
-                                <div ng-message="required">No Olvides de colocar la fecha estimada de salida</div>
+                                <div ng-messages="CartForm.time.$error"
+                                     ng-if="CartForm.time.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Don't forget your estimated arrival time</div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div class="tc-black-1 p+" flex-container="row">
-                        <div flex-item="12">
-                            <lx-text-field
-                                    lx-label="Hora"
-                                    lx-valid="CartForm.time.$valid"
-                                    lx-error="CartForm.time.$invalid && CartForm.time.$touched">
-                                <input type="text" name="time" ng-required="true"
-                                       ng-model="fcart.time" ps-input-time/>
-                            </lx-text-field>
-                            <div ng-messages="CartForm.time.$error"
-                                 ng-if="CartForm.time.$touched"
-                                 style="color:maroon"
-                                 role="alert">
-                                <div ng-message="required">Introduce una Hora estimada de llegada</div>
+                        <div class="tc-black-1 p+" flex-container="row">
+                            <div flex-item="6">
+                                <lx-date-picker
+                                        id="{{endDatePickerId}}"
+                                        ng-model="fcart.estimateDeparture"
+                                        lx-input-format="YYYY-MM-DD"
+                                        lx-callback="datePickerCallback(newDate, true)"
+                                        lx-locale="{{fcart.datePicker.locale}}"
+                                        lx-min-date="fcart.enddatePicker.minDate"
+                                >
+                                    <lx-text-field
+                                            lx-allow-clear="true"
+                                            lx-label="Estimated departure"
+                                            lx-valid="CartForm.estimateDeparture.$valid"
+                                            lx-error="CartForm.estimateDeparture.$invalid && CartForm.estimateDeparture.$touched">
+                                        <input type="text" name="estimateDeparture"
+                                               ng-model="fcart.enddatePicker.dateFormated"
+                                               ng-value="fcart.enddatePicker.dateFormated"
+                                               ng-required="true" />
+                                    </lx-text-field>
+                                </lx-date-picker>
+                                <div ng-messages="CartForm.estimateDeparture.$error"
+                                     ng-if="CartForm.estimateDeparture.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Don't forget your estimated departure date</div>
+                                </div>
                             </div>
 
-                        </div>
-                    </div>
+                            <div flex-item="6">
+                                <lx-text-field
+                                        lx-label="Time"
+                                        lx-valid="CartForm.timeDeparture.$valid"
+                                        lx-error="CartForm.timeDeparture.$invalid && CartForm.timeDeparture.$touched">
+                                    <!--<input mdc-datetime-picker=""
+                                           date="false"
+                                           time="true"
+                                           id="time"
+                                           min-date="minDate"
+                                           format="HH:mm"
+                                           ng-model="fcart.time"
 
-                    <div class="tc-black-1 p+" flex-container="row">
-                        <div flex-item="12">
-                            <lx-select
-                                    name="myaircraft"
-                                    ng-model="fcart.myaircraft"
-                                    lx-allow-clear="true"
-                                    lx-choices="listMyAirCrafts"
-                                    lx-fixed-label="true"
-                                    lx-valid="CartForm.myaircraft.$valid"
-                                    lx-error="CartForm.myaircraft.$invalid && CartForm.myaircraft.$touched"
-                                    ng-required="false"
-                                    lx-label="Aeronave">
-                                <lx-select-selected>
-                                    Nombre:{{ $selected.name }} - Modelo:{{ $selected.model }}
-                                </lx-select-selected>
+                                           type="text" name="time"
+                                           ng-required="true">-->
+                                    <input type="text" name="timeDeparture" ng-required="true"
+                                           ng-model="fcart.timeDeparture" ui-time-mask="short"/>
+                                </lx-text-field>
+                                <div ng-messages="CartForm.timeDeparture.$error"
+                                     ng-if="CartForm.timeDeparture.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Don't forget your estimated departure time</div>
+                                </div>
 
-                                <lx-select-choices>
-                                    Nombre:{{ $choice.name }} - Modelo:{{ $choice.model }}
-                                </lx-select-choices>
-                            </lx-select>
-                            <div ng-messages="CartForm.myaircraft.$error"
-                                 ng-if="CartForm.myaircraft.$touched"
-                                 style="color:maroon"
-                                 role="alert">
-                                <div ng-message="required">Escoge Su Aeronave</div>
                             </div>
                         </div>
-                     </div>
-                    </div>
 
-                    <div class="card__actions">
-                        <div class="p+">
-                            <div style="position: relative;">
-                                <lx-progress lx-type="linear" lx-color="teal"
-                                             ng-if="LinearProgress">
-                                </lx-progress>
+                        <div class="tc-black-1 p+" flex-container="row">
+                            <div flex-item="12">
+                                <lx-select
+                                        name="myaircraft"
+                                        ng-model="fcart.myaircraft"
+                                        lx-allow-clear="true"
+                                        lx-choices="listMyAirCrafts"
+                                        lx-fixed-label="true"
+                                        lx-valid="CartForm.myaircraft.$valid"
+                                        lx-error="CartForm.myaircraft.$invalid && CartForm.myaircraft.$touched"
+                                        ng-required="true"
+                                        lx-label="My aircraft">
+                                    <lx-select-selected>
+                                        {{ $selected.name }} / {{ $selected.model }}
+                                    </lx-select-selected>
+
+                                    <lx-select-choices>
+                                        {{ $choice.name }} / {{ $choice.model }}
+                                    </lx-select-choices>
+                                </lx-select>
+                                <div ng-messages="CartForm.myaircraft.$error"
+                                     ng-if="CartForm.myaircraft.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Choose your aircraft</div>
+                                </div>
                             </div>
-                            <lx-button lx-color="red"
-                                       ng-click="reset()"
-                            >Limpiar</lx-button>
-                            <lx-button lx-color="green"
-                                       ng-click="searchServices($event, fcart)"
-                                       ng-disabled="sendbutton || CartForm.$invalid"
-                            >Buscar Servicios</lx-button>
-                        </div>
-                    </div>
+                         </div>
+                        <div class="tc-black-1 p+" flex-container="row">
+                            <div flex-item="12">
+                                <lx-select
+                                        name="mycaptain"
+                                        ng-model="fcart.mycaptain"
+                                        lx-allow-clear="true"
+                                        lx-choices="listCaptain"
+                                        lx-fixed-label="true"
+                                        lx-valid="CartForm.mycaptain.$valid"
+                                        lx-error="CartForm.mycaptain.$invalid && CartForm.mycaptain.$touched"
+                                        ng-required="true"
+                                        lx-label="My pilots">
+                                    <lx-select-selected>
+                                        {{ $selected.name }} / {{ $selected.license }}
+                                    </lx-select-selected>
 
+                                    <lx-select-choices>
+                                        {{ $choice.name }} / {{ $choice.license }}
+                                    </lx-select-choices>
+                                </lx-select>
+                                <div ng-messages="CartForm.mycaptain.$error"
+                                     ng-if="CartForm.mycaptain.$touched"
+                                     style="color:maroon"
+                                     role="alert">
+                                    <div ng-message="required">Choose a pilot</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card__actions">
+                            <div class="p+">
+                                <div style="position: relative;">
+                                    <lx-progress lx-type="linear" lx-color="teal"
+                                                 ng-if="LinearProgress">
+                                    </lx-progress>
+                                </div>
+                                <lx-button lx-color="red"
+                                           ng-click="reset()"
+                                >Clear</lx-button>
+                                <lx-button lx-color="green"
+                                           ng-click="searchServices($event, fcart)"
+                                           ng-disabled="sendbutton || CartForm.$invalid"
+                                >Search</lx-button>
+                            </div>
+                        </div>
+                      </form>
+
+                        </section>
+                    </div>
                 </div>
             </div>
-            <!--</div>-->
+
 
         <!--TOOLBAR SEARCH-->
             <!--prepareFligthList: {{ prepareFligthList }}-->
 
 
-            <div flex-container="row" >
+            <div flex-container="row">
                 <div class="p+ pt0" flex-item="12">
 
                     <form name="shopCart" novalidate >
                         <!--TOOLBAR SEARCH-->
                         <div flex-container="row" >
                             <!--<div class="p+ pt0" flex-item="12">-->
-                                <div flex-item="12" class="card bgc-blue-grey-100 tc-black-1" ng-if="prepareFligthList">
+                                <div flex-item="12" class="card bgc-blue-grey-100 tc-black-1 listAnimation" ng-show="prepareFligthList">
 
                                     <div flex-container="row" >
                                         <div flex-item="6" class="p+">
                                             <lx-text-field
-                                                    lx-label="Descripción de su Orden"
+                                                    lx-label="Flight name"
+                                                    lx-valid="shopCart.description.$valid"
+                                                    lx-error="shopCart.description.$invalid && shopCart.description.$touched">
+                                                <input type="text" name="description" ng-required="true"
+                                                       ng-model="fcart.description" />
+                                            </lx-text-field>
+                                            <div ng-messages="shopCart.description.$error"
+                                                 ng-if="shopCart.description.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">This field must be fill</div>
+                                            </div>
+
+                                        </div>
+                                    <!--</div>-->
+
+                                    <!--<div class="card__actions">-->
+                                    <!--<div flex-container="row" >-->
+                                        <div flex-item="6" class="p++">
+                                            <div style="position: relative;">
+                                                <lx-progress lx-type="circular" lx-color="teal"
+                                                             ng-if="shopCartLinearProgress">
+                                                </lx-progress>
+                                            </div>
+                                            <lx-button lx-color="red"
+                                                       ng-click="reset()"
+                                            >Clear</lx-button>
+                                            <lx-button lx-color="green"
+                                                       ng-click="addShopCart($event, fcart)"
+                                                       ng-disabled="shopCartsendbutton || shopCart.$invalid"
+                                            >Save</lx-button>
+                                        </div>
+                                    </div>
+
+                                    <div class="data-table-container bgc-blue-grey-100 p+ ">
+                                        <header class="data-table-header">
+                                            <div class="data-table-header__label">
+                                                <span class="fs-subhead">Services</span>
+                                            </div>
+                                        </header>
+
+                                        <table class="data-table fs-body-1">
+                                            <thead>
+                                            <tr class="">
+                                                <th> Select </th>
+                                                <th> Info </th>
+                                                <th> Unt </th>
+                                                <th> Price </th>
+                                                <th> Amount </th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody ng-repeat="service in prepareFligthList | orderBy:'id'" class="fs-body-1 ">
+                                            <tr>
+                                                <td>
+                                                    <lx-checkbox
+                                                            ng-model="bool"
+                                                            ng-change="sync(bool, service)"
+                                                    ></lx-checkbox>
+                                                </td>
+                                                <td> {{service.pricename}} </td>
+                                                <td> {{service.pricedesc}} </td>
+                                                <td> {{service.price}} {{service.currency}} </td>
+                                                <!--</tr>
+                                                <tr ng-show="bool">-->
+                                                <td ng-show="bool">
+                                                    <div flex-container="row" flex-column="16" flex-gutter="">
+                                                        <div flex-item="16">
+                                                            <lx-text-field lx-label="Amount"
+                                                                           lx-valid="CartForm.amount.$valid"
+                                                                           lx-error="CartForm.amount.$invalid && CartForm.amount.$touched">
+                                                                <input type="number" name="amount" ng-model="itemQuantity"
+                                                                       ng-change="sync(false, service, itemQuantity)"
+                                                                >
+                                                            </lx-text-field>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <td colspan="4"></td>
+                                            <td>{{servicesTotal}}</td>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                    <!--<div flex-container="row" >
+                                        <div flex-item="6" class="p+">
+                                            <lx-text-field
+                                                    lx-label="Descripción de su orden"
                                                     lx-valid="shopCart.description.$valid"
                                                     lx-error="shopCart.description.$invalid && shopCart.description.$touched">
                                                 <input type="text" name="description" ng-required="true"
@@ -184,11 +404,11 @@
                                             </div>
 
                                         </div>
-                                    <!--</div>-->
+                                        &lt;!&ndash;</div>&ndash;&gt;
 
-                                    <!--<div class="card__actions">-->
-                                    <!--<div flex-container="row" >-->
-                                        <div flex-item="6" class="p+">
+                                        &lt;!&ndash;<div class="card__actions">&ndash;&gt;
+                                        &lt;!&ndash;<div flex-container="row" >&ndash;&gt;
+                                        &lt;!&ndash;<div flex-item="6" class="p++">
                                             <div style="position: relative;">
                                                 <lx-progress lx-type="circular" lx-color="teal"
                                                              ng-if="shopCartLinearProgress">
@@ -201,92 +421,21 @@
                                                        ng-click="addShopCart($event, fcart)"
                                                        ng-disabled="shopCartsendbutton || shopCart.$invalid"
                                             >Guardar</lx-button>
-                                        </div>
-                                    </div>
+                                        </div>&ndash;&gt;
+                                    </div>-->
                                 </div>
                             <!--</div>-->
+
+
+
                         </div>
                     </form>
 
-                    <div class="data-table-container bgc-blue-grey-100 p+" ng-if="prepareFligthList">
-                        <header class="data-table-header">
-                            <div class="data-table-header__label">
-                                <span class="fs-subhead">Servicios</span>
-                            </div>
-                        </header>
 
-                        <table class="data-table fs-body-1">
-                            <thead>
-                            <tr class="">
-                                <th> Marcar </th>
-                                <th> Descripción </th>
-                                <th> Unidad </th>
-                                <th> Precio </th>
-                                <th  >Moneda</th>
-                                <th  >Cantidad</th>
-                            </tr>
-                            </thead>
-
-                            <tbody ng-repeat="service in prepareFligthList" class="fs-body-1 ">
-                            <tr>
-                                <td>
-                                    <lx-checkbox
-                                            ng-model="bool"
-                                            ng-change="sync(bool, service)"
-                                    ></lx-checkbox>
-                                </td>
-                                <td> {{service.pricename}} </td>
-                                <td> {{service.pricedesc}} </td>
-                                <td> {{service.price}} </td>
-                                <td> {{service.currency}} </td>
-                                <!--</tr>
-                                <tr ng-show="bool">-->
-                                <td colspan="2" ng-show="bool">
-                                    <div flex-item="2">
-                                        <lx-text-field lx-label="Cantidad"
-                                                       lx-valid="CartForm.cantidad.$valid"
-                                                       lx-error="CartForm.cantidad.$invalid && CartForm.cantidad.$touched">
-                                            <input type="number" name="cantidad" ng-model="itemQuantity"
-                                                   ng-change="sync(false, service, itemQuantity)"
-                                            >
-                                        </lx-text-field>
-                                        <div ng-messages="CartForm.cantidad.$error"
-                                             ng-if="CartForm.cantidad.$touched"
-                                             style="color:maroon"
-                                             role="alert">
-                                            <div ng-message="required">No Olvides de colocar la Cantidad</div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!--<td >
-                                <lx-icon ng-click="openDialogCaptain(service)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
-                            </td>
-                            <td >
-                                <lx-icon ng-click="deleteCaptain(service)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
-                            </td>-->
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
+
         </div>
-    </form>
-
-
-
-
-            <!--PRODUCT DATATABLE
-            <div class="p+ pt0">
-                <div flex-container="row">
-                <div ng-include="'/partials/dashboard/cart/datatableCart.html'"></div>
-                </div>
-            </div>
-            PRODUCT DATATABLE-->
-
-
-    </div>
-
 
 
 </div>

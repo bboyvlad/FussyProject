@@ -37,6 +37,9 @@ public class ProductController {
     SvcgroupRepository svcgroupRepository;
 
     @Autowired
+    ProviderRepository providers;
+
+    @Autowired
     AviationRepository aviation;
 
     @Autowired
@@ -92,8 +95,12 @@ public class ProductController {
             pro.setName(nproduct.getProductname());
             pro.setDetaildesc(nproduct.getDetail());
             pro.setDcreate(new Date());
+            pro.setUnit(nproduct.getProductunit());
+            pro.setUnitdesc(nproduct.getProductunitdesc());
+
             pro.setActive(nproduct.isActive());
             pro.setPricetype(nproduct.getPricetype());
+
             productRepository.saveAndFlush(pro);
 
             /*Este codigo esta optimizado en el update., pero aqui ya esta asi XD*/
@@ -117,7 +124,7 @@ public class ProductController {
                         pUnit.setCurrency(price.getCurrency());
                         pUnit.setMeasure(price.getMeasure());
                         pUnit.setUnit(price.getUnit());
-                        pUnit.setUnitdesc(nproduct.getUnitdesc());
+                        pUnit.setUnitdesc(nproduct.getProductunitdesc());
                         pUnit.setPrice1(price.getPrice1());
                         pUnit.setPrice2(price.getPrice2());
                         pUnit.setPrice3(price.getPrice3());
@@ -163,7 +170,7 @@ public class ProductController {
                         pDate.setCurrency(price.getCurrency());
                         pDate.setMeasure(price.getMeasure());
                         pDate.setUnit(price.getUnit());
-                        pDate.setUnitdesc(nproduct.getUnitdesc());
+                        pDate.setUnitdesc(nproduct.getProductunitdesc());
                         pDate.setPrice1(price.getPrice1());
                         pDate.setPrice2(price.getPrice2());
                         pDate.setPrice3(price.getPrice3());
@@ -208,7 +215,7 @@ public class ProductController {
                         pPound.setCurrency(price.getCurrency());
                         pPound.setMeasure(price.getMeasure());
                         pPound.setUnit(price.getUnit());
-                        pPound.setUnitdesc(nproduct.getUnitdesc());
+                        pPound.setUnitdesc(nproduct.getProductunitdesc());
                         pPound.setPrice1(price.getPrice1());
                         pPound.setPrice2(price.getPrice2());
                         pPound.setPrice3(price.getPrice3());
@@ -347,6 +354,12 @@ public class ProductController {
     }
 
     /*End CRUD*/
+
+    /*Show Providers*/
+    @RequestMapping(value = "/providers",method = RequestMethod.GET)
+    public List<Provider> showProviders(){
+        return providers.findAll();
+    }
 
     //retrieve a price from product
     @RequestMapping(value = "/prices/{location}/{aviationtype}/{myaircraft}/{landingdate}", method = RequestMethod.GET)

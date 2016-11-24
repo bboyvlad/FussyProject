@@ -6,14 +6,14 @@
         <div class="data-table-container">
         <header class="data-table-header">
             <div class="data-table-header__label">
-                <span class="fs-title">Produtos</span>
+                <span class="fs-title">Products</span>
             </div>
         </header>
 
         <table class="data-table">
             <thead>
             <tr class="">
-                <th class="data-table__sortable-cell data-table__sortable-cell--desc">Productos</th>
+                <th class="data-table__sortable-cell data-table__sortable-cell--desc">Products</th>
                 <th ></th>
                 <th ></th>
                 <th ></th>
@@ -27,7 +27,7 @@
         <!--<tbody ng-repeat="price in listPrices track by $index">-->
 
                 <tr  class=" ">
-                    <td coldspan="5"> Producto </td>
+                    <td coldspan="5"> Product </td>
 
                     <td >
                         <lx-icon ng-click="toggleHiddenForm(product.id)" lx-id="add" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
@@ -64,7 +64,7 @@
                                                     vm.pPrice_{{vm.pPrice}}-->
                                                     <div flex-item="4">
                                                         <lx-text-field
-                                                                lx-label="Cantidad "
+                                                                lx-label="Amount"
                                                                 lx-valid="editItemCartForm.cant.$valid"
                                                                 lx-error="editItemCartForm.cant.$invalid && editItemCartForm.cant.$touched">
                                                             <input type="text" name="cant" ng-required="true"
@@ -74,14 +74,13 @@
                                                              ng-if="editItemCartForm.cant.$touched"
                                                              style="color:maroon"
                                                              role="alert">
-                                                            <div ng-message="required">Introduce el Monto</div>
-                                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                                            <div ng-message="minlength">The amount must be greater than 0</div>
                                                         </div>
                                                     </div>
 
                                                     <div flex-item="4">
                                                         <lx-text-field
-                                                                lx-label="Precio"
+                                                                lx-label="Price"
                                                                 lx-valid="editItemCartForm.price.$valid"
                                                                 lx-error="editItemCartForm.price.$invalid && editItemCartForm.price.$touched">
                                                             <input type="text" name="price" ng-required="true"
@@ -91,8 +90,8 @@
                                                              ng-if="editItemCartForm.price.$touched"
                                                              style="color:maroon"
                                                              role="alert">
-                                                            <div ng-message="required">Introduce el Monto</div>
-                                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                                            <div ng-message="required">Enter an amount</div>
+                                                            <div ng-message="minlength">The amount must be greater than 0</div>
                                                         </div>
                                                     </div>
 
@@ -100,7 +99,7 @@
                                                         <lx-button lx-color="green"
                                                                    ng-click="addCart($event, vm.fcart, user.user_id)"
                                                                    ng-disabled="">
-                                                            Agregar al carro</lx-button>
+                                                            Add to ShopCart</lx-button>
                                                     </div>
 
                                                 </div>
@@ -121,7 +120,7 @@
 
                                             <lx-button lx-color="green"
                                             ng-click="editItemCartForm.$commitViewValue(); updatePrice($event, price)" >
-                                                Actualizar Precio</lx-button>
+                                                Update ShopCart</lx-button>
                                         </div>
                                     </div>
                                 </div>
