@@ -18,7 +18,9 @@ public class Product {
     private String detaildesc;
     private String pricetype;
     private Date dcreate;
+    private Date dupdate;
     private boolean active;
+    private boolean deleted;
 
     ArrayList<Price> pricesUnit= new ArrayList<>();
     ArrayList<Pricedate> pricesDate= new ArrayList<>();
@@ -26,7 +28,6 @@ public class Product {
 
 
     public Product() {  }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,6 +78,22 @@ public class Product {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Date getDupdate() {
+        return dupdate;
+    }
+
+    public void setDupdate(Date dupdate) {
+        this.dupdate = dupdate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Transient
