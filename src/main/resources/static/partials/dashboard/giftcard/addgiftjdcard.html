@@ -149,7 +149,7 @@
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="{{'giftcard.add.form1.f4' | translate}}"
+                                                lx-label="{{'giftcard.add.form1.f5' | translate}}"
                                                 lx-valid="AddGiftForm.jdcamount.$valid"
                                                 lx-error="AddGiftForm.jdcamount.$invalid && AddGiftForm.jdcamount.$touched">
                                             <input type="text" name="jdcamount" ng-required="true" ng-model="fgiftcard.jdcamount" ng-minlength="1" ui-number-mask>
@@ -158,8 +158,8 @@
                                              ng-if="AddGiftForm.jdcamount.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">{{'giftcard.add.form1.f4error.e1' | translate}}</div>
-                                            <div ng-message="minlength">{{'giftcard.add.form1.f4error.e2' | translate}}</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f5error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'giftcard.add.form1.f5error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -185,6 +185,8 @@
                              src="/css/img/Fuelcard_empty.png"
                              ng-src="/css/img/Fuelcard_empty.png" />
                         <span class="fs-headline tc-white-1 display-block emboss ccname_text">
+                            {{fjdcard.cardname}}</span>
+                        <span class="fs-headline tc-white-1 display-block emboss ccname_text">
                             {{fgiftcard.recipient_message}}</span>
                     </div>
                     <div class="p+">
@@ -195,31 +197,13 @@
                                     <div flex-item>
 
                                         <lx-text-field
-                                                lx-label="{{'giftcard.add.form1.f5' | translate}}"
+                                                lx-label="{{'giftcard.add.form1.f6' | translate}}"
                                                 lx-valid="AddGiftForm.recipient_email.$valid"
                                                 lx-error="AddGiftForm.recipient_email.$invalid && AddGiftForm.recipient_email.$touched">
                                             <input type="email" name="recipient_email" ng-model="fgiftcard.recipient_email"  ng-required="true" >
                                         </lx-text-field>
                                         <div ng-messages="AddGiftForm.recipient_email.$error"
                                              ng-if="AddGiftForm.recipient_email.$touched"
-                                             style="color:maroon"
-                                             role="alert">
-                                            <div ng-message="required">{{'giftcard.add.form1.f5error.e1' | translate}}</div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div flex-container="row">
-                                    <div flex-item>
-
-                                        <lx-text-field
-                                                lx-label="{{'giftcard.add.form1.f6' | translate}}"
-                                                lx-valid="AddGiftForm.recipient_name.$valid"
-                                                lx-error="AddGiftForm.recipient_name.$invalid && AddGiftForm.recipient_name.$touched">
-                                            <input type="name" name="recipient_name" ng-model="fgiftcard.recipient_name"  ng-required="true" >
-                                        </lx-text-field>
-                                        <div ng-messages="AddGiftForm.recipient_name.$error"
-                                             ng-if="AddGiftForm.recipient_name.$touched"
                                              style="color:maroon"
                                              role="alert">
                                             <div ng-message="required">{{'giftcard.add.form1.f6error.e1' | translate}}</div>
@@ -232,6 +216,24 @@
 
                                         <lx-text-field
                                                 lx-label="{{'giftcard.add.form1.f7' | translate}}"
+                                                lx-valid="AddGiftForm.recipient_name.$valid"
+                                                lx-error="AddGiftForm.recipient_name.$invalid && AddGiftForm.recipient_name.$touched">
+                                            <input type="name" name="recipient_name" ng-model="fgiftcard.recipient_name"  ng-required="true" >
+                                        </lx-text-field>
+                                        <div ng-messages="AddGiftForm.recipient_name.$error"
+                                             ng-if="AddGiftForm.recipient_name.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">{{'giftcard.add.form1.f7error.e1' | translate}}</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div flex-container="row">
+                                    <div flex-item>
+
+                                        <lx-text-field
+                                                lx-label="{{'giftcard.add.form1.f8' | translate}}"
                                                 lx-valid="AddGiftForm.recipient_message.$valid"
                                                 lx-error="AddGiftForm.recipient_message.$invalid && AddGiftForm.recipient_message.$touched">
                                             <input type="text" name="recipient_message" ng-model="fgiftcard.recipient_message"  ng-required="true" >
@@ -240,7 +242,7 @@
                                              ng-if="AddGiftForm.recipient_message.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">{{'giftcard.add.form1.f7error.e1' | translate}}</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f8error.e1' | translate}}</div>
 
                                         </div>
                                     </div>

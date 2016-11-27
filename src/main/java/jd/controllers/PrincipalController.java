@@ -448,7 +448,6 @@ public class PrincipalController {
             return new String[]{"message","Card inactive"};
         }
 
-
     }
     //add payment method to user
     @RequestMapping(value = "/paymethod",  method = RequestMethod.POST)
@@ -846,7 +845,7 @@ public class PrincipalController {
 
     //activa la tarjeta de coordenadas que ha sido generada por el usuario
     @RequestMapping(value ="/coordinateactivate/{token}", method=RequestMethod.GET)
-    public @ResponseBody Object activateCoordinates(@PathVariable String token){
+    public Object activateCoordinates(@PathVariable String token){
 
         Hashtable<String, String> message = new Hashtable<String, String>();
         final JWTVerifier jwtVerifier = new JWTVerifier(utils.getSecret());
@@ -861,9 +860,9 @@ public class PrincipalController {
             usract.getCoordinates().setDupdate(fechaActual);
 
             principalRepository.save(usract);
-
-            message.put("message","tarjeta de coordenadas activada con exito");
-            return message;
+            //message.put("message","tarjeta de coordenadas activada con exito");
+            //return message;
+            return "redirect:/dashboard";
 
         }catch(Exception e){
             return e.getCause();
@@ -919,13 +918,12 @@ public class PrincipalController {
             }
 
             message.put("message","Coordinate card inactive");
-            return message;
 
+            return message;
 
         }catch (Exception e){
             return e.getLocalizedMessage();
         }
-
     }
 
     /*

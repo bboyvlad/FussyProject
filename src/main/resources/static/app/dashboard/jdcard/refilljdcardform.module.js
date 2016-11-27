@@ -5,8 +5,8 @@
 
 var refilljdcard = angular.module('reFillJdCard', ['ngRoute', 'ui.utils.masks', 'angularPayments']);
 
-refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc','jdCardResource', 'userPaymentResource', 'cardPaymentResource',
-    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, jdCardResource, userPaymentResource, cardPaymentResource) {
+refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc','jdCardResource', 'userPaymentResource', 'cardPaymentResource', '$translate', '$filter',
+    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, jdCardResource, userPaymentResource, cardPaymentResource, $translate, $filter ) {
         $scope.cssClass = 'refilljdcard';
         var self = this;
         $scope.sendbutton = false;
@@ -71,8 +71,8 @@ refilljdcard.controller('RefillJdCardController', ['$rootScope','$scope', '$http
 
                     $scope.sms2 = $filter('translate')('jdcard.refill.module.sms2');
                     $scope.sms3 = $filter('translate')('jdcard.refill.module.sms3', fields);
-                    LxNotificationService.alert($scope.sms2,
-                        $scope.sms3,
+                    LxNotificationService.alert("J&D Card "+$scope.sms2,
+                        $scope.sms3+" J&D Card",
                         'Ok',
                         function(answer)
                         {

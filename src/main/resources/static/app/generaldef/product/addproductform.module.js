@@ -5,8 +5,8 @@
 
 var addproduct = angular.module('AddProduct', ['ngRoute', 'ngMessages', 'ui.utils.masks']);
 
-addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', '$anchorScroll', 'myJdMenu', 'helperFunc', 'grpServResource', 'productsResource', 'LxDialogService', 'locationResource',
-    function AddProductController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, $anchorScroll, myJdMenu, helperFunc, grpServResource, productsResource, LxDialogService, locationResource) {
+addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', '$anchorScroll', 'myJdMenu', 'helperFunc', 'grpServResource', 'productsResource', 'LxDialogService', 'locationResource', '$translate', '$filter',
+    function AddProductController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, $anchorScroll, myJdMenu, helperFunc, grpServResource, productsResource, LxDialogService, locationResource, $translate, $filter) {
 
         var self = this;
 
@@ -56,7 +56,7 @@ addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '
         $scope.productId= {};
 
         /* CurrencyList */
-        $scope.proCurrency = [
+        $scope.currencyOpts = [
             { key: "USD", name: "USD" },
             { key: "BSF", name: "BSF" }
         ];
@@ -108,16 +108,17 @@ addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '
             var self = this;
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
+            var toSave = {productname: fields.productname , detail: fields.detail , productunit: fields.productunit , productunitdesc: fields.productunitdesc , active: fields.active , pricetype: fields.pricetype.key , prices:[ { location: fields.location.id , provider: '60' , aviationtype: fields.aviationtype.key , pricename: fields.pricename , prepaid: fields.prepaid , validto: fields.validto , frompound: fields.frompound , topound: fields.topound , fromdate: fields.fromdate , todate: fields.todate , currency: fields.currency , measure: fields.measure , unit: fields.unit , unitdesc: fields.unitdesc , price1: fields.price1 , cost1: fields.cost1 , diff: fields.diff , feesenable: fields.feesenable}] };
 
-            var toSave = '{"productcode":"'+fields.productcode+'","description":"'+fields.description+'","detaildesc":"'+fields.detaildesc+'","currency":"'+fields.currency.key+'","datecreate":"'+fields.datecreate+'", "location":"'+fields.location.id+'"}';
-            grpServResource.productAdd({groupid: id}, toSave).$promise.
+            //var toSave = '{"productcode":"'+fields.productcode+'","description":"'+fields.description+'","detaildesc":"'+fields.detaildesc+'","currency":"'+fields.currency.key+'","datecreate":"'+fields.datecreate+'", "location":"'+fields.location.id+'"}';
+            productsResource.save({}, toSave).$promise.
             then(
                 function (data) {
                     self.productId = helperFunc.mainSetter(data.products);
                     $scope.productId = helperFunc.mainSetter(data.products);
                     self.disablePrice = helperFunc.toogleStatus(self.disablePrice);
                     console.log("Guardado!!" + $scope.productId.toSource());
-                    $scope.listProduct = productsResource.query();
+                    //$scope.listProduct = productsResource.query();
                     /*self.productId = data;
                      self.togglePricetab();*/
                     LxNotificationService.info('Su producto fue creado,  Ingrese el precio al producto!!!');
@@ -170,7 +171,7 @@ addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '
         $scope.updateLinearProgress2 = false;
 
         /* ListProducts */
-        $scope.listProduct = productsResource.query();
+        //$scope.listProduct = productsResource.query();
 
         /* DialogVariables */
         $scope.dialogProduct = "dialogProduct";
