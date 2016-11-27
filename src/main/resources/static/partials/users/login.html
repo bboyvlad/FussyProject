@@ -1,19 +1,24 @@
 <div class="row" ng-init="updateMenu()">
-
     <form name="Loginform" >
         <!--{{flogin}}-->
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="4"></div>
             <div flex-item="8">
                 <div class="card" >
+                    <div class="card__img card__img--top">
+                        <img ng-src="{{loginFormImg}}" width="100%">
+                    </div>
                     <div class="p+"><!--{{progressBar}}-->
 
-                        <strong class="fs-headline display-block">Acceda a su Cuenta...</strong>
+                        <strong class="fs-headline display-block">{{'login.card1.title' | translate}}</strong>
                         <lx-progress lx-type="linear" lx-color="teal" ng-if="progressBar"></lx-progress>
+                        <p>{{'login.card1.subtitle' | translate}}</p> <a href="/users/sing-up">{{'login.card1.link' | translate}}</a>
+
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Email"
+                                        <lx-text-field lx-label="{{'login.form1.f1' | translate}}"
                                            lx-valid="Loginform.username.$valid"
                                            lx-error="Loginform.username.$invalid && Loginform.username.$touched">
 
@@ -24,15 +29,15 @@
                                              ng-if="Loginform.username.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">You did not enter a field Name</div>
-                                            <div ng-message="email">You did not enter a valid Email</div>
+                                            <div ng-message="required">{{'login.form1.f1error.e1' | translate}}</div>
+                                            <div ng-message="email">{{'login.form1.f1error.e2' | translate}}</div>
                                         </div>
 
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
-                                        <lx-text-field lx-label="Contraseña"
+                                        <lx-text-field lx-label="{{'login.form1.f2' | translate}}"
                                                        lx-valid="Loginform.password.$valid"
                                                        lx-error="Loginform.password.$invalid && Loginform.password.$touched">
                                             <input type="password" name="password" ng-model="flogin.password"
@@ -42,7 +47,7 @@
                                              ng-if="Loginform.password.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">You did not enter a field Name</div>
+                                            <div ng-message="required">{{'login.form1.f2error.e1' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +66,7 @@
                             <lx-button lx-color="blue"
                                        ng-click="userLogin($event, flogin)"
                                        ng-disabled="sendbutton || Loginform.$invalid"
-                            >ENVIAR</lx-button>
+                            >{{'login.form1.button' | translate}}</lx-button>
                         </div>
                     </div>
                 </div>

@@ -23,6 +23,7 @@ config(['$locationProvider', '$routeProvider', '$httpProvider',
         when('/users/sing-up', {
             templateUrl: 'partials/users/singup.html',
             controller: 'singupController'
+
         })/*.
         when('/users/sms-email', {
             templateUrl: 'partials/users/smsemail.html',
@@ -36,7 +37,16 @@ config(['$locationProvider', '$routeProvider', '$httpProvider',
         }).
         when('/users/admin', {
             templateUrl: 'partials/users/manage/admin_users.html',
-            controller: 'ManageUserController'
+            controller: 'ManageUserController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         })
         /*.
         when('/users/account-status', {
@@ -52,18 +62,137 @@ config(['$locationProvider', '$routeProvider', '$httpProvider',
             templateUrl: 'partials/dashboard/main.html',
             controller: 'DashController'/*,
             controllerAs: 'vm'*/
+        })
+        .
+        when('/dashboard/cardstatus', {
+            templateUrl: 'partials/dashboard/cardcheck/cardcheck.html',
+            controller: 'CardCheckController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_PROVIDER', 'ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/paymentmethod-form', {
             templateUrl: 'partials/dashboard/paymethod/paymethodform.html',
-            controller: 'PayMethodController'
+            controller: 'PayMethodController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/sendpayment', {
+            templateUrl: 'partials/dashboard/notifypayment/notifypaymentform.html',
+            controller: 'NotifyPayController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/showreceived', {
+            templateUrl: 'partials/dashboard/checkpayment/checkpaymentform.html',
+            controller: 'CheckPayController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/bankmanage', {
+            templateUrl: 'partials/dashboard/bankmanage/bankaccount.html',
+            controller: 'BankAccountController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/balance_details', {
+            templateUrl: 'partials/dashboard/balance/balance.html',
+            controller: 'BalanceDetailsController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/admin_pending_payments', {
+            templateUrl: 'partials/dashboard/admin_pending/admin_pendingform.html',
+            controller: 'AdminDeferedPayController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
+        }).
+        when('/dashboard/defered_payments', {
+            templateUrl: 'partials/dashboard/deferedpayment/deferedpaymentform.html',
+            controller: 'DeferedPayController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/buy/jdcard', {
             templateUrl: 'partials/dashboard/jdcard/addjdcard.html',
-            controller: 'AddJdCardController'
+            controller: 'AddJdCardController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/refill/jdcard', {
             templateUrl: 'partials/dashboard/jdcard/refilljdcard.html',
-            controller: 'RefillJdCardController'
+            controller: 'RefillJdCardController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/groupserv/add', {
             templateUrl: 'partials/generaldef/groupserv/addgroupserv.html',
@@ -75,25 +204,76 @@ config(['$locationProvider', '$routeProvider', '$httpProvider',
         }).
         when('/dashboard/cart', {
             templateUrl: 'partials/dashboard/cart/cartForm.html',
-            controller: 'AddCartController'
+            controller: 'AddCartController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/giftcard/buy', {
             templateUrl: 'partials/dashboard/giftcard/addgiftjdcard.html',
-            controller: 'AddGiftJdCardController'
+            controller: 'AddGiftJdCardController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
 
         }).
         when('/dashboard/giftcard/redeem', {
             templateUrl: 'partials/dashboard/giftcard/redeemgiftjdcard.html',
-            controller: 'RedeemGiftJdCardController'
+            controller: 'RedeemGiftJdCardController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/aircraft/manage', {
             templateUrl: 'partials/dashboard/aircraft/myaircrafts.html',
-            controller: 'MyAirCraftsController'
+            controller: 'MyAirCraftsController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         }).
         when('/dashboard/captain/manage', {
             templateUrl: 'partials/dashboard/captain/captain.html',
-            controller: 'MyCaptainController'
+            controller: 'MyCaptainController',
+            resolve:{
+                "check":function($location, helperFunc, LxNotificationService){
+                    if(helperFunc.checkauth(true, ['ROLE_ADMIN', 'ROLE_SYSADMIN'])==false){
+                        //$event.preventDefault();
+                        $location.path("/401");
+                        LxNotificationService.error('Get in contact with the System Administartor!!!');
+                    }
+                }
+            }
         })
+
+        /******** ERRORS *********/
+            .
+            when('/401', {
+                templateUrl: 'partials/errors/401.html'
+            })
 
 
             .otherwise({ redirectTo: '/' });

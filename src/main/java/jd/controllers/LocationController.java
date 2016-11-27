@@ -41,7 +41,7 @@ public class LocationController {
     @ApiMethod(description = "Recupera una lista de todos las localidades disponibles")
     public @ResponseBody List<Location> showLocations(){
         try{
-            return locationRepository.findAll();
+            return locationRepository.findByAvailable(true);
         }catch(Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -49,11 +49,15 @@ public class LocationController {
     }
 
     //retrieve products chids from group parent
-    @RequestMapping(value = "/airport/{name}",method = RequestMethod.GET)
+    @RequestMapping(value = "/airport/{tag}",method = RequestMethod.GET)
     @ApiMethod(description = "Recupera una lista de localidades a traves del tag aeropuerto")
-    public @ResponseBody List<Location> showAirportsByName(@ApiPathParam(name = "name", description = "tag nombre del aeropuerto") @PathVariable String name){
+    public @ResponseBody List<Location> showAirportsByName(@ApiPathParam(name = "tag", description = "tag nombre del aeropuerto") @PathVariable String tag){
         try{
-            return locationRepository.findByNameContainingIgnoreCase(name);
+            //locationRepository.findByNameContainingIgnoreCase(tag);
+            if(tag !=null){
+                return locationRepository.findByTag(tag);
+            }
+            return null;
         }catch(Exception e){
             System.out.println(e.getMessage());
             return null;

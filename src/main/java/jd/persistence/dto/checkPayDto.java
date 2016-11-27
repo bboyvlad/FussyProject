@@ -5,6 +5,7 @@ package jd.persistence.dto;
  */
 public class checkPayDto {
     private long payment;
+    private double famount;
     private boolean approved;
 
     public checkPayDto() {
@@ -24,5 +25,13 @@ public class checkPayDto {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public double getFamount() {
+        return famount;
+    }
+
+    public void setFamount(double famount) {
+        this.famount = famount;
     }
 }

@@ -1,15 +1,20 @@
 <div class="row" ng-init="updateMenu()">
 
     <form name="RedeemGiftForm" novalidate>
-        user id: {{user.id}}
-        {{fredeemcard}}
+        <!--user id: {{user.id}}
+        {{fredeemcard}}-->
         <!--{{jdcardOpts}}-->
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="4"></div>
             <div flex-item="8">
 
                 <div class="card">
+                    <div class="card__img card__img--top bgc-jd">
+                        <img ng-src="{{icon}}" width="100px" class="p+">
+                        <p class="fs-headline tc-white-1 display-block" >{{'giftcard.redeem.card1.headline' | translate}} </p>
+                    </div>
                     <div class="p+">
-                        <strong class="fs-headline display-block">Escoga una J&amp;D Card</strong>
+                        <strong class="fs-headline display-block">{{'giftcard.redeem.card1.title' | translate}} J&amp;D Card</strong>
                         <!--1{{paymethod}} 2{{paymethod}}-->
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
@@ -24,20 +29,20 @@
                                                 lx-valid="RedeemGiftForm.jdcard.$valid"
                                                 lx-error="RedeemGiftForm.jdcard.$invalid && RedeemGiftForm.jdcard.$touched"
                                                 ng-required="true"
-                                                lx-label="Escoja su metodo de pago">
+                                                lx-label="{{'giftcard.redeem.form1.f1' | translate}} J&amp;D Card">
                                             <lx-select-selected>
-                                                {{ $selected.payacctnum }}
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                             </lx-select-selected>
 
                                             <lx-select-choices>
-                                                {{ $choice.payacctnum }}
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }} - {{ $choice.payavailable | currency:"USD$"  }}
                                             </lx-select-choices>
                                         </lx-select>
                                         <div ng-messages="RedeemGiftForm.jdcard.$error"
                                              ng-if="RedeemGiftForm.jdcard.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                            <div ng-message="required">{{'giftcard.redeem.form1.f1error.e1' | translate}} J&amp;D Card </div>
                                         </div>
                                     </div>
                                 </div>
@@ -51,7 +56,7 @@
                     <div class="card" >
 
                         <div class="p+">
-                            <strong class="fs-headline display-block">Personaliza tu Gift Card</strong>
+                            <strong class="fs-headline display-block">{{'giftcard.redeem.card2.title' | translate}}</strong>
                             <div class="paragraph fs-body-1 mt+">
                                 <div class="p+ pt0">
 
@@ -59,7 +64,7 @@
                                         <div flex-item>
 
                                             <lx-text-field
-                                                    lx-label="Gift Card Codigo"
+                                                    lx-label="Gift card claim code"
                                                     lx-valid="RedeemGiftForm.claimcode.$valid"
                                                     lx-error="RedeemGiftForm.claimcode.$invalid && RedeemGiftForm.claimcode.$touched">
                                                 <input type="name" name="claimcode" ng-model="fredeemcard.claimcode"  ng-required="true" >
@@ -68,7 +73,7 @@
                                                  ng-if="RedeemGiftForm.claimcode.$touched"
                                                  style="color:maroon"
                                                  role="alert">
-                                                <div ng-message="required">Debes llenar este campo</div>
+                                                <div ng-message="required">{{'giftcard.redeem.form1.f2error.e1' | translate}}</div>
 
                                             </div>
                                         </div>
@@ -79,21 +84,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card__actions" flex-container="row" flex-column="16" flex-gutter="24">
+                        <div class="p+" flex-item="5"></div>
+                        <div class="p+">
+                            <div style="position: relative;">
+                                <lx-progress lx-type="linear" lx-color="teal"
+                                             ng-if="LinearProgress">
+                                </lx-progress>
+                            </div>
+                                <lx-button lx-color="red"
+                                           ng-click="reset()"
+                                >{{'giftcard.redeem.form1.button1' | translate}}</lx-button>
+                                <lx-button lx-color="green"
+                                           ng-click="redeemGiftCard($event, fredeemcard)"
+                                           ng-disabled="sendbutton || RedeemGiftForm.$invalid">
+                                    {{'giftcard.redeem.form1.button2' | translate}} </lx-button>
+                        </div>
+                    </div>
+
                 </div>
-                <div style="position: relative;">
-                    <lx-progress lx-type="linear" lx-color="teal"
-                                 ng-if="LinearProgress">
-                    </lx-progress>
-                </div>
-                <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
-                    <lx-button lx-color="red"
-                               ng-click="reset()"
-                    >Limpiar</lx-button>
-                    <lx-button lx-color="green"
-                               ng-click="redeemGiftCard($event, fredeemcard)"
-                               ng-disabled="sendbutton || RedeemGiftForm.$invalid">
-                        Reclamar Gift Card</lx-button>
-                </div>
+
             </div>
         </div>
     </form>

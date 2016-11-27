@@ -5,14 +5,16 @@
 
 var paymethod = angular.module('PayMethod', ['ngRoute', 'ngMessages', 'angularPayments']);
 
-paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'LxDialogService', 'userPaymentResource', 'userResource',
-    function PayMethodController($rootScope, $scope, $http, $location, $LxDatePickerService, myJdMenu, helperFunc, LxNotificationService, LxDialogService, userPaymentResource, userResource) {
-
+paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'LxDialogService', 'userPaymentResource', 'userResource', 'cardPaymentResource','$translate', '$filter',
+    function PayMethodController($rootScope, $scope, $http, $location, $LxDatePickerService, myJdMenu, helperFunc, LxNotificationService, LxDialogService, userPaymentResource, userResource, cardPaymentResource, $translate, $filter) {
+        $scope.cssClass = 'paymethod';
         var self = this;
         $scope.sendbutton = false;
         $scope.LinearProgress = false;
-
+        $scope.search = { mysearch:'' };
         $scope.faddpaym = {};
+        $scope.icon = '../css/icons/bank.png';
+
 
         /***************** COORDINATE CARD ********************/
         $scope.userDetail = userResource.detailUser().$promise
@@ -20,33 +22,28 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
             function (data) {
                 if(data.coordinates==null || data.coordinates.id==""){
                     //console.log(data.coordinates.id + " / " + data.coordinates.active);
-                    LxNotificationService.confirm('Crear Tarjeta de Coordenadas', 'Para agregar un Metodo de pago debe tener una Tarjeta de Coordenadas.',
+                    $scope.sms1 = $filter('translate')('paymethod.module.sms1');
+                    $scope.sms2 = $filter('translate')('paymethod.module.sms2');
+                    LxNotificationService.confirm($scope.sms1, $scope.sms2,
                         {
-                            cancel: 'Cancelar',
-                            ok: 'Crear'
+                            cancel: 'Cancel',
+                            ok: 'Create'
                         }, function(answer)
                         {
                             if (answer)
                             {
-                                window.open('http://localhost:8080/users/setcoordinates', '_blank');
-                                /*userResource.createCoordinates().$promise.
-                                then(
-                                    function (data) {
-                                        console.log("creada!!" + data);
-                                        LxNotificationService.success('Tarjeta creada satisfactoriamente!!!.. en su correo tiene las instrucciones nesarias para su activación');
-                                    },function (data) {
-                                        console.log("Error!!" + data.toSource());
-                                    }
-                                )*/
-                                LxNotificationService.success('Tarjeta creada satisfactoriamente!!!.. en su correo tiene las instrucciones nesarias para su activación');
+                                window.open('http://jdoilfield.net:8080/users/setcoordinates', '_blank');
+                                $scope.sms3 = $filter('translate')('paymethod.module.sms3');
+                                LxNotificationService.success($scope.sms3);
                             }
                             else
                             {
-                                LxNotificationService.error('Disagree');
+                                LxNotificationService.error('Operation Canceled');
                             }
                         });
                 }else if(data.coordinates.active==false){
-                    LxNotificationService.info('Usted ya creo su Tarjeta de Coordenadas, pero no la ha activado... en su correo tiene las instrucciones nesarias para su activación');
+                    $scope.sms4 = $filter('translate')('paymethod.module.sms4');
+                    LxNotificationService.info($scope.sms4);
                 }
             }
         );
@@ -97,7 +94,7 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
-            paytype: "", payacctnum: "", paycardname: "", payvalid: new Date(), paystatus: ""
+            paytype: "", payacctnum: "", paycardname: "", payvalid: null /*, paystatus: ""*/
         };
         $scope.reset = function() {
             $scope.faddpaym = angular.copy($scope.master);
@@ -118,7 +115,7 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
             input:
             {
                 date: new Date(),
-                dateFormatted: moment().locale('es').format('LL')
+                dateFormated: moment().locale('es').format('LL')
             }
         };
 
@@ -128,43 +125,55 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
             $event.preventDefault();
             var self = this;
 
-
             var coordinates = '{"crdOne":"'+$scope.coord1.key+'","valOne":"'+$scope.coord1.val+'","crdTwo":"'+$scope.coord2.key+'","valTwo":"'+$scope.coord2.val+'"}';
             userResource.checkCoordinates({}, coordinates).$promise.then(
                 function (data) {
-                    console.log(data.toSource());
-                    if(data.messaje=="Autorized"){
+                    //console.log(data.toSource());
+                    if(data.message=="Autorized"){
                         LxDialogService.close($scope.dialogCoordinates);
                         $scope.LinearProgress = helperFunc.toogleStatus($scope.LinearProgress);
                         $scope.sendbutton = helperFunc.toogleStatus($scope.sendbutton);
 
-                        var url = '/users/add/paymentmethod/'+ id;
-                        var toSave = '{"paytype":"'+fields.paytype.key+'","payacctnum":"'+fields.payacctnum+'","paycardname":"'+fields.paycardname+'","payvalid":"'+fields.payvalid+'","paystatus":"'+fields.paystatus+'"}';
+                        var toSave = { paytype:fields.paytype.key, payacctnum:fields.payacctnum, paycardname:fields.paycardname, payvalid:helperFunc.dateToDB(fields.payvalid), paystatus:"ACTIVE", paycardtype:fields.type };
+
                         userPaymentResource.save({id: $rootScope.user.id}, toSave).$promise.
                         then(
                             function (data) {
-                                console.log("Guardado!!" + data.toSource());
-                                LxNotificationService.alert('Metodo de Pago Creado',
-                                    "Su tarjeta ha sido agregada satisfactoriamente,\r\na sus metodos de pago...",
+                                if(angular.isDefined(data.message) && data.message=="Unknown SMTP host: smtp.gmail.com"){
+                                    $scope.sms5 = $filter('translate')('paymethod.module.sms5');
+                                    LxNotificationService.error($scope.sms5);
+                                    self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
+                                    self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
+                                    return;
+                                }
+                                //console.log("Saved!!" + data.toSource());
+                                $scope.sms6 = $filter('translate')('paymethod.module.sms6');
+                                $scope.sms7 = $filter('translate')('paymethod.module.sms7');
+                                LxNotificationService.alert($scope.sms6,
+                                    $scope.sms7,
                                     'Ok',
                                     function(answer)
                                     {
                                         $scope.reset();
                                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                                        $location.path("/dashboard");
+                                        //$location.path("/dashboard");
                                     });
                             },function (data) {
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                                console.log("Error!!" + data);
+                                console.log("Error!!" + data.toString());
                             }
                         )
 
-                    }else if(data.messaje=="Unautorized"){
-                        window.alert(" Datos Invalidos!!! ");
-                    }else if(data.messaje=="Coordinate card inactive"){
-                        window.alert(" Aun no ha activado su tarjeta!!! ");
+                    }else if(data.message=="Unautorized"){
+                        //window.alert(" Invalid Data!!! ");
+                        $scope.sms8 = $filter('translate')('paymethod.module.sms8');
+                        LxNotificationService.error($scope.sms8);
+                    }else if(data.message=="Coordinate card inactive"){
+                        $scope.sms9 = $filter('translate')('paymethod.module.sms9');
+                        LxNotificationService.error($scope.sms9);
+                        //window.alert(" You haven't activated your card yet!!! ");
                     }
                 }
             );
@@ -175,7 +184,7 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
         /********** addpayMethod ********/
 
         /********** editpayMethod ********/
-        //$scope.listPayMethod = userResource.myaircraft({principal_id: $rootScope.user.id});
+        $scope.listPayMethod = userPaymentResource.get();
 
         $scope.dialogPayMethod = "dialogPayMethod";
         $scope.feditpaym = {};
@@ -183,9 +192,9 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
         /***************** TO RESET EDIT FORMS ********************/
 
 
-        $scope.editReset = function(id) {
+        $scope.editReset = function(payid) {
             $scope.editMaster = {
-                id: id, paytype: "", payacctnum: "", paycardname: "", payvalid: new Date(), paystatus: ""
+                payid: payid, paytype: "", payacctnum: "", paycardname: "", payvalid: null/*, paystatus: ""*/
             };
             $scope.feditpaym = angular.copy($scope.editMaster);
         };
@@ -195,10 +204,10 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
         $scope.openDialogPayMethod = function openDialogPayMethod(ef_paym)
         {
             LxDialogService.open(this.dialogPayMethod);
-            console.log(ef_paym.id );
+            //console.log(ef_paym.payid );
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
             $scope.editmaster = {
-                id: ef_paym.id, paytype: ef_paym.paytype, payacctnum: ef_paym.payacctnum, paycardname: ef_paym.paycardname, payvalid: new Date(ef_paym.payvalid), paystatus: ef_paym.paystatus
+                payid: ef_paym.payid, paytype: { key: ef_paym.paytype, name: ef_paym.paytype }, payacctnum: ef_paym.payacctnum, paycardname: ef_paym.paycardname, payvalid: helperFunc.dateFromDB(ef_paym.payvalid), type:ef_paym.type
             };
             $scope.feditpaym = angular.copy($scope.editmaster);
             /***************** TO RECALL DATA ON EDIT FORMS ********************/
@@ -218,16 +227,21 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
             $event.preventDefault();
             var self = this;
 
-            console.log(fields[0].id+ ' / ' + fields[0]);
+            //console.log(fields.payid+ ' / ' + fields);
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
 
-            userPaymentResource.update({id: fields[0].id}, fields[0]).$promise.
+            var toSave = {
+                payid: fields.payid, paytype: fields.paytype.key, payacctnum: fields.payacctnum, paycardname: fields.paycardname, payvalid: helperFunc.dateToDB(fields.payvalid), paycardtype:fields.type, paystatus: 'ACTIVE'
+            };
+
+            userPaymentResource.update({}, toSave).$promise.
             then(
                 function (data) {
-                    console.log("Actualizado!!" + data);
-                    LxNotificationService.success('Actualización realizada!!!');
-                    //$scope.listPayMethod = userPaymentResource.query();
+                    //console.log("Updated!!" + data);
+                    $scope.sms10 = $filter('translate')('paymethod.module.sms10');
+                    LxNotificationService.success($scope.sms10);
+                    $scope.listPayMethod = userPaymentResource.get();
                     $scope.reset();
                     //$location.path("/dashboard");
                     LxDialogService.close(self.dialogPayMethod);
@@ -236,7 +250,7 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
                 },function (data) {
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                    console.log("Error!!" + data);
+                    console.log("Error!!" + data.toString());
                 }
             );
         }
@@ -250,35 +264,41 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
             var self = this;
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
-            console.log(data.toSource());
-            LxNotificationService.confirm('Eliminar Metodo de Pago', 'Por favor confirme que desea eliminar esta Metodo de Pago.',
+            //console.log(data.toSource());
+            $scope.sms11 = $filter('translate')('paymethod.module.sms11');
+            $scope.sms12 = $filter('translate')('paymethod.module.sms12');
+            $scope.sms13 = $filter('translate')('paymethod.module.sms13');
+            $scope.sms14 = $filter('translate')('paymethod.module.sms14');
+            LxNotificationService.confirm($scope.sms11, $scope.sms12,
                 {
-                    cancel: 'Cancelar',
-                    ok: 'Eliminar'
+                    cancel: $scope.sms13,
+                    ok: $scope.sms14
                 }, function(answer)
                 {
                     if (answer)
                     {
-                        userPaymentResource.delete({id: data.id}).$promise.
+                        userPaymentResource.delete({paymethod: data.payid}).$promise.
                         then(
                             function (data) {
-                                console.log("Borrado!!" + data);
-                                LxNotificationService.success('Metodo de Pago, Eliminado satisfactoriamente!!!');
-                                //$scope.listPayMethod = userPaymentResource.query();
-                                $scope.faircrafts = [];
+                                //console.log("Erased!!" + data);
+                                $scope.sms15 = $filter('translate')('paymethod.module.sms15');
+                                LxNotificationService.success($scope.sms15);
+                                $scope.listPayMethod = userPaymentResource.get();
+                                //$scope.faircrafts = [];
                                 //$location.path("/dashboard");
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                             },function (data) {
                                 self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                 self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
-                                console.log("Error!!" + data.toSource());
+                                console.log("Error!!" + data.toString());
                             }
                         );
                     }
                     else
                     {
-                        LxNotificationService.error('Disagree');
+                        $scope.sms16 = $filter('translate')('paymethod.module.sms16');
+                        LxNotificationService.error($scope.sms16);
                         this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
                         this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
                     }
@@ -288,108 +308,4 @@ paymethod.controller('PayMethodController', ['$rootScope','$scope', '$http', '$l
         /********** deletePayMethod ********/
 
 
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
     }]);

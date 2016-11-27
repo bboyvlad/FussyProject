@@ -1,10 +1,7 @@
 package jd.controllers;
 
 import jd.Util.AppUtils;
-import jd.persistence.dto.generateTicketDto;
-import jd.persistence.dto.newTicketDto;
-import jd.persistence.dto.rptServiceItemRequestDTO;
-import jd.persistence.dto.showServicesRequestDto;
+import jd.persistence.dto.*;
 import jd.persistence.model.*;
 import jd.persistence.repository.*;
 import net.sf.jasperreports.engine.JRException;
@@ -27,11 +24,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,6 +102,9 @@ public class ServicerequestController {
                                          @PathVariable long shopcart_id,
                                           HttpServletResponse httpServletResponse,
                                                        HttpServletRequest request) throws IOException, JRException, MessagingException {
+        String CACMail="efernandez.ve@gmail.com";
+        String OPERMail="efernandez.ve@gmail.com";
+
         try{
                 Hashtable<String, String> message= new Hashtable<String, String>();
                 final boolean[] owmpay = {false};
@@ -121,7 +123,7 @@ public class ServicerequestController {
                     }
                 });
                 if (!owmpay[0]){
-                    message.put("messaje","algo pasa, esta tarjeta no le pertenece a este usuario");
+                    message.put("message","algo pasa, esta tarjeta no le pertenece a este usuario");
                     return message;
                 }
 
@@ -133,7 +135,7 @@ public class ServicerequestController {
                     }
                 });
                 if (!owncart[0]){
-                    message.put("messaje","algo pasa, este carro de compras no le pertenece a este usuario");
+                    message.put("message","algo pasa, este carro de compras no le pertenece a este usuario");
                     return message;
                 }
 
@@ -146,13 +148,14 @@ public class ServicerequestController {
                 System.out.println("aircraft del shopcart es "+shopcart[0].getMyaircraft());
 
                 if (aircraftGo[0]== null){
-                    message.put("messaje","algo pasa, esta aeronave al parecer no le pertenece a este usuario");
+                    message.put("message","algo pasa, esta aeronave al parecer no le pertenece a este usuario");
                     return message;
                 }
 
                 Set<Itemcart> cartitems = new HashSet<Itemcart>(0); //Items del carro de compra (servicios)
                 Set<Itemrequest> itemsrequest = new HashSet<Itemrequest>(0); //Items del service request, su fuente es el caritems
                 Set <rptServiceItemRequestDTO> irequestDTOs = new HashSet<rptServiceItemRequestDTO>(0);
+
                 Servicerequest servicerequest = new Servicerequest();
 
                 final double[] serviceamount={0};
@@ -178,9 +181,11 @@ public class ServicerequestController {
                             ir.setPricedesc(citem.getPricedesc());
                             ir.setPricetype("U");
 
-                            irDTO.setPricedesc(citem.getPricedesc());
+                            irDTO.setPricedesc(citem.getPricedesc().toUpperCase());
                             irDTO.setAmount(ir.getTotalprice());
-                            irDTO.setDescription(Pc.getName());
+                            irDTO.setDescription(Pc.getName().toUpperCase());
+                            irDTO.setQuantity(citem.getQuantity());
+                            irDTO.setMeasure(Pc.getMeasure().toUpperCase());
 
                             break;
 
@@ -195,9 +200,11 @@ public class ServicerequestController {
                             ir.setPricedesc(citem.getPricedesc());
                             ir.setPricetype("D");
 
-                            irDTO.setPricedesc(citem.getPricedesc());
+                            irDTO.setPricedesc(citem.getPricedesc().toUpperCase());
                             irDTO.setAmount(ir.getTotalprice());
-                            irDTO.setDescription(Pd.getName());
+                            irDTO.setDescription(Pd.getName().toUpperCase());
+                            irDTO.setQuantity(citem.getQuantity());
+                            irDTO.setMeasure(Pd.getMeasure().toUpperCase());
 
                             break;
 
@@ -212,9 +219,11 @@ public class ServicerequestController {
                             ir.setPricedesc(citem.getPricedesc());
                             ir.setPricetype("P");
 
-                            irDTO.setPricedesc(citem.getPricedesc());
+                            irDTO.setPricedesc(citem.getPricedesc().toUpperCase());
                             irDTO.setAmount(ir.getTotalprice());
-                            irDTO.setDescription(Po.getName());
+                            irDTO.setDescription(Po.getName().toUpperCase());
+                            irDTO.setQuantity(citem.getQuantity());
+                            irDTO.setMeasure(Po.getMeasure().toUpperCase());
 
                             break;
                     }
@@ -225,7 +234,7 @@ public class ServicerequestController {
 
                 });
 
-            serviceGuarantee= serviceamount[0]*0.30;
+            serviceGuarantee= serviceamount[0]*0.15;  //Porcentaje de garantia
 
             servicerequest.setPrincipal(Pp.getId());
             servicerequest.setPaymethod(paymethod[0].getPayid());
@@ -234,10 +243,12 @@ public class ServicerequestController {
             servicerequest.setLocation(shopcart[0].getLocation());
             servicerequest.setAviationtype(shopcart[0].getAviationtype());
             servicerequest.setMyaircraft(aircraftGo[0].getId());
+            servicerequest.setRdate(shopcart[0].getRdate());
 
             servicerequest.setDcreate(fechaActual);
             servicerequest.setDupdate(fechaActual);
 
+            /*Calcula los dias de expiracion de un service request*/
             Calendar c = Calendar.getInstance();
             c.setTime(fechaActual);
             c.add(Calendar.DATE, 15);
@@ -248,8 +259,6 @@ public class ServicerequestController {
             servicerequest.setDlanding(shopcart[0].getDlanding());
             servicerequest.setReleased(false);
             servicerequest.setSerialcode(serialcode);
-
-
 
             if(serviceamount[0]<= paymethod[0].getPayavailable()){ //verifico si tiene saldo disponible
 
@@ -269,20 +278,31 @@ public class ServicerequestController {
                 //servicerequestRepository.save(servicerequest);
                 servicerequestRepository.saveAndFlush(servicerequest);
 
-
                 /*genera el pdf*/
 
                 Map<String,Object> params = new HashMap<String,Object>();
 
                 params.put("fcreate",fechaActual);
+
                 params.put("client",Pp.getName().toUpperCase());
                 params.put("email",Pp.getEmail());
                 params.put("guarantee",serviceGuarantee);
                 params.put("locationiata",airport.getIATA());
+
+                params.put("id",servicerequest.getId());
+
+                params.put("landing",shopcart[0].getDlanding());
+                params.put("returndate",shopcart[0].getRdate()); //return date
+
+                params.put("locationicao",airport.getICAO());
+                params.put("tail",aircraftGo[0].getTailnumber());
+
                 params.put("airport",airport.getName().toUpperCase());
                 params.put("city",airport.getCity().toUpperCase());
                 params.put("typeaviation",getAviationname(aircraftGo[0].getAviationtype()));
+
                 params.put("craftype",aircraftGo[0].getCraftype());
+
                 params.put("mpound",aircraftGo[0].getMtow());
                 params.put("serialcode",serialcode);
 
@@ -297,23 +317,27 @@ public class ServicerequestController {
                 JasperExportManager.exportReportToPdfFile(jasperPrint,
                         java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+serialcode+".pdf");
 
+                System.out.println("se guardo en "+java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+serialcode+".pdf");
+
                 /*Se envia el correo al cliente*/
                 MimeMessage msg = mailSender.createMimeMessage();
 
                 // use the true flag to indicate you need a multipart message
                 MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-                helper.setTo(Pp.getEmail());
-                helper.addBcc("efernandez.ve@gmail.com");
-                helper.setText("Hola "+Pp.getName()+", has generado satisfactoriamente un service request " +
-                        "ahora despreocupate que nosotros nos encargamos, te avisaremos tan pronto este listo");
-                helper.setSubject("Has generado un Service Request");
+                helper.setTo(CACMail);
+                helper.addBcc(OPERMail);
+                helper.setText("El Cliente "+Pp.getName()+" "+Pp.getLastname()+", ha generado satisfactoriamente un service request " +
+                        "se debe hacer un service release para la validación");
+                helper.setSubject("Han generado un Service Request");
 
                 // let's attach the infamous windows Sample file (this time copied to c:/)
                 FileSystemResource file = new FileSystemResource(java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+serialcode+".pdf");
 
                 helper.addAttachment(serialcode+".pdf", file);
 
-                mailSender.send(msg);
+                /*Service request para los proveedores*/
+
+                //itemsrequest
 
                 /*endmail*/
 
@@ -330,6 +354,8 @@ public class ServicerequestController {
                 deferedpay.save(defered);
 
                 message.put("message","Service request generado");
+
+                mailSender.send(msg);
 
             }else{
                 message.put("message","Saldo insuficiente");
@@ -446,7 +472,9 @@ public class ServicerequestController {
     }
 
     @RequestMapping(value = "/manage/generateticket",method = RequestMethod.POST)
-    public  @ResponseBody String[] geneateTicket(@RequestBody newTicketDto rdto){
+    public  @ResponseBody String[] geneateTicket(@RequestBody newTicketDto rdto,
+                                                 HttpServletResponse httpServletResponse,
+                                                 HttpServletRequest request) throws JRException, IOException {
 
         Servicerequest sr=servicerequestRepository.findOne(rdto.getServicerequest());
         Principal Pp = principalRepository.findOne(sr.getPrincipal());
@@ -456,6 +484,7 @@ public class ServicerequestController {
         //Verifico si el paymethod es del usuario
         final boolean[] owmpay = {false};
         final Paymethod[] paymethod = new Paymethod[1];
+
         Pp.getPayments().forEach((pay)->{
             if(pay.getPayid()==sr.getPaymethod() && pay.getPaytype().equals("JDCARD")){
                 owmpay[0] =true;
@@ -463,15 +492,32 @@ public class ServicerequestController {
             }
         });
         if (!owmpay[0]){
-            return new String[]{"messaje","algo pasa, esta tarjeta no esta relacionada con este usuario"};
+            return new String[]{"message","algo pasa, esta tarjeta no esta relacionada con este usuario"};
+        }
+
+        /*El aircraft que viajó*/
+        final Myaircraft[] aircraftGo = new Myaircraft[1];
+        Pp.getMyaircrafts().forEach((myaircraft)->{
+            if(sr.getMyaircraft()==myaircraft.getId()){
+                aircraftGo[0]=myaircraft;
+            }
+        });
+        if (aircraftGo[0]== null){
+            return new String[]{"message","algo pasa, esta aeronave al parecer no le pertenece a este usuario o ya no esta disponible"};
         }
 
         Serviceticket st=new Serviceticket();
         Set<Itemticket> ticketitems = new HashSet<Itemticket>(0);
+
+        /*Coleccion para el reporte de los items del ticket*/
+        //Set <rptServiceItemTicketDto> iticketDTOs = new HashSet<rptServiceItemTicketDto>(0);
+        List<rptServiceItemTicketDto>iticketDTOs=new ArrayList<rptServiceItemTicketDto>();
+
         final double[] serviceamount={0};
 
         rdto.getItems().forEach((titem)->{
             Itemticket it=new Itemticket();
+            rptServiceItemTicketDto irDTO=new rptServiceItemTicketDto(); //para el reporte
 
             switch (titem.getPricetype()){
                 case "U":
@@ -486,6 +532,11 @@ public class ServicerequestController {
                     it.setQuantity(titem.getQuantity());
                     it.setUnitprice(Pc.getPrice1());
                     it.setTotalprice(it.getQuantity()*it.getUnitprice());
+
+                    irDTO.setFeenabled(Pc.isFeesenable());
+                    irDTO.setPricedesc(titem.getPricedesc());
+                    irDTO.setAmount(it.getTotalprice());
+                    irDTO.setDescription(Pc.getName());
 
                     break;
 
@@ -502,6 +553,11 @@ public class ServicerequestController {
                     it.setUnitprice(Pd.getPrice1());
                     it.setTotalprice(it.getQuantity()*it.getUnitprice());
 
+                    irDTO.setFeenabled(Pd.isFeesenable());
+                    irDTO.setPricedesc(titem.getPricedesc());
+                    irDTO.setAmount(it.getTotalprice());
+                    irDTO.setDescription(Pd.getName());
+
                     break;
 
                 case "P":
@@ -517,15 +573,22 @@ public class ServicerequestController {
                     it.setUnitprice(Po.getPrice1());
                     it.setTotalprice(it.getQuantity()*it.getUnitprice());
 
+                    irDTO.setFeenabled(Po.isFeesenable());
+                    irDTO.setPricedesc(titem.getPricedesc());
+                    irDTO.setAmount(it.getTotalprice());
+                    irDTO.setDescription(Po.getName());
+
                     break;
             }
             ticketitems.add(it);
+            iticketDTOs.add(irDTO);
             serviceamount[0]=serviceamount[0]+it.getTotalprice();
         });
 
         /*Preparo y guardo el service ticket*/
         Serviceticket ticket=new Serviceticket();
 
+        ticket.setTicket(rdto.getTicket());
         ticket.setAmount(serviceamount[0]);
         ticket.setPaymethod(sr.getPaymethod());
         ticket.setAviationtype(sr.getAviationtype());
@@ -542,11 +605,9 @@ public class ServicerequestController {
 
         /*Desbloqueo el pago del service request*/
         Deferedpay defered=deferedpay.findByServicerequestIs(sr.getId());
-
         deferedpay.delete(defered);
 
         /*Realizo el Cobro del Monto Correspondiente a la JDcard*/
-
          Tranpay jd_etpm = new Tranpay();
          jd_etpm.setTrantype("JDEBIT");
          jd_etpm.setTranamount(-(serviceamount[0]));
@@ -560,12 +621,52 @@ public class ServicerequestController {
         /*Actualizo el Service request*/
         sr.setClosed(true);
         sr.setDupdate(new Date());
+        sr.setTicket(true);
         servicerequestRepository.save(sr);
 
-        /*Genero el PDF del ServiceTicket*/
+        /*Preciso la localidad*/
+        Location airport=loc.findOne(ticket.getLocation());
 
+        /*Genero el PDF del ServiceTicket*/
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("fcreate",fechaActual);
+        params.put("client",Pp.getName().toUpperCase());
+        params.put("email",Pp.getEmail());
+        params.put("locationiata",airport.getIATA());
+        params.put("airport",airport.getName().toUpperCase());
+        params.put("city",airport.getCity().toUpperCase());
+        params.put("typeaviation",getAviationname((int)ticket.getAviationtype()));
+        params.put("craftype",aircraftGo[0].getCraftype());
+        params.put("mpound",aircraftGo[0].getMtow());
+        params.put("serialcode",ticket.getSerialcode());
+
+        //Le doy un orden a los items, para que el report pueda agrupar los resultados correctamente
+        Collections.sort(iticketDTOs,(dto1,dto2)->
+                Boolean.compare(dto1.isFeenabled(),dto2.isFeenabled())
+        );
+
+        JRBeanCollectionDataSource beanCollectionDataSource=new JRBeanCollectionDataSource(iticketDTOs);
+
+        JasperPrint jasperPrint= JasperFillManager.fillReport(java.lang.System.getProperty("user.home")+"/fussyfiles/reports/rptserviceticket.jasper",
+                params,beanCollectionDataSource);
+
+        System.out.println("Tratando de escrbir el pdf en el direcorio");
+
+        httpServletResponse.getOutputStream();
+        httpServletResponse.addHeader("Content-disposition","attachment; filename=serviceticket.pdf");
+        ServletOutputStream stream = httpServletResponse.getOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
+        stream.flush();
+        stream.close();
+
+        System.out.println("Listo!");
 
         return new String[]{"message","success"};
+        /*
+        JasperExportManager.exportReportToPdfFile(jasperPrint,
+                java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+ticket.getSerialcode()+".pdf");
+        JasperExportManager.exportReportToPdfFile(jasperPrint, "tigre.pdf");
+        */
 
     }
 
@@ -597,7 +698,8 @@ public class ServicerequestController {
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
                 Date createDate = df.parse((String) record[3]);
-                Date landingDate = df.parse((String) record[4]);
+                Date landingDate = new Date(((Timestamp)record[4]).getTime());
+
 
                 dto.setDcreate(createDate);
                 dto.setDlanding(landingDate);
@@ -636,6 +738,98 @@ public class ServicerequestController {
         }catch (Exception e){
             System.out.println(e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    @RequestMapping(value = "/pending",method = RequestMethod.GET)
+    public @ResponseBody List<showServicesRequestDto> showServicesRequestePendingUser(Authentication auth){
+
+        Principal Pp = principalRepository.findByEmail(auth.getName());
+        List<Object[]> results= servicerequestRepository.findForUser(Pp.getId(),false);
+        List<showServicesRequestDto> shw = new ArrayList<>(0);
+        results.stream().forEach((record) -> {
+            showServicesRequestDto dto = new showServicesRequestDto();
+            try {
+                dto.setServicerequest(((BigInteger) record[0]).longValue());
+                dto.setPrincipal(((BigInteger) record[1]).longValue());
+                dto.setPrincipalname(((String) record[2]).toUpperCase());
+                dto.setLocationname(((String) record[3]).toUpperCase());
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Date createDate = df.parse((String) record[4]);
+                Date landingDate =new Date(((Timestamp)record[5]).getTime());
+                Date returnDate= new Date(((Timestamp)record[6]).getTime());
+                dto.setDcreate(createDate);
+                dto.setDlanding(landingDate);
+                dto.setRdate(returnDate);
+                dto.setSerialcode((String) record[7]);
+                shw.add(dto);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+        return shw;
+    }
+
+    @RequestMapping(value = "/finalized",method = RequestMethod.GET)
+    public @ResponseBody List<showServicesRequestDto> showServicesRequesteFinalizedUser(Authentication auth){
+
+        Principal Pp = principalRepository.findByEmail(auth.getName());
+        List<Object[]> results= servicerequestRepository.findForUser(Pp.getId(),true);
+
+        List<showServicesRequestDto> shw = new ArrayList<>(0);
+
+        results.stream().forEach((record) -> {
+            showServicesRequestDto dto = new showServicesRequestDto();
+            try {
+                dto.setServicerequest(((BigInteger) record[0]).longValue());
+                dto.setPrincipal(((BigInteger) record[1]).longValue());
+                dto.setPrincipalname(((String) record[2]).toUpperCase());
+                dto.setLocationname(((String) record[3]).toUpperCase());
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Date createDate = df.parse((String) record[4]);
+                Date landingDate =new Date(((Timestamp)record[5]).getTime());
+                Date returnDate= new Date(((Timestamp)record[6]).getTime());
+                dto.setDcreate(createDate);
+                dto.setDlanding(landingDate);
+                dto.setRdate(returnDate);
+                dto.setSerialcode((String) record[7]);
+                shw.add(dto);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+        return shw;
+    }
+
+    @RequestMapping(value = "/reverse/{servicerequest}",method = RequestMethod.PATCH)
+    public @ResponseBody String[] reverseServicesRequest(Authentication auth,
+                                                         @PathVariable long servicerequest){
+
+        try{
+            Principal Pp = principalRepository.findByEmail(auth.getName());
+            Servicerequest svr= servicerequestRepository.findOne(servicerequest);
+
+            if (svr.getPrincipal()==Pp.getId()){
+
+                /*Desbloqueo el pago del service request*/
+                Deferedpay defered=deferedpay.findByServicerequestIs(svr.getId());
+                deferedpay.delete(defered);
+
+                /*Se cierra el svr y se le coloca la fecha de expiración*/
+                svr.setClosed(true);
+                svr.setDupdate(new Date());
+                svr.setDexpired(new Date());
+
+                /*Actualizo el service request*/
+                servicerequestRepository.save(svr);
+
+                return new String[]{"message","success"};
+            }
+            return new String[]{"message","failure"};
+
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+           return new String[]{"message","failure"};
         }
     }
 

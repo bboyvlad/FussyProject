@@ -1,29 +1,34 @@
 <div class="row" ng-init="updateMenu()">
 
     <form name="AddGiftForm" novalidate>
-        user id: {{user.id}}
-        fgiftcard:{{fgiftcard}}
+        <!--user id: {{user.id}}
+        fgiftcard:{{fgiftcard}}-->
         <!--{{paymethod}}-->
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
             <div flex-item="8">
+                <div class="card__img card__img--top bgc-jd">
+                    <img ng-src="{{icon}}" width="100px" class="p+">
+                    <p class="fs-headline tc-white-1 display-block" style=" right: 16px !important; ">{{'giftcard.add.card1.headline' | translate}}</p>
+                </div>
                 <span class="fs-title display-block">
-                    Escoja entre uno de los metodos de pago...
+                    {{'giftcard.add.radio.headline' | translate}}
                     <lx-radio-group class="mt+">
                     <lx-radio-button name="test2" value="false" ng-model="fgiftcard.switches">
-                        <lx-radio-button-label>TDC</lx-radio-button-label>
-                        <lx-radio-button-help>Marque esta opcion para pagar con TDC.</lx-radio-button-help>
+                        <lx-radio-button-label>{{'giftcard.add.radio.option1.title' | translate}}</lx-radio-button-label>
+                        <lx-radio-button-help>{{'giftcard.add.radio.option1.subtitle' | translate}}</lx-radio-button-help>
                     </lx-radio-button>
 
                     <lx-radio-button name="test2" value="true" ng-model="fgiftcard.switches">
                         <lx-radio-button-label>J&amp;D Card</lx-radio-button-label>
-                        <lx-radio-button-help>Marque esta opcion para pagar con J&amp;D Card.</lx-radio-button-help>
+                        <lx-radio-button-help>{{'giftcard.add.radio.option2.subtitle' | translate}} J&amp;D Card.</lx-radio-button-help>
                     </lx-radio-button>
                 </lx-radio-group>
                 </span>
 
                 <div class="card" ng-if="fgiftcard.switches=='false'">
+
                     <div class="p+">
-                        <strong class="fs-headline display-block">Escoga una TDC</strong>
+                        <strong class="fs-headline display-block">{{'giftcard.add.card1.title' | translate}}</strong>
                         <!--1{{paymethod}} 2{{paymethod}}-->
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
@@ -38,27 +43,27 @@
                                                 lx-valid="AddGiftForm.idpaymethod.$valid"
                                                 lx-error="AddGiftForm.idpaymethod.$invalid && AddGiftForm.idpaymethod.$touched"
                                                 ng-required="true"
-                                                lx-label="Escoja su metodo de pago">
+                                                lx-label="{{'giftcard.add.form1.f1' | translate}}">
                                             <lx-select-selected>
-                                                {{ $selected.payacctnum }}
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                             </lx-select-selected>
 
                                             <lx-select-choices>
-                                                {{ $choice.payacctnum }}
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }}
                                             </lx-select-choices>
                                         </lx-select>
                                         <div ng-messages="AddGiftForm.idpaymethod.$error"
                                              ng-if="AddGiftForm.idpaymethod.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f1error.e1' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="TDC Codigo de Seguridad"
+                                                lx-label="{{'giftcard.add.form1.f2' | translate}}"
                                                 lx-valid="AddGiftForm.paycardsec.$valid"
                                                 lx-error="AddGiftForm.paycardsec.$invalid && AddGiftForm.paycardsec.$touched">
                                             <input type="text" name="paycardsec" ng-required="true"
@@ -70,16 +75,16 @@
                                              ng-if="AddGiftForm.paycardsec.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Introduce el numero de tu TDC</div>
-                                            <div ng-message="minlength">Introduce los 3 digitos del verso de tu tarjeta</div>
-                                            <div ng-message="maxlength">Introduce los 4 digitos del verso de tu tarjeta</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f2error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'giftcard.add.form1.f2error.e2' | translate}}</div>
+                                            <div ng-message="maxlength">{{'giftcard.add.form1.f2error.e3' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="Monto"
+                                                lx-label="{{'giftcard.add.form1.f3' | translate}}"
                                                 lx-valid="AddGiftForm.tdcamount.$valid"
                                                 lx-error="AddGiftForm.tdcamount.$invalid && AddGiftForm.tdcamount.$touched">
                                             <input type="text" name="tdcamount" ng-required="true" ng-model="fgiftcard.tdcamount" ng-minlength="1" ui-number-mask>
@@ -88,8 +93,8 @@
                                              ng-if="AddGiftForm.tdcamount.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Introduce el Monto</div>
-                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f3error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'giftcard.add.form1.f3error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +107,7 @@
 
                 <div class="card" ng-if="fgiftcard.switches=='true'">
                     <div class="p+">
-                        <strong class="fs-headline display-block">Escoga una J&amp;D Card</strong>
+                        <strong class="fs-headline display-block">{{'giftcard.add.card2.title' | translate}} J&amp;D Card</strong>
                         <!--1{{paymethod}} 2{{paymethod}}-->
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
@@ -117,34 +122,34 @@
                                                 lx-valid="AddGiftForm.jdcardmethod.$valid"
                                                 lx-error="AddGiftForm.jdcardmethod.$invalid && AddGiftForm.jdcardmethod.$touched"
                                                 ng-required="true"
-                                                lx-label="Escoja su metodo de pago">
+                                                lx-label="{{'giftcard.add.form1.f4' | translate}}">
                                             <lx-select-selected>
-                                                {{ $selected.payacctnum }}
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
                                             </lx-select-selected>
 
                                             <lx-select-choices>
-                                                {{ $choice.payacctnum }}
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }} - {{ $choice.payavailable | currency:"USD$"  }}
                                             </lx-select-choices>
                                         </lx-select>
                                         <div ng-messages="AddGiftForm.jdcardmethod.$error"
                                              ng-if="AddGiftForm.jdcardmethod.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f4error.e1' | translate}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row" ng-show="fgiftcard.jdcardmethod.paybalance">
                                     <div flex-item>
                                         <p class="p+ fs-title display-block" >
-                                            Su Saldo Actual es de $ {{fgiftcard.jdcardmethod.paybalance}}
+                                            Your balance is $ {{fgiftcard.jdcardmethod.paybalance}}
                                         </p>
                                     </div>
                                 </div>
                                 <div flex-container="row">
                                     <div flex-item>
                                         <lx-text-field
-                                                lx-label="Monto"
+                                                lx-label="{{'giftcard.add.form1.f4' | translate}}"
                                                 lx-valid="AddGiftForm.jdcamount.$valid"
                                                 lx-error="AddGiftForm.jdcamount.$invalid && AddGiftForm.jdcamount.$touched">
                                             <input type="text" name="jdcamount" ng-required="true" ng-model="fgiftcard.jdcamount" ng-minlength="1" ui-number-mask>
@@ -153,15 +158,15 @@
                                              ng-if="AddGiftForm.jdcamount.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Introduce el Monto</div>
-                                            <div ng-message="minlength">Introduce un monto mayor a 0</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f4error.e1' | translate}}</div>
+                                            <div ng-message="minlength">{{'giftcard.add.form1.f4error.e2' | translate}}</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div flex-container="row" ng-show="fgiftcard.jdcardmethod.paybalance">
                                     <div flex-item>
                                         <p class="p+ fs-title display-block" >
-                                            Aplicando este monto tendria restante $ {{fgiftcard.jdcardmethod.paybalance - fgiftcard.jdcamount}}
+                                            Your balance left will be $ {{fgiftcard.jdcardmethod.paybalance - fgiftcard.jdcamount}}
                                         </p>
                                     </div>
                                 </div>
@@ -176,20 +181,21 @@
             <div flex-item="8">
                 <div class="card" >
                     <div class="card__img card__img--top">
-                        <img th:src="@{/css/img/Fuelcard_empty.jpg}"
-                             src="/css/img/Fuelcard_empty.jpg"
-                             ng-src="/css/img/Fuelcard_empty.jpg" />
-                        <span class="fs-headline tc-white-1 display-block emboss ccname_text">{{fgiftcard.recipient_message}}</span>
+                        <img th:src="@{/css/img/Fuelcard_empty.png}"
+                             src="/css/img/Fuelcard_empty.png"
+                             ng-src="/css/img/Fuelcard_empty.png" />
+                        <span class="fs-headline tc-white-1 display-block emboss ccname_text">
+                            {{fgiftcard.recipient_message}}</span>
                     </div>
                     <div class="p+">
-                        <strong class="fs-headline display-block">Personaliza tu Gift Card</strong>
+                        <strong class="fs-headline display-block">{{'giftcard.add.card3.title' | translate}}</strong>
                         <div class="paragraph fs-body-1 mt+">
                             <div class="p+ pt0">
                                 <div flex-container="row">
                                     <div flex-item>
 
                                         <lx-text-field
-                                                lx-label="Quien recibe su Gift Card?"
+                                                lx-label="{{'giftcard.add.form1.f5' | translate}}"
                                                 lx-valid="AddGiftForm.recipient_email.$valid"
                                                 lx-error="AddGiftForm.recipient_email.$invalid && AddGiftForm.recipient_email.$touched">
                                             <input type="email" name="recipient_email" ng-model="fgiftcard.recipient_email"  ng-required="true" >
@@ -198,7 +204,7 @@
                                              ng-if="AddGiftForm.recipient_email.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Debes llenar este campo</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f5error.e1' | translate}}</div>
 
                                         </div>
                                     </div>
@@ -207,7 +213,7 @@
                                     <div flex-item>
 
                                         <lx-text-field
-                                                lx-label="Nombre del receptor"
+                                                lx-label="{{'giftcard.add.form1.f6' | translate}}"
                                                 lx-valid="AddGiftForm.recipient_name.$valid"
                                                 lx-error="AddGiftForm.recipient_name.$invalid && AddGiftForm.recipient_name.$touched">
                                             <input type="name" name="recipient_name" ng-model="fgiftcard.recipient_name"  ng-required="true" >
@@ -216,7 +222,7 @@
                                              ng-if="AddGiftForm.recipient_name.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Debes llenar este campo</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f6error.e1' | translate}}</div>
 
                                         </div>
                                     </div>
@@ -225,7 +231,7 @@
                                     <div flex-item>
 
                                         <lx-text-field
-                                                lx-label="Mensaje de su Gift Card"
+                                                lx-label="{{'giftcard.add.form1.f7' | translate}}"
                                                 lx-valid="AddGiftForm.recipient_message.$valid"
                                                 lx-error="AddGiftForm.recipient_message.$invalid && AddGiftForm.recipient_message.$touched">
                                             <input type="text" name="recipient_message" ng-model="fgiftcard.recipient_message"  ng-required="true" >
@@ -234,7 +240,7 @@
                                              ng-if="AddGiftForm.recipient_message.$touched"
                                              style="color:maroon"
                                              role="alert">
-                                            <div ng-message="required">Debes llenar este campo</div>
+                                            <div ng-message="required">{{'giftcard.add.form1.f7error.e1' | translate}}</div>
 
                                         </div>
                                     </div>
@@ -260,11 +266,11 @@
         <div class="tc-white-1 p+" flex-container="column" flex-align="space-between center">
             <lx-button lx-color="red"
                        ng-click="reset()"
-            >Limpiar</lx-button>
+            >{{'giftcard.add.form1.button1' | translate}}</lx-button>
             <lx-button lx-color="green"
                        ng-click="addGiftCard($event, fgiftcard)"
                        ng-disabled="sendbutton || AddGiftForm.$invalid">
-                Comprar Gift Card</lx-button>
+                {{'giftcard.add.form1.button2' | translate}}</lx-button>
         </div>
     </form>
 

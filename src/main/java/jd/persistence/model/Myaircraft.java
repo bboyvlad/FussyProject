@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class Myaircraft {
 
     private long id;
+    private long aircraftype;
     private int aviationtype;
     private String name;
     private String model;
@@ -71,6 +72,15 @@ public class Myaircraft {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @Column(name = "AIRCRAFTYPE_ID")
+    public long getAircraftype() {
+        return aircraftype;
+    }
+
+    public void setAircraftype(long aircraftype) {
+        this.aircraftype = aircraftype;
     }
 
     public String getName() {

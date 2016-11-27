@@ -23,4 +23,9 @@ public interface ServicerequestRepository extends JpaRepository<Servicerequest,L
             "from ServicesRequestPending AS sr",nativeQuery = true)
     List<Object[]> findPending();
 
+    @Query(value = "select sr.SERVICEREQUEST_ID, sr.PRINCIPAL_ID, sr.Principalname, sr.Locationname, sr.dcreate, sr.dlanding, sr.rdate, sr.serialcode " +
+            "from ServicesRequestUser AS sr WHERE sr.PRINCIPAL_ID=?1 and sr.closed=?2",nativeQuery = true)
+    List<Object[]> findForUser(long principal,boolean closed);
+
+
 }

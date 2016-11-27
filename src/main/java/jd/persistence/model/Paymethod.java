@@ -18,11 +18,21 @@ public class Paymethod {
     private String paystatus;
     private boolean payenabled;
     private String payacctnum;
-    private String paycardname;
+    private String payalias;
+
+    /*2Checkout billing info*/
+    private String paycardname; //card_holder_name
+    private String payaddrlineone; //street_address
+    private String paycity; //city
+    private String paystate; //state
+    private String paycountry; //country
+    private String payzip;
+    /*tco*/
+
     private String paycardtype;
     private double paybalance;
     private double paylocked;
-    private double payavailable;
+    private double payavailable; //Transient
     private boolean deleted;
     private Date paycreate;
     private Date payvalid;
@@ -167,6 +177,54 @@ public class Paymethod {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getPayaddrlineone() {
+        return payaddrlineone;
+    }
+
+    public void setPayaddrlineone(String payaddrlineone) {
+        this.payaddrlineone = payaddrlineone;
+    }
+
+    public String getPaycity() {
+        return paycity;
+    }
+
+    public void setPaycity(String paycity) {
+        this.paycity = paycity;
+    }
+
+    public String getPaystate() {
+        return paystate;
+    }
+
+    public void setPaystate(String paystate) {
+        this.paystate = paystate;
+    }
+
+    public String getPaycountry() {
+        return paycountry;
+    }
+
+    public void setPaycountry(String paycountry) {
+        this.paycountry = paycountry;
+    }
+
+    public String getPayzip() {
+        return payzip;
+    }
+
+    public void setPayzip(String payzip) {
+        this.payzip = payzip;
+    }
+
+    public String getPayalias() {
+        return payalias;
+    }
+
+    public void setPayalias(String payalias) {
+        this.payalias = payalias;
     }
 
     @Transient

@@ -17,6 +17,7 @@ public class ShopcartDTO {
     private long myaircraft;
     private long captain;
     private Date landing;
+    private Date returndate;
     private String description;
     private boolean generated;
     private Set<ItemcartDTO> items = new HashSet<ItemcartDTO>(0);
@@ -88,5 +89,13 @@ public class ShopcartDTO {
 
     public void setItems(Set<ItemcartDTO> items) {
         this.items = items;
+    }
+
+    public Date getReturndate() {
+        return returndate;
+    }
+
+    public void setReturndate(Date returndate) {
+        this.returndate = returndate;
     }
 }

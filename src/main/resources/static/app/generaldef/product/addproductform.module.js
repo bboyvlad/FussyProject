@@ -57,20 +57,50 @@ addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '
 
         /* CurrencyList */
         $scope.proCurrency = [
-            {
-                key: "usd",
-                name: "usd"
-
-            },
-            {
-                key: "bsf",
-                name: "bsf"
-
-            }
+            { key: "USD", name: "USD" },
+            { key: "BSF", name: "BSF" }
         ];
 
-        /* ListGroupServices */
-        $scope.groupOpts = grpServResource.query();
+        /* pricetypeOpts */
+        $scope.pricetypeOpts = [
+            { key: "D", name: "Date" },
+            { key: "P", name: "Pound" },
+            { key: "U", name: "Unit" }
+        ];
+
+        /****** Location Search ********/
+        $scope.selectAjax = {
+            loading: false,
+            locationOpts: []
+        };
+        $scope.searchLocation = function searchLocation(newFilter) {
+            //console.log(newFilter);
+            if (newFilter && newFilter.length >= 4)
+            {
+                $scope.selectAjax.loading = true;
+                locationResource.airportByName({ airportname: newFilter}).$promise.then(
+                    function(data)
+                    {
+                        $scope.selectAjax.locationOpts = data;
+                        $scope.selectAjax.loading = false;
+                    },
+                    function()
+                    {
+                        $scope.selectAjax.loading = false;
+                        $scope.selectAjax.locationOpts = false;
+                    });
+            }
+            else
+            {
+                $scope.selectAjax.locationOpts = false;
+            }
+        };
+
+        /* aviationOpts */
+        $scope.aviationOpts = [
+            { key: "1", value: "COMERCIAL" },{ key: "2", value: "GENERAL" }
+        ];
+
 
         /* SaveingNewProduct */
         $scope.addProduct = function addProduct($event, fields, id) {
@@ -393,109 +423,4 @@ addproduct.controller('AddProductController', ['$rootScope','$scope', '$http', '
         }*/
 
 
-
-        $scope.userOpts = {
-            "usermenu":[
-                {
-                    "link":"/users/sing-up",
-                    "text":"Registrate"
-                },
-                {
-                    "link":"/loginpage",
-                    "text":"Log In"
-                }
-            ],
-            "useradmin":[
-                {
-                    "link":"/users/admin",
-                    "text":"Gestionar Usuarios"
-                }
-            ],
-            "jdcard":[
-                {
-                    "link":"/dashboard/buy/jdcard",
-                    "text":"Comprar J&D Card"
-                },
-                {
-                    "link":"/dashboard/refill/jdcard",
-                    "text":"Refill J&D Card"
-                }
-            ],
-            "giftcard":[
-                {
-                    "link":"/dashboard/giftcard/buy",
-                    "text":"Comprar Gift Card"
-                },
-                {
-                    "link":"/dashboard/giftcard/redeem",
-                    "text":"Reclamar Gift Card"
-                }
-            ],
-            "payments":[
-                {
-                    "link":"/dashboard/paymentmethod-form",
-                    "text":"Agregar Metodo de pago"
-                }
-            ],
-            "defgen":[
-                {
-                    "link":"/dashboard/groupserv/add",
-                    "text":"Grupo de Servicios"
-                },
-                {
-                    "link":"/dashboard/products/add",
-                    "text":"Productos"
-                }
-            ],
-            "aircraft":[
-                {
-                    "link":"/dashboard/aircraft/manage",
-                "text":"Aeronaves"
-            }
-        ],
-            "captain":[
-            {
-                "link":"/dashboard/captain/manage",
-                "text":"Capitanes"
-            }
-        ],            "mainmenu":{
-                "main":[
-                    {
-                        "link":"/",
-                        "text":"Home"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Servicios"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Productos"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Promociones"
-                    },
-                    {
-                        "link":"/",
-                        "text":"Contacto"
-                    }
-                ]
-            }
-        };
-
-        $scope.sharedMenu = myJdMenu;
-
-        $scope.updateMenu = function () {
-            //alert(this.Opts.item1);
-            myJdMenu.userSection(this.userOpts.usermenu);
-            myJdMenu.userAdminSection(this.userOpts.useradmin);
-            myJdMenu.mainSection(this.userOpts.mainmenu);
-            myJdMenu.jdcardSection(this.userOpts.jdcard);
-            myJdMenu.giftcardSection(this.userOpts.giftcard);
-            myJdMenu.paymentsSection(this.userOpts.payments);
-            myJdMenu.defgenSection(this.userOpts.defgen);
-            myJdMenu.aircraftSection(this.userOpts.aircraft);
-            myJdMenu.captainSection(this.userOpts.captain);
-        };
     }]);

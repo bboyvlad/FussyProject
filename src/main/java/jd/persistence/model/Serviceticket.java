@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Serviceticket")
 public class Serviceticket {
+
     private long id; //
     private long principal; //
     private long paymethod;
@@ -21,6 +22,7 @@ public class Serviceticket {
     private Date dlanding;
     private boolean closed;
     private String serialcode;
+    private String ticket;
     private Set<Itemticket> items;
 
     public Serviceticket() {
@@ -116,6 +118,14 @@ public class Serviceticket {
 
     public void setSerialcode(String serialcode) {
         this.serialcode = serialcode;
+    }
+
+    public String getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
     }
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

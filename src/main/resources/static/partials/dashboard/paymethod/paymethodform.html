@@ -4,20 +4,25 @@
     </div>
     <div class="p+" flex-item="12">
 
-        <lx-tabs lx-theme="dark" lx-color="light-blue" lx-indicator="yellow">
-            <lx-tab lx-icon="content-save" lx-label="Agregar">
+        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="light-blue" lx-indicator="yellow">
+            <lx-tab lx-icon="content-save" lx-label="{{'paymethod.tabs.tab1' | translate}}">
 
                 <!-- FORM TAB -->
                 <form name="PayMthdForm" novalidate>
-                    {{faddpaym}}
+                    <!--{{faddpaym}}
+                    cardtype: {{PayMthdForm.payacctnum.$card.type}}-->
                     <!--user: {{user.id}}-->
                     <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
                         <div flex-item="1">
                         </div>
                         <div flex-item="14">
                             <div class="card" >
+                                <div class="card__img card__img--top bgc-jd">
+                                    <img ng-src="{{icon}}" width="100px" class="p+">
+                                    <p class="fs-headline tc-white-1 display-block" >{{'paymethod.card1.headline' | translate}} </p>
+                                </div>
                                 <div class="p+">
-                                    <strong class="fs-headline display-block">Agregue Metodos de Pago</strong>
+                                    <strong class="fs-headline display-block">{{'paymethod.card1.title' | translate}}</strong>
                                     <div class="paragraph fs-body-1 mt+">
                                         <div class="p+ pt0">
                                             <div flex-container="row">
@@ -31,7 +36,7 @@
                                                             lx-valid="PayMthdForm.paytype.$valid"
                                                             lx-error="PayMthdForm.paytype.$invalid && PayMthdForm.paytype.$touched"
                                                             ng-required="true"
-                                                            lx-label="Escoja su metodo de pago">
+                                                            lx-label="{{'paymethod.form1.f1' | translate}}">
                                                         <lx-select-selected>
                                                             {{ $selected.key }}
                                                         </lx-select-selected>
@@ -44,41 +49,40 @@
                                                          ng-if="PayMthdForm.paytype.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Escoge el tipo de Metodo</div>
+                                                        <div ng-message="required">{{'paymethod.form1.f1error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item="2">
                                                     <p class="p+ tdc_img">
-                                                        <img src="../css/img/tdcs/{{PayMthdForm.payacctnum.$card.type || 'credit'}}.png" alt="" style="visibility: visible; float: left;" width="50px" /></p>
+                                                        <img ng-src='../css/img/tdcs/{{PayMthdForm.payacctnum.$card.type || "credit"}}.png' alt="" style="visibility: visible; float: left;" width="50px" /></p>
                                                 </div>
                                                 <div flex-item="10">
 
                                                     <lx-text-field
-                                                            lx-label="Numero de Tarjeta"
+                                                            lx-label="{{'paymethod.form1.f2' | translate}}"
                                                             lx-valid="PayMthdForm.payacctnum.$valid"
                                                             lx-error="PayMthdForm.payacctnum.$invalid && PayMthdForm.payacctnum.$touched"
                                                             lx-allow-clear="true">
                                                         <input type="text" name="payacctnum" ng-required="true"
                                                                ng-model="faddpaym.payacctnum"
-                                                               payments-validate="card" payments-type-model="type"
+                                                               payments-validate="card" payments-type-model="faddpaym.type"
                                                                payments-format="card" />
                                                     </lx-text-field>
                                                     <div ng-messages="PayMthdForm.payacctnum.$error"
                                                          ng-if="PayMthdForm.payacctnum.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Introduce el numero de tu TDC</div>
-                                                        <!--<div ng-message="minlength">Introduce los 16 digitos de tu tarjeta</div>
-                                                        <div ng-message="maxlength">Introduce los 16 digitos de tu tarjeta</div>-->
+                                                        <div ng-message="required">{{'paymethod.form1.f2error.e1' | translate}}</div>
+                                                        <div ng-message="card">{{'paymethod.form1.f2error.e2' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
                                                     <lx-text-field
-                                                            lx-label="Su Nombre como esta en su Tarjeta"
+                                                            lx-label="{{'paymethod.form1.f3' | translate}}"
                                                             lx-valid="PayMthdForm.paycardname.$valid"
                                                             lx-error="PayMthdForm.paycardname.$invalid && PayMthdForm.paycardname.$touched">
                                                         <input type="text" name="paycardname" ng-model="faddpaym.paycardname"  ng-required="true" ng-pattern="regex" capitalize />
@@ -87,51 +91,40 @@
                                                          ng-if="PayMthdForm.paycardname.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Debes llenar este campo</div>
-                                                        <div ng-message="pattern">Solo se permiten letras mayusculas y espacios. Ejemplo: "MATILDE R PEREZ R"</div>
+                                                        <div ng-message="required">{{'paymethod.form1.f3error.e1' | translate}}</div>
+                                                        <div ng-message="pattern">{{'paymethod.form1.f3error.e2' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div flex-container="row">
 
-                                                <div class="p+ pt0">
-                                                    <lx-date-picker ng-model="faddpaym.payvalid"
-                                                                    lx-input-format="YYYY-MM-DD"
-                                                                    lx-locale="es"
-                                                                    lx-valid="PayMthdForm.payvalid.$valid"
-                                                                    lx-error="PayMthdForm.payvalid.$invalid && PayMthdForm.payvalid.$touched">
-                                                        <lx-text-field lx-allow-clear="true" lx-label="Fecha de Vencimiento">
-                                                            <input type="text" name="payvalid"
-                                                                   ng-model="faddpaym.payvalid" ng-required="true">
-                                                        </lx-text-field>
-                                                    </lx-date-picker>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-text-field lx-label="{{'paymethod.form1.f4' | translate}}"
+                                                                   lx-valid="PayMthdForm.payvalid.$valid"
+                                                                   lx-error="PayMthdForm.payvalid.$invalid && PayMthdForm.payvalid.$touched">
+
+                                                        <input type="text"
+                                                               name="payvalid"
+                                                               ng-model="faddpaym.payvalid"
+                                                               payments-format="expiry"
+                                                               payments-validate="expiry"
+                                                               ng-required="true"
+                                                        />
+                                                    </lx-text-field>
                                                     <div ng-messages="PayMthdForm.payvalid.$error"
                                                          ng-if="PayMthdForm.payvalid.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">No Olvides de colocar la Fecha de Expiracion</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div flex-container="row">
-                                                <div flex-item>
-                                                    <lx-text-field lx-label="Estatus"
-                                                                   lx-valid="PayMthdForm.paystatus.$valid"
-                                                                   lx-error="PayMthdForm.paystatus.$invalid && PayMthdForm.paystatus.$touched">
-                                                        <input type="text" name="paystatus" ng-model="faddpaym.paystatus">
-                                                    </lx-text-field>
-                                                    <div ng-messages="PayMthdForm.paystatus.$error"
-                                                         ng-if="PayMthdForm.paystatus.$touched"
-                                                         style="color:maroon"
-                                                         role="alert">
-                                                        <div ng-message="required">No Olvides de colocar tu Nombre</div>
+                                                        <div ng-message="required">{{'paymethod.form1.f4error.e1' | translate}}</div>
+                                                        <div ng-message="expiry">{{'paymethod.form1.f4error.e2' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card__actions">
+                                <div class="card__actions" flex-container="row" flex-column="16" flex-gutter="24">
+                                    <div class="p+" flex-item="5"></div>
                                     <div class="p+">
                                         <div style="position: relative;">
                                             <lx-progress lx-type="linear" lx-color="teal"
@@ -140,11 +133,11 @@
                                         </div>
                                         <lx-button lx-color="red"
                                                    ng-click="reset()"
-                                        >Limpiar</lx-button>
+                                        >{{'paymethod.form1.button1' | translate}}</lx-button>
                                         <lx-button lx-color="green"
                                                    ng-click="openDialogCoordinates()"
                                                    ng-disabled="sendbutton || PayMthdForm.$invalid">
-                                            SALVAR</lx-button>
+                                            {{'paymethod.form1.button2' | translate}}</lx-button>
                                     </div>
                                 </div>
                             </div>
@@ -154,32 +147,46 @@
 
             </lx-tab>
 
-            <lx-tab lx-icon="airplane" lx-label="Gestionar">
+            <lx-tab lx-icon="airplane" lx-label="{{'paymethod.tabs.tab2' | translate}}">
 
                 <!-- DATATABLE TAB -->
+                <div flex-item="4">
+                    <div class="card">
+                        <div class="toolbar">
+                            <lx-search-filter>
+                                <input type="text" name="mysearch" ng-model="search.mysearch"
+                                       ng-model-options="{ debounce : 400 }" placeholder="{{'paymethod.datatable.placeholder' | translate}}">
+                            </lx-search-filter>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="data-table-container">
-                    <header class="data-table-header">
+                    <!--<header class="data-table-header">
                         <div class="data-table-header__label">
-                            <span class="fs-title">Metodos de Pago</span>
+                            <span class="fs-title">payment Method</span>
                         </div>
-                    </header>
+                    </header>-->
 
                     <table class="data-table">
                         <thead>
                         <tr class="">
-                            <th >paytype</th>
-                            <th >paystatus</th>
-                            <th >payacctnum</th>
-                            <th  >Edit</th>
-                            <th  >Delete</th>
+                            <th width="15.6%">{{'paymethod.datatable.f1' | translate}}</th>
+                            <th width="10.6%">{{'paymethod.datatable.f2' | translate}}</th>
+                            <th width="30.6%">{{'paymethod.datatable.f3' | translate}}</th>
+                            <th width="26.6%">{{'paymethod.datatable.f4' | translate}}</th>
+                            <th width="6.6%">{{'paymethod.datatable.f5' | translate}}</th>
+                            <th width="6.6%">{{'paymethod.datatable.f6' | translate}}</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="paymthd in listPayMethod" class=" ">
+                        <tr ng-repeat="paymthd in listPayMethod | filter:search.mysearch | orderBy:'payid' | limitTo:5 " class=" ">
                             <td >{{paymthd.paytype}}</td>
-                            <td >{{paymthd.paystatus}}</td>
-                            <td >{{paymthd.payacctnum}}</td>
+                            <td >
+                                <img ng-src='../css/img/tdcs/{{paymthd.paycardtype}}.png' alt="" style="visibility: visible; float: left;" width="50px" />
+                            </td>
+                            <td >{{paymthd.paycardname}}</td>
+                            <td >{{paymthd.payacctnum | tdcmask}}</td>
                             <td >
                                 <lx-icon ng-click="openDialogPayMethod(paymthd)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
                             </td>
@@ -191,14 +198,13 @@
                     </table>
                 </div>
 
-
                 <!-- EDIT DIALOG -->
 
                 <lx-dialog id="{{ dialogPayMethod }}">
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
                             <span class="toolbar__label tc-white fs-title">
-                                Metodos de Pago
+                                {{'paymethod.card1.title' | translate}}
                             </span>
 
                         </div>
@@ -208,13 +214,14 @@
 
                         <!-- EDIT FORM -->
                         <form name="editPayMthdForm" novalidate>
-                            {{faddpaym}}
-                            <!--user: {{user.id}}-->
+                            <!--{{faddpaym}}
+                            user: {{user.id}}-->
                             <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
-                                <div flex-item="8">
+                                <div flex-item="2"></div>
+                                <div flex-item="12">
                                     <div class="card" >
                                         <div class="p+">
-                                            <strong class="fs-headline display-block">Editar Metodo de Pago</strong>
+                                            <strong class="fs-headline display-block">{{'paymethod.card1.title' | translate}}</strong>
                                             <div class="paragraph fs-body-1 mt+">
                                                 <div class="p+ pt0">
                                                     <div flex-container="row">
@@ -228,7 +235,7 @@
                                                                     lx-valid="editPayMthdForm.paytype.$valid"
                                                                     lx-error="editPayMthdForm.paytype.$invalid && editPayMthdForm.paytype.$touched"
                                                                     ng-required="true"
-                                                                    lx-label="Escoja su metodo de pago">
+                                                                    lx-label="{{'paymethod.form1.f1' | translate}}">
                                                                 <lx-select-selected>
                                                                     {{ $selected.key }}
                                                                 </lx-select-selected>
@@ -241,41 +248,43 @@
                                                                  ng-if="editPayMthdForm.paytype.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Escoge el tipo de Metodo</div>
+                                                                <div ng-message="required">{{'paymethod.form1.f1error.e1' | translate}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div flex-container="row">
                                                         <div flex-item="2">
                                                             <p class="p+ tdc_img">
-                                                                <img src="../css/img/tdcs/{{editPayMthdForm.payacctnum.$card.type || 'credit'}}.png" alt="" style="visibility: visible; float: left;" width="50px" /></p>
+                                                                <img src='../css/img/tdcs/{{editPayMthdForm.payacctnum.$card.type || "credit"}}.png' alt="" style="visibility: visible; float: left;" width="50px" /></p>
                                                         </div>
                                                         <div flex-item="10">
-
+{{feditpaym.paytype.key}}
                                                             <lx-text-field
-                                                                    lx-label="Numero de Tarjeta"
+                                                                    lx-label="{{'paymethod.form1.f2' | translate}}"
                                                                     lx-valid="editPayMthdForm.payacctnum.$valid"
                                                                     lx-error="editPayMthdForm.payacctnum.$invalid && editPayMthdForm.payacctnum.$touched"
                                                                     lx-allow-clear="true">
-                                                                <input type="text" name="payacctnum" ng-required="true"
+                                                                <input type="text" name="payacctnum"
+                                                                       ng-required="true"
                                                                        ng-model="feditpaym.payacctnum"
-                                                                       payments-validate="card" payments-type-model="type"
-                                                                       payments-format="card" />
+                                                                       ng-value="feditpaym.payacctnum"
+                                                                       payments-validate="card" payments-type-model="feditpaym.type"
+                                                                       payments-format="card"
+                                                                ng-disabled="feditpaym.paytype.key=='JDCARD'"/>
                                                             </lx-text-field>
                                                             <div ng-messages="editPayMthdForm.payacctnum.$error"
                                                                  ng-if="editPayMthdForm.payacctnum.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Introduce el numero de tu TDC</div>
-                                                                <!--<div ng-message="minlength">Introduce los 16 digitos de tu tarjeta</div>
-                                                                <div ng-message="maxlength">Introduce los 16 digitos de tu tarjeta</div>-->
+                                                                <div ng-message="required">{{'paymethod.form1.f2error.e1' | translate}}</div>
+                                                                <div ng-message="card">{{'paymethod.form1.f2error.e2' | translate}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div flex-container="row">
                                                         <div flex-item>
                                                             <lx-text-field
-                                                                    lx-label="Su Nombre como esta en su Tarjeta"
+                                                                    lx-label="{{'paymethod.form1.f3' | translate}}"
                                                                     lx-valid="editPayMthdForm.paycardname.$valid"
                                                                     lx-error="editPayMthdForm.paycardname.$invalid && editPayMthdForm.paycardname.$touched">
                                                                 <input type="text" name="paycardname" ng-model="feditpaym.paycardname"  ng-required="true" ng-pattern="regex" capitalize />
@@ -284,33 +293,36 @@
                                                                  ng-if="editPayMthdForm.paycardname.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Debes llenar este campo</div>
-                                                                <div ng-message="pattern">Solo se permiten letras mayusculas y espacios. Ejemplo: "MATILDE R PEREZ R"</div>
+                                                                <div ng-message="required">{{'paymethod.form1.f3error.e1' | translate}}</div>
+                                                                <div ng-message="pattern">{{'paymethod.form1.f3error.e2' | translate}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div flex-container="row">
+                                                        <div flex-item>
+                                                            <lx-text-field lx-label="{{'paymethod.form1.f4' | translate}}"
+                                                                           lx-valid="editPayMthdForm.payvalid.$valid"
+                                                                           lx-error="editPayMthdForm.payvalid.$invalid && editPayMthdForm.payvalid.$touched">
 
-                                                        <div class="p+ pt0">
-                                                            <lx-date-picker ng-model="feditpaym.payvalid"
-                                                                            lx-input-format="YYYY-MM-DD"
-                                                                            lx-locale="es"
-                                                                            lx-valid="editPayMthdForm.payvalid.$valid"
-                                                                            lx-error="editPayMthdForm.payvalid.$invalid && editPayMthdForm.payvalid.$touched">
-                                                                <lx-text-field lx-allow-clear="true" lx-label="Fecha de Vencimiento">
-                                                                    <input type="text" name="payvalid"
-                                                                           ng-model="feditpaym.payvalid" ng-required="true">
-                                                                </lx-text-field>
-                                                            </lx-date-picker>
+                                                                <input type="text"
+                                                                       name="payvalid"
+                                                                       ng-model="feditpaym.payvalid"
+                                                                       payments-format="expiry"
+                                                                       payments-validate="expiry"
+                                                                       ng-required="true"
+                                                                />
+                                                            </lx-text-field>
                                                             <div ng-messages="editPayMthdForm.payvalid.$error"
                                                                  ng-if="editPayMthdForm.payvalid.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">No Olvides de colocar la Fecha de Expiracion</div>
+                                                                <div ng-message="required">{{'paymethod.form1.f4error.e1' | translate}}</div>
+                                                                <div ng-message="expiry">{{'paymethod.form1.f4error.e2' | translate}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div flex-container="row">
+
+                                                    <!--<div flex-container="row">
                                                         <div flex-item>
                                                             <lx-text-field lx-label="Estatus"
                                                                            lx-valid="editPayMthdForm.paystatus.$valid"
@@ -324,7 +336,7 @@
                                                                 <div ng-message="required">No Olvides de colocar tu Nombre</div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -335,13 +347,13 @@
                                                                  ng-if="LinearProgress">
                                                     </lx-progress>
                                                 </div>
-                                                <lx-button lx-color="red"
+                                                <!--<lx-button lx-color="red"
                                                            ng-click="reset()"
                                                 >Limpiar</lx-button>
                                                 <lx-button lx-color="green"
                                                            ng-click="updatePayMethod($event, feditpaym)"
                                                            ng-disabled="sendbutton || editPayMthdForm.$invalid">
-                                                    SALVAR</lx-button>
+                                                    SALVAR</lx-button>-->
                                             </div>
                                         </div>
                                     </div>
@@ -352,7 +364,14 @@
                     </lx-dialog-content>
 
                     <lx-dialog-footer>
-                        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
+                        <lx-progress lx-type="linear" lx-color="teal"
+                                     ng-if="LinearProgress">
+                        </lx-progress>
+                        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>{{'paymethod.form1.button1' | translate}}</lx-button>
+                        <lx-button lx-color="green"
+                                   ng-click="updatePayMethod($event, feditpaym)"
+                                   ng-disabled="sendbutton || editPayMthdForm.$invalid">
+                            {{'paymethod.form1.button3' | translate}}</lx-button>
                     </lx-dialog-footer>
                 </lx-dialog>
 
@@ -368,24 +387,24 @@
     <lx-dialog-header>
         <div class="toolbar bgc-primary pl++">
             <span class="toolbar__label tc-white fs-title">
-                Comprobar Coordenadas
+                {{'paymethod.coord.title' | translate}}
             </span>
 
         </div>
     </lx-dialog-header>
 
     <lx-dialog-content>
-        {{coord1}}
+        <!--{{coord1}}-->
 
 
         <div class="p+">
             <div class="card">
-                <div class="p+">
+                <div flex-item="6" class="p+">
 
                     <div class="paragraph fs-body-1 mt+">
                         <form name="formCoordinates" novalidate>
                             <div flex-container="row">
-                                <div flex-item="4">
+                                <div flex-item="6" class="p+">
                                     <lx-text-field lx-label="{{coord1.key}}"
                                                    lx-valid="formCoordinates.coord1.$valid"
                                                    lx-error="formCoordinates.coord1.$invalid && formCoordinates.coord1.$touched">
@@ -395,13 +414,13 @@
                                          ng-if="formCoordinates.coord1.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">Este campo debe ser llenado</div>
+                                        <div ng-message="required">This field must be fill</div>
                                     </div>
                                 </div>
                             <!--</div>
                             {{coord2}}
                             <div flex-container="row">-->
-                                <div flex-item="4">
+                                <div flex-item="6" class="p+">
                                     <lx-text-field lx-label="{{coord2.key}}"
                                                    lx-valid="formCoordinates.coord2.$valid"
                                                    lx-error="formCoordinates.coord2.$invalid && formCoordinates.coord2.$touched">
@@ -411,7 +430,7 @@
                                          ng-if="formCoordinates.coord2.$touched"
                                          style="color:maroon"
                                          role="alert">
-                                        <div ng-message="required">Este campo debe ser llenado</div>
+                                        <div ng-message="required">This field must be fill</div>
                                     </div>
                                 </div>
                             </div>
@@ -427,8 +446,8 @@
     </lx-dialog-content>
 
     <lx-dialog-footer>
-        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
-        <lx-button lx-color="black" lx-type="flat" ng-click="payMethodCreate($event, faddpaym)">Enviar</lx-button>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close> {{'paymethod.coord.button1' | translate}}</lx-button>
+        <lx-button lx-color="black" lx-type="flat" ng-click="payMethodCreate($event, faddpaym)"> {{'paymethod.coord.button2' | translate}}</lx-button>
     </lx-dialog-footer>
 </lx-dialog>
 

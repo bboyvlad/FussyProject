@@ -1,14 +1,14 @@
 <div class="row"  ng-init="updateMenu()">
 
     <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
-        <div flex-item="10">
+        <div flex-item="8">
             <div class="card" >
                 <div class="p+">
                     <strong class="fs-headline display-block">J&amp;D Oilfield</strong>
 
                     <div class="paragraph fs-body-1 mt+">
                         <p>
-                            Bienvenido {{user.name +' '+ user.lastname}}, Su Dashboard le Permitira:
+                            {{"dashboard.card1.text"|translate:user }}
                         </p>
                     </div>
                 </div>
@@ -16,70 +16,107 @@
                 <!--<div class="card__actions">
                     <div class="p+">
                         <a href="" ng-href="/loginpage">
-                            <button class="btn btn&#45;&#45;m btn&#45;&#45;raised bgc-jd tc-white-1" lx-ripple="indigo-500">Mas info...</button>
+                            <button class="btn btn&#45;&#45;m btn&#45;&#45;raised bgc-jd tc-white-1" lx-ripple="indigo-500">Mas info</button>
                         </a>
                     </div>
                 </div>-->
             </div>
+
+            <div  flex-container="row">
+
+                <div class="p+" flex-item="6">
+                    <div class="card" ng-if=" user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'">
+                        <div class="p+">
+                            <strong class="fs-headline display-block">{{'dashboard.card2.title' | translate}}</strong>
+
+                            <div class="paragraph fs-body-1 mt+">
+                                <p>
+                                    {{'dashboard.card2.text' | translate}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card__actions">
+                            <div class="p+">
+                                <a href="" ng-href="/dashboard/paymentmethod-form">
+                                    <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'dashboard.card2.button' | translate}}</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p+" flex-item="6">
+                    <div class="card" ng-if=" user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'">
+                        <div class="p+">
+                            <strong class="fs-headline display-block">{{'dashboard.card3.title' | translate}}</strong>
+
+                            <div class="paragraph fs-body-1 mt+">
+                                <p>
+                                    {{'dashboard.card3.text' | translate}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="card__actions">
+                            <div class="p+">
+                                <a href="" ng-href="/dashboard/buy/jdcard">
+                                    <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'dashboard.card3.button' | translate}}</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div flex-item="8">
+            <div class="card" ng-if="user.authorities[0].authority=='ROLE_PROVIDER' || user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'" >
+                <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                    <div class="p+" flex-item="8">
+                        <strong class="fs-headline display-block">{{'dashboard.card4.title' | translate}}</strong>
+
+                        <div class="paragraph fs-body-1 mt+">
+                            <p class="fs-body-2 " >{{'dashboard.card4.text1' | translate}}</p>
+                                <p class="fs-headline tc-green-500 " >{{ totalJdCardBalance.payavailable | currency:"USD$" }}</p>
+                        </div>
+                        <div class="paragraph fs-body-1 mt+" ng-show="totalJdCardBalance.paylocked!=0">
+                            <p class="fs-body-2 " >{{'dashboard.card4.text2' | translate}}</p>
+                            <p class="fs-headline tc-red-500 " >{{ totalJdCardBalance.paylocked | currency:"USD$" }}</p>
+                        </div>
+
+                    </div>
+                    <div class="p+" flex-item="8" ng-show="mainPieChart.show">
+                        <canvas id="pie" class="chart chart-pie"
+                                chart-data="mainPieChart.data" chart-labels="mainPieChart.labels" chart-options="mainPieChart.options">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="card__actions">
+                    <div class="p+">
+                        <a href="" ng-href="/dashboard/balance_details">
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'dashboard.card4.button' | translate}}</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 
     <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
 
+
+
         <div flex-item="5">
-            <div class="card" >
+            <div class="card" ng-if=" user.authorities[0].authority=='ROLE_ADMIN' || user.authorities[0].authority=='ROLE_SYSADMIN'">
                 <div class="p+">
-                    <strong class="fs-headline display-block">Agregar metodo de pago</strong>
+                    <strong class="fs-headline display-block">{{'dashboard.card5.title' | translate}}</strong>
 
                     <div class="paragraph fs-body-1 mt+">
                         <p>
-                            Agrega TDC's para Adquirir J&amp;D Cards
-                            y en un futuro, nuestros productos y servicios!...
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card__actions">
-                    <div class="p+">
-                        <a href="" ng-href="/dashboard/paymentmethod-form">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Agrega Metodo de Pago</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div flex-item="5">
-            <div class="card" >
-                <div class="p+">
-                    <strong class="fs-headline display-block">Comprar J&amp;D Card</strong>
-
-                    <div class="paragraph fs-body-1 mt+">
-                        <p>
-                            Compra ya tu Tarjeta Personalizada, para disfrutar de nuestros
-                            Fuel Services, Catering y más!!
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card__actions">
-                    <div class="p+">
-                        <a href="" ng-href="/dashboard/buy/jdcard">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Comprar J&amp;D Card</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div flex-item="5">
-            <div class="card" >
-                <div class="p+">
-                    <strong class="fs-headline display-block">Refill J&amp;D Card</strong>
-
-                    <div class="paragraph fs-body-1 mt+">
-                        <p>
-                            Refill ya tu J&amp;D Card, y sigue disfrutando de nuestros Servicios!!
+                            {{'dashboard.card5.text' | translate}}
                         </p>
                     </div>
                 </div>
@@ -87,7 +124,7 @@
                 <div class="card__actions">
                     <div class="p+">
                         <a href="" ng-href="/dashboard/refill/jdcard">
-                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">Refill J&amp;D Card</button>
+                            <button class="btn btn--m btn--raised bgc-jd tc-white-1" lx-ripple="indigo-500">{{'dashboard.card5.button' | translate}}</button>
                         </a>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import jd.persistence.model.Price;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface PriceRepository extends JpaRepository<Price,Long>{
 
     List<Price> findByLocationAndAviationAndValidtoGreaterThanEqual(long location,long aviation, Date validto);
-
+    ArrayList<Price> findByProduct(long product);
 
 }
 
