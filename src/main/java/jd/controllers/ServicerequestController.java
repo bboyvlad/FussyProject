@@ -102,6 +102,9 @@ public class ServicerequestController {
                                          @PathVariable long shopcart_id,
                                           HttpServletResponse httpServletResponse,
                                                        HttpServletRequest request) throws IOException, JRException, MessagingException {
+        String CACMail="efernandez.ve@gmail.com";
+        String OPERMail="efernandez.ve@gmail.com";
+
         try{
                 Hashtable<String, String> message= new Hashtable<String, String>();
                 final boolean[] owmpay = {false};
@@ -321,18 +324,20 @@ public class ServicerequestController {
 
                 // use the true flag to indicate you need a multipart message
                 MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-                helper.setTo(Pp.getEmail());
-                helper.addBcc("efernandez.ve@gmail.com");
-                helper.setText("Hola "+Pp.getName()+", has generado satisfactoriamente un service request " +
-                        "ahora despreocupate que nosotros nos encargamos, te avisaremos tan pronto este listo");
-                helper.setSubject("Has generado un Service Request");
+                helper.setTo(CACMail);
+                helper.addBcc(OPERMail);
+                helper.setText("El Cliente "+Pp.getName()+" "+Pp.getLastname()+", ha generado satisfactoriamente un service request " +
+                        "se debe hacer un service release para la validación");
+                helper.setSubject("Han generado un Service Request");
 
                 // let's attach the infamous windows Sample file (this time copied to c:/)
                 FileSystemResource file = new FileSystemResource(java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+serialcode+".pdf");
 
                 helper.addAttachment(serialcode+".pdf", file);
 
-                mailSender.send(msg);
+                /*Service request para los proveedores*/
+
+                //itemsrequest
 
                 /*endmail*/
 
@@ -349,6 +354,8 @@ public class ServicerequestController {
                 deferedpay.save(defered);
 
                 message.put("message","Service request generado");
+
+                mailSender.send(msg);
 
             }else{
                 message.put("message","Saldo insuficiente");

@@ -54,7 +54,10 @@ public class LocationController {
     public @ResponseBody List<Location> showAirportsByName(@ApiPathParam(name = "tag", description = "tag nombre del aeropuerto") @PathVariable String tag){
         try{
             //locationRepository.findByNameContainingIgnoreCase(tag);
-            return locationRepository.findByTag(tag);
+            if(tag !=null){
+                return locationRepository.findByTag(tag);
+            }
+            return null;
         }catch(Exception e){
             System.out.println(e.getMessage());
             return null;
