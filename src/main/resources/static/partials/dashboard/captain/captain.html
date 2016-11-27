@@ -5,7 +5,7 @@
     <div class="p+" flex-item="12">
 
         <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="blue" lx-indicator="orange">
-            <lx-tab lx-icon="content-save" lx-label="Add">
+            <lx-tab lx-icon="content-save" lx-label="{{ 'captain.tabs.tab1' | translate}}">
 
                 <form name="MyCaptainForm" novalidate>
                     <!--1{{fmycaptain}} 2{{master}}-->
@@ -14,16 +14,16 @@
                             <div class="card" >
                                 <div class="card__img card__img--top bgc-jd">
                                     <img ng-src="{{icon}}" width="100px" class="p+">
-                                    <p class="fs-headline tc-white-1 display-block" >Add pilot </p>
+                                    <p class="fs-headline tc-white-1 display-block" >{{ 'captain.card1.headline' | translate}} </p>
                                 </div>
                                 <div class="p+">
-                                    <strong class="fs-headline display-block">Register pilot</strong>
+                                    <strong class="fs-headline display-block">{{ 'captain.card1.title' | translate}}</strong>
 
                                     <div class="paragraph fs-body-1 mt+">
                                         <div class="p+ pt0">
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Names"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f1' | translate}}"
                                                                    lx-valid="MyCaptainForm.name.$valid"
                                                                    lx-error="MyCaptainForm.name.$invalid && MyCaptainForm.name.$touched">
                                                         <input type="text" name="name" ng-model="fmycaptain.name"
@@ -33,13 +33,13 @@
                                                          ng-if="MyCaptainForm.name.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's name</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f1error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Licence"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f2' | translate}}"
                                                                    lx-valid="MyCaptainForm.license.$valid"
                                                                    lx-error="MyCaptainForm.license.$invalid && MyCaptainForm.license.$touched">
                                                         <input type="text" name="license" ng-model="fmycaptain.license"
@@ -49,7 +49,7 @@
                                                          ng-if="MyCaptainForm.license.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's licence</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f2error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -66,7 +66,7 @@
                                                                 lx-valid="PayMthdForm.dateofbirth.$valid"
                                                                 lx-error="PayMthdForm.dateofbirth.$invalid && PayMthdForm.dateofbirth.$touched"
                                                                 lx-allow-clear="true"
-                                                                lx-label="Date of birth">
+                                                                lx-label="{{ 'captain.form1.f3' | translate}}">
                                                             <input type="text" name="dateofbirth"
                                                                    ng-model="fmycaptain.datePicker.dateFormatted" ng-required="true">
                                                         </lx-text-field>
@@ -75,13 +75,13 @@
                                                          ng-if="PayMthdForm.dateofbirth.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's date of birth</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f3error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Address"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f4' | translate}}"
                                                                    lx-valid="MyCaptainForm.address.$valid"
                                                                    lx-error="MyCaptainForm.address.$invalid && MyCaptainForm.address.$touched">
                                                         <input type="text" name="address" ng-model="fmycaptain.address"
@@ -91,13 +91,13 @@
                                                          ng-if="MyCaptainForm.address.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's address</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f4error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Country"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f5' | translate}}"
                                                                    lx-valid="MyCaptainForm.country.$valid"
                                                                    lx-error="MyCaptainForm.country.$invalid && MyCaptainForm.country.$touched">
                                                         <input type="text" name="country" ng-model="fmycaptain.country"
@@ -107,13 +107,13 @@
                                                          ng-if="MyCaptainForm.country.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's country</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f5error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="City"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f6' | translate}}"
                                                                    lx-valid="MyCaptainForm.city.$valid"
                                                                    lx-error="MyCaptainForm.city.$invalid && MyCaptainForm.city.$touched">
                                                         <input type="text" name="city" ng-model="fmycaptain.city"
@@ -123,13 +123,13 @@
                                                          ng-if="MyCaptainForm.city.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's city</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f6error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Phone number"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f7' | translate}}"
                                                                    lx-valid="MyCaptainForm.phone.$valid"
                                                                    lx-error="MyCaptainForm.phone.$invalid && MyCaptainForm.phone.$touched">
                                                         <input type="text" name="phone" ng-model="fmycaptain.phone"
@@ -139,13 +139,13 @@
                                                          ng-if="MyCaptainForm.phone.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's phone number</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f7error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div flex-container="row">
                                                 <div flex-item>
-                                                    <lx-text-field lx-label="Email"
+                                                    <lx-text-field lx-label="{{ 'captain.form1.f8' | translate}}"
                                                                    lx-valid="MyCaptainForm.email.$valid"
                                                                    lx-error="MyCaptainForm.email.$invalid && MyCaptainForm.email.$touched">
 
@@ -156,27 +156,27 @@
                                                          ng-if="MyCaptainForm.email.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Don't forget to enter the pilot's email</div>
-                                                        <div ng-message="email">The email is invalid!</div>
+                                                        <div ng-message="required">{{ 'captain.form1.f8error.e1' | translate}}</div>
+                                                        <div ng-message="email">{{ 'captain.form1.f8error.e2' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <span class="fs-title display-block">
-                                                Enable pilot:
+                                                {{ 'captain.form1.f9' | translate}}:
                                                 <lx-radio-group class="mt+">
                                                     <lx-radio-button
                                                             name="test2"
                                                             value="false"
                                                             ng-model="fmycaptain.active">
-                                                        <lx-radio-button-label>Active</lx-radio-button-label>
+                                                        <lx-radio-button-label>{{ 'captain.form1.f9label1' | translate}}</lx-radio-button-label>
                                                     </lx-radio-button>
 
                                                     <lx-radio-button
                                                             name="test2"
                                                             value="true"
                                                             ng-model="fmycaptain.active">
-                                                        <lx-radio-button-label>Inactive</lx-radio-button-label>
+                                                        <lx-radio-button-label>{{ 'captain.form1.f9label2' | translate}}</lx-radio-button-label>
                                                     </lx-radio-button>
                                                 </lx-radio-group>
                                             </span>
@@ -195,11 +195,11 @@
                                         </div>
                                         <lx-button lx-color="red"
                                                    ng-click="reset()"
-                                        >Clear</lx-button>
+                                        >{{ 'captain.form1.button1' | translate}}</lx-button>
                                         <lx-button lx-color="green"
                                                    ng-click="myCaptainCreate($event, fmycaptain)"
                                                    ng-disabled="sendbutton || MyCaptainForm.$invalid"
-                                        >Save</lx-button>
+                                        >{{ 'captain.form1.button2' | translate}}</lx-button>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@
 
             </lx-tab>
 
-            <lx-tab lx-icon="airplane" lx-label="Manage">
+            <lx-tab lx-icon="airplane" lx-label="{{ 'captain.tabs.tab2' | translate}}">
 
                 <!-- DATATABLE TAB -->
 

@@ -5,8 +5,8 @@
 
 var addcart = angular.module('AddCart', ['ngRoute', 'ngMessages', 'ui.utils.masks', 'ngAnimate', 'ngMaterialDatePicker']);
 
-addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', 'myJdMenu', 'helperFunc', 'shopcartResource', 'locationResource', 'aircraftResource', 'mycaptainResource',
-    function AddCartController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, myJdMenu, helperFunc, shopcartResource, locationResource, aircraftResource, mycaptainResource) {
+addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$location', 'LxDatePickerService','LxNotificationService', 'myJdMenu', 'helperFunc', 'shopcartResource', 'locationResource', 'aircraftResource', 'mycaptainResource', '$translate', '$filter',
+    function AddCartController($rootScope, $scope, $http, $location, LxDatePickerService, LxNotificationService, myJdMenu, helperFunc, shopcartResource, locationResource, aircraftResource, mycaptainResource, $translate, $filter) {
         $scope.cssClass = 'cart';
         if($body.hasClass('sidebar_secondary_active')) {
             $body.removeClass('sidebar_secondary_active');
@@ -35,9 +35,10 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
                 if(moment($scope.fcart.enddatePicker.dateFormated).diff($scope.fcart.startdatePicker.dateFormated, 'days') < 0 ){
                     $scope.fcart.enddatePicker.dateFormated = angular.copy($scope.fcart.startdatePicker.dateFormated);
                     $scope.fcart.estimateDeparture = angular.copy($scope.fcart.startdatePicker.dateFormated);
-                    console.log($scope.fcart.toSource());
-                    console.log(moment($scope.fcart.enddatePicker.dateFormated).diff($scope.fcart.startdatePicker.dateFormated, 'days'));
-                    LxNotificationService.error('The departure date must be equal or grater than the arrival date, please select a new departure date' );
+                    /*console.log($scope.fcart.toSource());
+                    console.log(moment($scope.fcart.enddatePicker.dateFormated).diff($scope.fcart.startdatePicker.dateFormated, 'days'));*/
+                    $scope.sms1 = $filter('translate')('cart.module.sms1');
+                    LxNotificationService.error($scope.sms1 );
                 }
             }
         });
@@ -46,14 +47,14 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
         $scope.datePickerCallback = function datePickerCallback(_newdate, action=false)
         {
             if(action==true){
-                $scope.fcart.enddatePicker.dateFormated = moment(_newdate).locale($scope.fcart.datePicker.locale).format($scope.fcart.datePicker.format);
+                $scope.fcart.enddatePicker.dateFormated = moment(_newdate).locale($rootScope.dateP.locale).format($rootScope.dateP.format);
 
 
                 LxDatePickerService.close($scope.endDatePickerId);
                 return;
             }
             //console.log("_newdate: "+_newdate);
-                $scope.fcart.startdatePicker.dateFormated = moment(_newdate).locale($scope.fcart.datePicker.locale).format($scope.fcart.datePicker.format);
+                $scope.fcart.startdatePicker.dateFormated = moment(_newdate).locale($rootScope.dateP.locale).format($rootScope.dateP.format);
             /*console.log("startdatePicker: "+$scope.fcart.startdatePicker.toSource());
             $scope.fcart.enddatePicker.minDate = angular.copy(moment($scope.fcart.startdatePicker.dateFormated));
             console.log("enddatePicker: "+$scope.fcart.enddatePicker.toSource());*/
@@ -63,7 +64,7 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
 
         /***************** TO RESET FORMS ********************/
         $scope.master = {
-            location: false, estimateArrival: null, time: "", myaircraft: "", datePicker: { locale: 'es', format: 'YYYY-MM-DD' }, startdatePicker: { dateFormated: new Date()}, enddatePicker: { dateFormated: new Date()}
+            location: false, estimateArrival: null, time: "", estimateDeparture: null, timeDeparture: "", myaircraft: "", datePicker: { locale: 'es', format: 'YYYY-MM-DD' }, startdatePicker: { dateFormated: new Date()}, enddatePicker: { dateFormated: new Date()}
         };
         $scope.masteritem = "";
         $scope.reset = function() {
@@ -178,7 +179,8 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
                     $scope.LinearProgress = helperFunc.toogleStatus($scope.LinearProgress);
                     $scope.sendbutton = helperFunc.toogleStatus($scope.sendbutton);
                     $scope.prepareFligthList = data;
-                    LxNotificationService.info('Seleccione los servicio que desea adquirir');
+                    $scope.sms2 = $filter('translate')('cart.module.sms2');
+                    LxNotificationService.info($scope.sms2);
                     //$location.path("/dashboard");
                 },function (data) {
                     console.log("Error!!" + data);
@@ -201,7 +203,7 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
             /*var toSave = { location: fields.location.id, myaircraft: fields.myaircraft.id, captain: fields.mycaptain.id, landing: helperFunc.dateToDB(fields.estimateArrival), description: fields.description, generated: false, items: angular.toJson($scope.checkService) };*/
             console.log(fields.toSource());
 
-            var toSave = '{ "location":"'+fields.location.id+'",  "myaircraft":14, "captain":1, "landing":"'+helperFunc.dateToDB(fields.startdatePicker.dateFormated+" "+fields.time+":00", "YYYY-MM-DD HH:mm:ss", true)+'",  "description":"'+fields.description+'",  "generated":"false",  "items": '+ angular.toJson($scope.checkService) +'}';
+            var toSave = '{ "location":"'+fields.location.id+'",  "myaircraft":"'+fields.myaircraft.id+'", "captain":"'+fields.mycaptain.id+'", "landing":"'+helperFunc.dateToDB(fields.startdatePicker.dateFormated+" "+fields.time+":00", "YYYY-MM-DD HH:mm:ss", true)+'",  "returndate":"'+helperFunc.dateToDB(fields.enddatePicker.dateFormated+" "+fields.timeDeparture+":00", "YYYY-MM-DD HH:mm:ss", true)+'",  "description":"'+fields.description+'",  "generated":"false",  "items": '+ angular.toJson($scope.checkService) +'}';
 
             //var addToCart = shopcartResource.addItemCart({}, toSave);
             shopcartResource.addItemCart({}, toSave).$promise.
@@ -210,10 +212,11 @@ addcart.controller('AddCartController', ['$rootScope','$scope', '$http', '$locat
                     console.log("cart: " + data.toSource());
                     //$rootScope.cart = data;
                     $rootScope.cart = shopcartResource.getCartUser();
-                    LxNotificationService.info('Saved en el Carro');
+                    $scope.sms3 = $filter('translate')('cart.module.sms3');
+                    LxNotificationService.info($scope.sms3, undefined, true);
                     self.shopCartLinearProgress = helperFunc.toogleStatus(self.shopCartLinearProgress);
                     self.shopCartsendbutton = helperFunc.toogleStatus(self.shopCartsendbutton);
-                    //$location.path("/dashboard");
+                    $location.path("/dashboard");
                 },function (data) {
                     console.log("Error!!" + data);
                     self.shopCartLinearProgress = helperFunc.toogleStatus(self.shopCartLinearProgress);

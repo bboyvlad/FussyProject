@@ -22,14 +22,14 @@
 <div class="row" id="tabPrice" ng-init="updateMenu()">
         <!--{{user.user_id}}-->
         <!--{{fcart}}-->
-    <!--{{listMyAirCrafts}}-->
-    {{checkService}}
+    <!--{{listMyAirCrafts}}
+    {{checkService}}-->
         <!--{{paymethod}}-->
 
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="">
             <div flex-item="16" class="card__img card__img--top bgc-jd">
                 <img ng-src="{{icon}}" width="100px" class="p+">
-                <p class="fs-headline tc-white-1 display-block" > Service request </p>
+                <p class="fs-headline tc-white-1 display-block" > {{'cart.card1.headline' | translate}} </p>
             </div>
         </div>
         <div class="p+" flex-container="row" flex-column="16" flex-gutter="">
@@ -39,8 +39,8 @@
                     <div  class="card bgc-blue-grey-100 tc-black-1" >
                         <div flex-container="row">
                         <!--<div class="toolbar">-->
-                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="!fcart.location">Choose a location</span>
-                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="fcart.location">Your destination will be <img ng-src="../css/img/flags/{{fcart.location.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" />{{fcart.location.name}}</span>
+                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="!fcart.location">{{'cart.card1.sms1' | translate}}</span>
+                            <span flex-item="12" class="p+ fs-subhead tc-black-1 ml" ng-if="fcart.location">{{'cart.card1.sms2' | translate}} <img ng-src="../css/img/flags/{{fcart.location.country}}.png" alt="" style="visibility: visible; float: left;" width="25px" />{{fcart.location.name}}</span>
                         <!--<div class="toolbar__right">-->
                         </div>
                         <div flex-container="row">
@@ -58,7 +58,7 @@
                                         lx-error="location.$invalid && location.$touched"
                                         lx-loading="selectAjax.loading"
                                         ng-required="true"
-                                        lx-label="Locations">
+                                        lx-label="{{'cart.form1.f1' | translate}}">
                                     <lx-select-selected>
                                         <img src='../css/img/flags/{{$selected.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
                                     </lx-select-selected>
@@ -71,7 +71,7 @@
                                      ng-if="location.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Choose your location</div>
+                                    <div ng-message="required">{{'cart.form1.f1error.e1' | translate}}</div>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                             <form name="CartForm" novalidate>
                         <div class="tc-black-1 p+" flex-container="row">
                             <div flex-item="12">
-                                <span class=" fs-subhead tc-black-1 ml">Flight details</span>
+                                <span class=" fs-subhead tc-black-1 ml">{{'cart.card1.sms3' | translate}}</span>
                             </div>
                         </div>
                         <div class="tc-black-1 p+" flex-container="row">
@@ -103,7 +103,7 @@
                                         >
                                     <lx-text-field
                                         lx-allow-clear="true"
-                                        lx-label="Estimated arrival"
+                                        lx-label="{{'cart.form1.f2' | translate}}"
                                         lx-valid="CartForm.estimateArrival.$valid"
                                         lx-error="CartForm.estimateArrival.$invalid && CartForm.estimateArrival.$touched">
                                     <input type="text" name="estimateArrival"
@@ -115,13 +115,13 @@
                                      ng-if="CartForm.estimateArrival.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Don't forget your estimated arrival date</div>
+                                    <div ng-message="required">{{'cart.form1.f2error.e1' | translate}}</div>
                                 </div>
                             </div>
 
                             <div flex-item="6">
                                 <lx-text-field
-                                        lx-label="Time"
+                                        lx-label="{{'cart.form1.f3' | translate}}"
                                         lx-valid="CartForm.time.$valid"
                                         lx-error="CartForm.time.$invalid && CartForm.time.$touched">
                                     <!--<input mdc-datetime-picker=""
@@ -141,7 +141,8 @@
                                      ng-if="CartForm.time.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Don't forget your estimated arrival time</div>
+                                    <div ng-message="required">{{'cart.form1.f3error.e1' | translate}}</div>
+                                    <div ng-message="time">{{'cart.form1.f3error.e2' | translate}}</div>
                                 </div>
 
                             </div>
@@ -158,7 +159,7 @@
                                 >
                                     <lx-text-field
                                             lx-allow-clear="true"
-                                            lx-label="Estimated departure"
+                                            lx-label="{{'cart.form1.f4' | translate}}"
                                             lx-valid="CartForm.estimateDeparture.$valid"
                                             lx-error="CartForm.estimateDeparture.$invalid && CartForm.estimateDeparture.$touched">
                                         <input type="text" name="estimateDeparture"
@@ -171,13 +172,13 @@
                                      ng-if="CartForm.estimateDeparture.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Don't forget your estimated departure date</div>
+                                    <div ng-message="required">{{'cart.form1.f4error.e1' | translate}}</div>
                                 </div>
                             </div>
 
                             <div flex-item="6">
                                 <lx-text-field
-                                        lx-label="Time"
+                                        lx-label="{{'cart.form1.f5' | translate}}"
                                         lx-valid="CartForm.timeDeparture.$valid"
                                         lx-error="CartForm.timeDeparture.$invalid && CartForm.timeDeparture.$touched">
                                     <!--<input mdc-datetime-picker=""
@@ -197,7 +198,7 @@
                                      ng-if="CartForm.timeDeparture.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Don't forget your estimated departure time</div>
+                                    <div ng-message="required">{{'cart.form1.f5error.e1' | translate}}</div>
                                 </div>
 
                             </div>
@@ -214,7 +215,7 @@
                                         lx-valid="CartForm.myaircraft.$valid"
                                         lx-error="CartForm.myaircraft.$invalid && CartForm.myaircraft.$touched"
                                         ng-required="true"
-                                        lx-label="My aircraft">
+                                        lx-label="{{'cart.form1.f6' | translate}}">
                                     <lx-select-selected>
                                         {{ $selected.name }} / {{ $selected.model }}
                                     </lx-select-selected>
@@ -227,7 +228,7 @@
                                      ng-if="CartForm.myaircraft.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Choose your aircraft</div>
+                                    <div ng-message="required">{{'cart.form1.f6error.e1' | translate}}</div>
                                 </div>
                             </div>
                          </div>
@@ -242,7 +243,7 @@
                                         lx-valid="CartForm.mycaptain.$valid"
                                         lx-error="CartForm.mycaptain.$invalid && CartForm.mycaptain.$touched"
                                         ng-required="true"
-                                        lx-label="My pilots">
+                                        lx-label="{{'cart.form1.f7' | translate}}">
                                     <lx-select-selected>
                                         {{ $selected.name }} / {{ $selected.license }}
                                     </lx-select-selected>
@@ -255,7 +256,7 @@
                                      ng-if="CartForm.mycaptain.$touched"
                                      style="color:maroon"
                                      role="alert">
-                                    <div ng-message="required">Choose a pilot</div>
+                                    <div ng-message="required">{{'cart.form1.f7error.e1' | translate}}</div>
                                 </div>
                             </div>
                         </div>
@@ -269,11 +270,11 @@
                                 </div>
                                 <lx-button lx-color="red"
                                            ng-click="reset()"
-                                >Clear</lx-button>
+                                >{{'cart.form1.button1' | translate}}</lx-button>
                                 <lx-button lx-color="green"
                                            ng-click="searchServices($event, fcart)"
                                            ng-disabled="sendbutton || CartForm.$invalid"
-                                >Search</lx-button>
+                                >{{'cart.form1.button2' | translate}}</lx-button>
                             </div>
                         </div>
                       </form>
@@ -300,7 +301,7 @@
                                     <div flex-container="row" >
                                         <div flex-item="6" class="p+">
                                             <lx-text-field
-                                                    lx-label="Flight name"
+                                                    lx-label="{{'cart.form1.f8' | translate}}"
                                                     lx-valid="shopCart.description.$valid"
                                                     lx-error="shopCart.description.$invalid && shopCart.description.$touched">
                                                 <input type="text" name="description" ng-required="true"
@@ -310,7 +311,7 @@
                                                  ng-if="shopCart.description.$touched"
                                                  style="color:maroon"
                                                  role="alert">
-                                                <div ng-message="required">This field must be fill</div>
+                                                <div ng-message="required">{{'cart.form1.f8error.e1' | translate}}</div>
                                             </div>
 
                                         </div>
@@ -326,29 +327,29 @@
                                             </div>
                                             <lx-button lx-color="red"
                                                        ng-click="reset()"
-                                            >Clear</lx-button>
+                                            >{{'cart.form1.button3' | translate}}</lx-button>
                                             <lx-button lx-color="green"
                                                        ng-click="addShopCart($event, fcart)"
                                                        ng-disabled="shopCartsendbutton || shopCart.$invalid"
-                                            >Save</lx-button>
+                                            >{{'cart.form1.button4' | translate}}</lx-button>
                                         </div>
                                     </div>
 
                                     <div class="data-table-container bgc-blue-grey-100 p+ ">
                                         <header class="data-table-header">
                                             <div class="data-table-header__label">
-                                                <span class="fs-subhead">Services</span>
+                                                <span class="fs-subhead">{{'cart.datatable1.title' | translate}}</span>
                                             </div>
                                         </header>
 
                                         <table class="data-table fs-body-1">
                                             <thead>
                                             <tr class="">
-                                                <th> Select </th>
-                                                <th> Info </th>
-                                                <th> Unt </th>
-                                                <th> Price </th>
-                                                <th> Amount </th>
+                                                <th> {{'cart.datatable1.f1' | translate}} </th>
+                                                <th> {{'cart.datatable1.f2' | translate}} </th>
+                                                <th> {{'cart.datatable1.f3' | translate}} </th>
+                                                <th> {{'cart.datatable1.f4' | translate}} </th>
+                                                <th> {{'cart.datatable1.f5' | translate}} </th>
                                             </tr>
                                             </thead>
 
@@ -368,7 +369,7 @@
                                                 <td ng-show="bool">
                                                     <div flex-container="row" flex-column="16" flex-gutter="">
                                                         <div flex-item="16">
-                                                            <lx-text-field lx-label="Amount"
+                                                            <lx-text-field lx-label="Quantity"
                                                                            lx-valid="CartForm.amount.$valid"
                                                                            lx-error="CartForm.amount.$invalid && CartForm.amount.$touched">
                                                                 <input type="number" name="amount" ng-model="itemQuantity"
@@ -382,7 +383,11 @@
                                             </tbody>
                                             <tfoot>
                                             <td colspan="4"></td>
-                                            <td>{{servicesTotal}}</td>
+                                            <td>
+                                                <span class="fs-subhead">
+                                                    Total: {{servicesTotal | currency:"USD$"}}
+                                                </span>
+                                            </td>
                                             </tfoot>
                                         </table>
                                     </div>

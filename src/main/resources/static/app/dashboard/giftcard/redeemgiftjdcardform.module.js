@@ -73,8 +73,8 @@ redeemgiftcard.controller('RedeemGiftJdCardController', ['$rootScope','$scope', 
                         //self.helperFuncBar();
                         return;
                     }
-                    $scope.sms2 = $filter('translate')('jdcard.add.module.sms2');
-                    $scope.sms3 = $filter('translate')('jdcard.add.module.sms3');
+                    $scope.sms2 = $filter('translate')('giftcard.redeem.module.sms2');
+                    $scope.sms3 = $filter('translate')('giftcard.redeem.module.sms3');
                     LxNotificationService.alert($scope.sms2,
                         $scope.sms3,
                         'Ok',

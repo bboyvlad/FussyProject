@@ -5,8 +5,8 @@
 
 var mycaptain = angular.module('MyCaptain', ['ngRoute', 'jdmenu', 'ngMessages']);
 
-mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'mycaptainResource', 'LxDialogService', 'LxDatePickerService',
-    function MyCaptainController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, mycaptainResource, LxDialogService, LxDatePickerService) {
+mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'LxNotificationService', 'helperFunc', 'mycaptainResource', 'LxDialogService', 'LxDatePickerService', '$translate', '$filter',
+    function MyCaptainController($rootScope, $scope, $http, $location, myJdMenu, LxNotificationService, helperFunc, mycaptainResource, LxDialogService, LxDatePickerService, $translate, $filter) {
         $scope.cssClass = 'captain';
         $scope.icon = '../css/icons/pilot-hat.png';
         var self = this;
@@ -58,7 +58,8 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
                     $scope.reset();
 
                     //$rootScope.userInfo = data;
-                    LxNotificationService.success('Captain, created successfully!!!');
+                    $scope.sms1 = $filter('translate')('captain.module.sms1');
+                    LxNotificationService.success($scope.sms1);
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
 
@@ -122,7 +123,8 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             then(
                 function (data) {
                     console.log("Updated!!" + data);
-                    LxNotificationService.success('Update successful!!!');
+                    $scope.sms2 = $filter('translate')('captain.module.sms2');
+                    LxNotificationService.success($scope.sms2);
                     $scope.listCaptain = mycaptainResource.query();
                     $scope.reset();
                     //$location.path("/dashboard");
@@ -148,7 +150,9 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
             console.log(data.toSource());
-            LxNotificationService.confirm('Erased Pilot', 'Please confirm that your wish to erased this pilot.',
+            $scope.sms3 = $filter('translate')('captain.module.sms3');
+            $scope.sms4 = $filter('translate')('captain.module.sms4');
+            LxNotificationService.confirm($scope.sms3, $scope.sms4,
                 {
                     cancel: 'Cancel',
                     ok: 'Delete'
@@ -160,7 +164,8 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
                         then(
                             function (data) {
                                 console.log("Erased!!" + data);
-                                LxNotificationService.success('Captain, Erased successfully!!!');
+                                $scope.sms5 = $filter('translate')('captain.module.sms5');
+                                LxNotificationService.success($scope.sms5);
                                 $scope.listCaptain = mycaptainResource.query();
                                 //$scope.faircrafts = [];
                                 //$location.path("/dashboard");
@@ -175,7 +180,8 @@ mycaptain.controller('MyCaptainController', ['$rootScope','$scope', '$http', '$l
                     }
                     else
                     {
-                        LxNotificationService.error('Disagree');
+                        $scope.sms6 = $filter('translate')('captain.module.sms6');
+                        LxNotificationService.error($scope.sms6);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                     }

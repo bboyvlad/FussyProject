@@ -5,8 +5,8 @@
 
 var addgiftcard = angular.module('AddGiftJdCard', ['ngRoute', 'ngMessages', 'ui.utils.masks', 'angularPayments']);
 
-addgiftcard.controller('AddGiftJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'giftCardResource', 'userPaymentResource',
-    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, LxNotificationService, giftCardResource, userPaymentResource) {
+addgiftcard.controller('AddGiftJdCardController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'LxNotificationService', 'giftCardResource', 'userPaymentResource', '$translate', '$filter',
+    function AddJdCardController($rootScope, $scope, $http, $location, myJdMenu, helperFunc, LxNotificationService, giftCardResource, userPaymentResource, $translate, $filter) {
         $scope.cssClass = 'addgiftcard';
         $scope.icon = '../css/icons/wallet-giftcard.png';
 

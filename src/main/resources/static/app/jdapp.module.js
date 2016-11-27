@@ -93,11 +93,11 @@ jdApp.service('helperFunc', ['userResource', 'shopcartResource', 'cardPaymentRes
         var newDate = "";
         if(unix==true){
             newDate = moment(value, dateFormat).format("x");
-            console.log('Unix to db: '+newDate);
+            //console.log('Unix to db: '+newDate);
             return newDate;
         }
         newDate = moment(value, dateFormat);
-        console.log('Date to db: '+newDate);
+        //console.log('Date to db: '+newDate);
         return newDate;
     };
 
@@ -287,8 +287,7 @@ jdApp.factory('userPaymentResource',  function ($resource) {
             isArray: true
         },
         save:{
-            method: 'POST',
-            isArray: false
+            method: 'POST'
         },
         update:{
             method: 'PATCH',
