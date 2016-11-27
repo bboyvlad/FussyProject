@@ -1,0 +1,466 @@
+
+<div class="row" flex-column="16" flex-gutter="24" flex-container="row">
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+<!--        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="light-blue" lx-indicator="yellow">
+            <lx-tab lx-icon="content-save" lx-label="Add">-->
+
+                <!-- FORM TAB -->
+                <form name="NotifyPayForm" novalidate>
+                    <!--{{fnotifypay}}
+                    user: {{user.id}}-->
+                    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                        <div flex-item="1">
+                        </div>
+                        <div flex-item="14">
+                            <div class="card" >
+                                <div class="card__img card__img--top bgc-jd">
+                                    <img ng-src="{{icon}}" width="100px" class="p+">
+                                    <p class="fs-headline tc-white-1 display-block" >Add Bank Account </p>
+                                </div>
+                                <div class="p+">
+                                    <!--<strong class="fs-headline display-block">Agregue Bank Accounts</strong>-->
+                                    <div class="paragraph fs-body-1 mt+">
+                                        <div class="p+ pt0">
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-select
+                                                            name="paymethod"
+                                                            ng-model="fnotifypay.paymethod"
+                                                            lx-allow-clear="true"
+                                                            lx-choices="jdcardOpts"
+                                                            lx-fixed-label="true"
+                                                            lx-valid="NotifyPayForm.paymethod.$valid"
+                                                            lx-error="NotifyPayForm.paymethod.$invalid && NotifyPayForm.paymethod.$touched"
+                                                            ng-required="true"
+                                                            lx-label="Escoja su metodo de pago">
+                                                        <lx-select-selected>
+                                                            {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
+                                                        </lx-select-selected>
+
+                                                        <lx-select-choices>
+                                                            {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }}
+                                                        </lx-select-choices>
+                                                    </lx-select>
+                                                    <div ng-messages="NotifyPayForm.paymethod.$error"
+                                                         ng-if="NotifyPayForm.paymethod.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-select
+                                                            name="bank"
+                                                            ng-model="fnotifypay.bank"
+                                                            lx-allow-clear="true"
+                                                            lx-choices="bankOpts"
+                                                            lx-fixed-label="true"
+                                                            lx-valid="NotifyPayForm.bank.$valid"
+                                                            lx-error="NotifyPayForm.bank.$invalid && NotifyPayForm.bank.$touched"
+                                                            ng-required="true"
+                                                            lx-label="Escoja su metodo de pago">
+                                                        <lx-select-selected>
+                                                            {{ $selected.bankname }}
+                                                        </lx-select-selected>
+
+                                                        <lx-select-choices>
+                                                            {{ $choice.bankname }}
+                                                        </lx-select-choices>
+                                                    </lx-select>
+                                                    <div ng-messages="NotifyPayForm.bank.$error"
+                                                         ng-if="NotifyPayForm.bank.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Escoge el tipo de Metodo Pago</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-text-field
+                                                            lx-label="Reference Number"
+                                                            lx-valid="NotifyPayForm.relatedref.$valid"
+                                                            lx-error="NotifyPayForm.relatedref.$invalid && NotifyPayForm.relatedref.$touched"
+                                                            lx-allow-clear="true">
+                                                        <input type="text" name="relatedref" ng-required="true"
+                                                               ng-model="fnotifypay.relatedref" capitalize/>
+                                                    </lx-text-field>
+                                                    <div ng-messages="NotifyPayForm.relatedref.$error"
+                                                         ng-if="NotifyPayForm.relatedref.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Your deposit / transfer reference number is required</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-text-field
+                                                            lx-label="Amount"
+                                                            lx-valid="NotifyPayForm.amount.$valid"
+                                                            lx-error="NotifyPayForm.amount.$invalid && NotifyPayForm.amount.$touched">
+                                                        <input type="text"
+                                                               name="amount"
+                                                               ng-required="true"
+                                                               ng-model="fnotifypay.amount"
+                                                               ng-minlength="1" ui-number-mask>
+                                                    </lx-text-field>
+                                                    <div ng-messages="NotifyPayForm.amount.$error"
+                                                         ng-if="NotifyPayForm.amount.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">An amount is required</div>
+                                                        <div ng-message="minlength">The amount must be grater than 0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-date-picker
+                                                            id="{{datePickerId}}"
+                                                            ng-model="fnotifypay.dcreate"
+                                                            lx-input-format="YYYY-MM-DD"
+                                                            lx-callback="datePickerCallback(fnotifypay.dcreate)"
+                                                            lx-locale="{{fnotifypay.datePicker.locale}}"
+                                                            >
+                                                        <lx-text-field
+                                                                lx-valid="NotifyPayForm.dcreate.$valid"
+                                                                lx-error="NotifyPayForm.dcreate.$invalid && NotifyPayForm.dcreate.$touched"
+                                                                lx-allow-clear="true"
+                                                                lx-label="Date">
+                                                            <input type="text" name="dcreate"
+                                                                   ng-model="fnotifypay.datePicker.dateFormated"
+                                                                   ng-required="true" />
+                                                        </lx-text-field>
+                                                    </lx-date-picker>
+                                                    <div ng-messages="NotifyPayForm.dcreate.$error"
+                                                         ng-if="NotifyPayForm.dcreate.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Transaction Date</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__actions" flex-container="row" flex-column="16" flex-gutter="24">
+                                    <div class="p+" flex-item="5"></div>
+                                    <div class="p+">
+                                        <div style="position: relative;">
+                                            <lx-progress lx-type="linear" lx-color="teal"
+                                                         ng-if="LinearProgress">
+                                            </lx-progress>
+                                        </div>
+                                        <lx-button lx-color="red"
+                                                   ng-click="reset()"
+                                        >Limpiar</lx-button>
+                                        <lx-button lx-color="green"
+                                                   ng-click="openDialogCoordinates()"
+                                                   ng-disabled="sendbutton || NotifyPayForm.$invalid">
+                                            SALVAR</lx-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            <!--</lx-tab>
+
+            <lx-tab lx-icon="airplane" lx-label="Manage">
+
+                &lt;!&ndash; DATATABLE TAB &ndash;&gt;
+                <div flex-item="4">
+                    <div class="card">
+                        <div class="toolbar">
+                            <lx-search-filter>
+                                <input type="text" name="mysearch" ng-model="search.mysearch"
+                                       ng-model-options="{ debounce : 400 }" placeholder="Search User">
+                            </lx-search-filter>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    &lt;!&ndash;<header class="data-table-header">
+                        <div class="data-table-header__label">
+                            <span class="fs-title">Bank Accounts</span>
+                        </div>
+                    </header>&ndash;&gt;
+
+                    <table class="data-table">
+                        <thead>
+                        <tr class="">
+                            <th >Bank</th>
+                            <th >Account</th>
+                            <th >Creation date</th>
+                            <th >Status</th>
+                            <th  >Edit</th>
+                            <th  >Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-if="!search.mysearch==''" ng-repeat="bankaccu in listNotifyPay | filter:search.mysearch" class=" ">
+                            <td >{{bankaccu.relatedref}}</td>
+                            <td >{{bankaccu.bankacctnum}}</td>
+                            <td >{{bankaccu.dcreate | dateFromDB : "YYYY-MM-DD"}}</td>
+                            <td >{{bankaccu.enabled}}</td>
+                            <td >
+                                <lx-icon ng-click="openDialogNotifyPay(bankaccu)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+                            </td>
+                            <td >
+                                <lx-icon ng-click="deleteNotifyPay(bankaccu)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                &lt;!&ndash; EDIT DIALOG &ndash;&gt;
+
+                <lx-dialog id="{{ dialogNotifyPay }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Bank Accounts
+                            </span>
+
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+
+                        &lt;!&ndash; EDIT FORM &ndash;&gt;
+                        <form name="editNotifyPayForm" novalidate>
+                            &lt;!&ndash;{{fnotifypay}}
+                            user: {{user.id}}&ndash;&gt;
+                            <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                                <div flex-item="2"></div>
+                                <div flex-item="12">
+                                    <div class="card" >
+                                        <div class="card__img card__img&#45;&#45;top bgc-jd">
+                                            <img ng-src="{{icon}}" width="100px" class="p+">
+                                            <p class="fs-headline tc-white-1 display-block" >Edit Bank Account </p>
+                                        </div>
+                                        <div class="p+">
+                                            &lt;!&ndash;<strong class="fs-headline display-block">Agregue Bank Accounts</strong>&ndash;&gt;
+                                            <div class="paragraph fs-body-1 mt+">
+                                                <div class="p+ pt0">
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank account name"
+                                                                    lx-valid="editNotifyPayForm.relatedref.$valid"
+                                                                    lx-error="editNotifyPayForm.relatedref.$invalid && editNotifyPayForm.relatedref.$touched"
+                                                                    lx-allow-clear="true">
+                                                                <input type="text" name="relatedref"
+                                                                       ng-required="true"
+                                                                       ng-model="feditbankaccount.relatedref"
+                                                                       capitalize/>
+                                                            </lx-text-field>
+                                                            <div ng-messages="editNotifyPayForm.relatedref.$error"
+                                                                 ng-if="editNotifyPayForm.relatedref.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account name is required</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank number"
+                                                                    lx-valid="editNotifyPayForm.bankacctnum.$valid"
+                                                                    lx-error="editNotifyPayForm.bankacctnum.$invalid && editNotifyPayForm.bankacctnum.$touched"
+                                                                    lx-allow-clear="true">
+                                                                <input type="text"
+                                                                       name="bankacctnum"
+                                                                       ng-required="true"
+                                                                       ng-model="feditbankaccount.bankacctnum"
+                                                                       ng-pattern="regex"/>
+                                                            </lx-text-field>
+                                                            <div ng-messages="editNotifyPayForm.bankacctnum.$error"
+                                                                 ng-if="editNotifyPayForm.bankacctnum.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account number is required</div>
+                                                                <div ng-message="pattern">Only numbers are allow</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+                                                            <lx-date-picker
+                                                                    id="{{datePickerId}}"
+                                                                    ng-model="feditbankaccount.dcreate"
+                                                                    lx-input-format="YYYY-MM-DD"
+                                                                    lx-callback="datePickerCallback(feditbankaccount.dcreate, 'update')"
+                                                                    locale="es"
+                                                                    lx-valid="editNotifyPayForm.dcreate.$valid"
+                                                                    lx-error="editNotifyPayForm.dcreate.$invalid && editNotifyPayForm.dcreate.$touched">
+                                                                <lx-text-field lx-allow-clear="true" lx-label="Fecha de Creación">
+                                                                    <input type="text" name="dcreate"
+                                                                           ng-model="feditbankaccount.datePicker.dateFormated" ng-required="true" />
+                                                                </lx-text-field>
+                                                            </lx-date-picker>
+                                                            <div ng-messages="editNotifyPayForm.dcreate.$error"
+                                                                 ng-if="editNotifyPayForm.dcreate.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">No Olvides de colocar la fecha estimada de salida</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank account note"
+                                                                    lx-valid="editNotifyPayForm.notes.$valid"
+                                                                    lx-error="editNotifyPayForm.notes.$invalid && editNotifyPayForm.notes.$touched"
+                                                                    lx-allow-clear="true">
+                                                        <textarea type="text" name="notes"
+                                                                  ng-model="feditbankaccount.notes" ></textarea>
+                                                            </lx-text-field>
+                                                            &lt;!&ndash;<div ng-messages="editNotifyPayForm.notes.$error"
+                                                                 ng-if="editNotifyPayForm.notes.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account name is required</div>
+                                                            </div>&ndash;&gt;
+                                                        </div>
+                                                    </div>
+
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+                                                            <lx-checkbox
+                                                                    ng-model="feditbankaccount.enabled"
+                                                                    lx-color="blue"
+                                                                    name="enabled"
+                                                                    ng-true-value="true"
+                                                                    ng-false-value="false"
+                                                                    ng-required="true">
+                                                                Enable
+                                                            </lx-checkbox>
+                                                        </div>
+                                                        <div ng-messages="editNotifyPayForm.enabled.$error"
+                                                             ng-if="editNotifyPayForm.enabled.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">The bank account status is required</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-progress lx-type="circular" lx-color="teal"
+                                     ng-if="LinearProgress">
+                        </lx-progress>
+                        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>Cerrar</lx-button>
+                        <lx-button lx-color="green"
+                                   ng-click="updateNotifyPay($event, feditbankaccount)"
+                                   ng-disabled="sendbutton || editNotifyPayForm.$invalid">
+                            SALVAR</lx-button>
+                    </lx-dialog-footer>
+                </lx-dialog>
+
+            </lx-tab>
+
+        </lx-tabs>-->
+
+    </div>
+
+</div>
+
+<lx-dialog id="{{ dialogCoordinates }}" lx-size="s">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Check Coordinates
+            </span>
+
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+        <!--{{coord1}}-->
+
+
+        <div class="p+">
+            <div class="card">
+                <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                    <div flex-item="16" class="p+">
+
+                        <div class="paragraph fs-body-1 mt+">
+                            <form name="formCoordinates" novalidate>
+                                <div flex-container="row">
+                                    <div flex-item="6" class="p+">
+                                        <lx-text-field lx-label="{{coord1.key}}"
+                                                       lx-valid="formCoordinates.coord1.$valid"
+                                                       lx-error="formCoordinates.coord1.$invalid && formCoordinates.coord1.$touched">
+                                            <input type="text" name="coord1" ng-model="coord1.val" capitalize>
+                                        </lx-text-field>
+                                        <div ng-messages="formCoordinates.coord1.$error"
+                                             ng-if="formCoordinates.coord1.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">This field must be fill</div>
+                                        </div>
+                                    </div>
+                                <!--</div>
+                                {{coord2}}
+                                <div flex-container="row">-->
+                                    <div flex-item="6" class="p+">
+                                        <lx-text-field lx-label="{{coord2.key}}"
+                                                       lx-valid="formCoordinates.coord2.$valid"
+                                                       lx-error="formCoordinates.coord2.$invalid && formCoordinates.coord2.$touched">
+                                            <input type="text" name="coord2" ng-model="coord2.val" capitalize>
+                                        </lx-text-field>
+                                        <div ng-messages="formCoordinates.coord2.$error"
+                                             ng-if="formCoordinates.coord2.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">This field must be fill</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
+        <lx-button lx-color="black" lx-type="flat" ng-click="NotifyPayCreate($event, fnotifypay)">Enviar</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
+
+
+

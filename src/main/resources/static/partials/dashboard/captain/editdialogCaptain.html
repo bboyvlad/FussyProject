@@ -1,0 +1,212 @@
+<lx-dialog id="{{ dialogCaptain }}">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Capitan : {{feditcaptain.name}}
+            </span>
+
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+
+        <form name="editMyCaptainForm" novalidate>
+            <!--1{{feditcaptain}} 2{{master}}-->
+            <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                <div flex-item="16">
+                    <div class="card" >
+                        <div class="p+">
+                            <strong class="fs-headline display-block">Editar Capitanes</strong>
+
+                            <div class="paragraph fs-body-1 mt+">
+                                <div class="p+ pt0">
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Names"
+                                                           lx-valid="editMyCaptainForm.name.$valid"
+                                                           lx-error="editMyCaptainForm.name.$invalid && editMyCaptainForm.name.$touched">
+                                                <input type="text" name="name" ng-model="feditcaptain.name"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.name.$error"
+                                                 ng-if="editMyCaptainForm.name.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's name</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Licence"
+                                                           lx-valid="editMyCaptainForm.license.$valid"
+                                                           lx-error="editMyCaptainForm.license.$invalid && editMyCaptainForm.license.$touched">
+                                                <input type="text" name="license" ng-model="feditcaptain.license"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.license.$error"
+                                                 ng-if="editMyCaptainForm.license.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's Licence</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-date-picker
+                                                id="{{datePickerId}}"
+                                                ng-model="feditcaptain.dateofbirth"
+                                                lx-input-format="YYYY-MM-DD"
+                                                lx-callback="datePickerCallback(feditcaptain.dateofbirth, 'update')"
+                                                lx-locale="{{feditcaptain.datePicker.locale}}"
+                                                            >
+                                            <lx-text-field
+                                            lx-valid="editMyCaptainForm.dateofbirth.$valid"
+                                            lx-error="editMyCaptainForm.dateofbirth.$invalid && editMyCaptainForm.dateofbirth.$touched"
+                                            lx-allow-clear="true" lx-label="Date of Birth" >
+                                            <input type="text" name="dateofbirth"
+                                                   ng-model="feditcaptain.datePicker.dateFormatted" ng-required="true">
+                                            </lx-text-field>
+                                            </lx-date-picker>
+                                            <div ng-messages="editMyCaptainForm.dateofbirth.$error"
+                                                 ng-if="editMyCaptainForm.dateofbirth.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's date of birth</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Address"
+                                                           lx-valid="editMyCaptainForm.address.$valid"
+                                                           lx-error="editMyCaptainForm.address.$invalid && editMyCaptainForm.address.$touched">
+                                                <input type="text" name="address" ng-model="feditcaptain.address"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.address.$error"
+                                                 ng-if="editMyCaptainForm.address.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's Address</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Country"
+                                                           lx-valid="editMyCaptainForm.country.$valid"
+                                                           lx-error="editMyCaptainForm.country.$invalid && editMyCaptainForm.country.$touched">
+                                                <input type="text" name="country" ng-model="feditcaptain.country"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.country.$error"
+                                                 ng-if="editMyCaptainForm.country.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's country</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="City"
+                                                           lx-valid="editMyCaptainForm.city.$valid"
+                                                           lx-error="editMyCaptainForm.city.$invalid && editMyCaptainForm.city.$touched">
+                                                <input type="text" name="city" ng-model="feditcaptain.city"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.city.$error"
+                                                 ng-if="editMyCaptainForm.city.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's city</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Phone"
+                                                           lx-valid="editMyCaptainForm.phone.$valid"
+                                                           lx-error="editMyCaptainForm.phone.$invalid && editMyCaptainForm.phone.$touched">
+                                                <input type="text" name="phone" ng-model="feditcaptain.phone"
+                                                       ng-required="true">
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.phone.$error"
+                                                 ng-if="editMyCaptainForm.phone.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's phone number</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div flex-container="row">
+                                        <div flex-item>
+                                            <lx-text-field lx-label="Email"
+                                                           lx-valid="editMyCaptainForm.email.$valid"
+                                                           lx-error="editMyCaptainForm.email.$invalid && editMyCaptainForm.email.$touched">
+
+                                                <input type="email" name="email" ng-model="feditcaptain.email"
+                                                       ng-required="true" />
+                                            </lx-text-field>
+                                            <div ng-messages="editMyCaptainForm.email.$error"
+                                                 ng-if="editMyCaptainForm.email.$touched"
+                                                 style="color:maroon"
+                                                 role="alert">
+                                                <div ng-message="required">Don't forget to enter the pilot's email</div>
+                                                        <div ng-message="email">The email is invalid!</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <span class="fs-title display-block">
+                                    Activar ó desactivar Capitan...
+                                    <lx-radio-group class="mt+">
+                                    <lx-radio-button name="test2" value="false" ng-model="feditcaptain.active">
+                                        <lx-radio-button-label>Activo</lx-radio-button-label>
+                                    </lx-radio-button>
+
+                                    <lx-radio-button name="test2" value="true" ng-model="feditcaptain.active">
+                                        <lx-radio-button-label>Inactivo</lx-radio-button-label>
+                                    </lx-radio-button>
+                                </lx-radio-group>
+                                </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card__actions">
+                            <div class="p+">
+
+                                <!--<lx-button lx-color="red"
+                                           ng-click="reset()"
+                                >Limpiar</lx-button>
+                                <lx-button lx-color="green"
+                                           ng-click="myCaptainUpdate($event, feditcaptain)"
+                                           ng-disabled="sendbutton || editMyCaptainForm.$invalid"
+                                >REGISTRAR</lx-button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+        <div style="position: relative;">
+            <lx-progress lx-type="linear" lx-color="teal"
+                         ng-if="LinearProgress">
+            </lx-progress>
+        </div>
+        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>Close</lx-button>
+        <lx-button lx-color="green"
+                   ng-click="updateCaptain($event, feditcaptain)"
+                   ng-disabled="sendbutton || editMyCaptainForm.$invalid"
+        >Update</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>

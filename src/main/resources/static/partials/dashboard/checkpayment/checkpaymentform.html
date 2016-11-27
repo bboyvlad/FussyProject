@@ -1,0 +1,71 @@
+
+<div class="row" flex-column="16" flex-gutter="24" flex-container="row">
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="1">
+            </div>
+            <div flex-item="16">
+                <div class="card" >
+                    <div class="card__img card__img--top bgc-jd">
+                        <img ng-src="{{icon}}" width="100px" class="p+">
+                        <p class="fs-headline tc-white-1 display-block" > Received Payments</p>
+                    </div>
+                    <div flex-item="4">
+                        <div class="card">
+                            <div class="toolbar">
+                                <lx-search-filter>
+                                    <input type="text" name="mysearch" ng-model="search.mysearch"
+                                           ng-model-options="{ debounce : 400 }" placeholder="Search User">
+                                </lx-search-filter>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-table-container">
+                        <header class="data-table-header">
+                        <div class="data-table-header__label">
+                            <span class="fs-title">Received Payments</span>
+                        </div>
+                    </header>
+
+                        <table class="data-table">
+                            <thead>
+                            <tr class="">
+                                <th >Bank</th>
+                                <th >Reference</th>
+                                <th >Creation date</th>
+                                <th >Status</th>
+                                <th  >Edit</th><!--
+                                <th  >Delete</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="payreci in listPaymentsRecieved | filter:search.mysearch | limitTo : 5 | orderBy:'id' " class=" ">
+                                <td >{{payreci.insname}}</td>
+                                <td >{{payreci.relatedref}}</td>
+                                <td >{{payreci.dcreate | dateFromDB : "YYYY-MM-DD"}}</td>
+                                <td >{{payreci.approved}}</td>
+                                <td >
+                                    <lx-icon ng-click="openDialogNotifyPay(payreci)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+                                </td><!--
+                                <td >
+                                    <lx-icon ng-click="deleteNotifyPay(payreci)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+                                </td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<section ng-include="'/partials/dashboard/checkpayment/checkDialog.html'"></section>

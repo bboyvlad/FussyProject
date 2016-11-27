@@ -1,0 +1,173 @@
+<style>
+    .listAnimation {
+        transition: all linear 0.5s;
+    }
+    .listAnimation.ng-hide-animate {
+        opacity: 0;
+    }
+</style>
+<div class="row" ng-init="updateMenu()">
+
+    <form name="BalanceForm" novalidate>
+        <!--user id: {{user.id}}
+        {{balance}}-->
+        <!--{{jdcardOpts}}-->
+        <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+            <div flex-item="16">
+
+                <div class="card">
+                    <div class="card__img card__img--top bgc-jd">
+                        <img ng-src="{{icon}}" width="100px" class="p+">
+                        <p class="fs-headline tc-white-1 display-block" >J&amp;D Cards Balance </p>
+                    </div>
+                    <div class="p+">
+                        <!--<strong class="fs-headline display-block">Choose a J&amp;D Card</strong>-->
+                        <!--1{{paymethod}} 2{{paymethod}}-->
+                        <div class="paragraph fs-body-1 mt+">
+                            <div class="p+ pt0">
+                                <div flex-container="row">
+                                    <div flex-item="5" class="p+ pt0">
+                                        <lx-select
+                                                name="jdcard"
+                                                ng-model="balance.jdcard"
+                                                lx-allow-clear="true"
+                                                lx-choices="jdcardOpts"
+                                                lx-fixed-label="true"
+                                                lx-valid="BalanceForm.jdcard.$valid"
+                                                lx-error="BalanceForm.jdcard.$invalid && BalanceForm.jdcard.$touched"
+                                                ng-required="true"
+                                                lx-label="Choose a J&amp;D Card">
+                                            <lx-select-selected>
+                                                {{ $selected.payacctnum | tdcmask}} - {{ $selected.paycardname }}
+                                            </lx-select-selected>
+
+                                            <lx-select-choices>
+                                                {{ $choice.payacctnum | tdcmask}} - {{ $choice.paycardname }}
+                                            </lx-select-choices>
+                                        </lx-select>
+                                        <div ng-messages="BalanceForm.jdcard.$error"
+                                             ng-if="BalanceForm.jdcard.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Choose a J&amp;D Card </div>
+                                        </div>
+                                    </div>
+
+                                    <div flex-item="2" class="p+ pt0">
+                                        <lx-date-picker
+                                                id="{{dateFromPickerId}}"
+                                                ng-model="balance.dateFrom"
+                                                lx-input-format="{{balance.dateFromPicker.format}}"
+                                                lx-callback="datePickerCallback(balance.dateFrom, 'from')"
+                                                lx-locale="{{balance.dateFromPicker.locale}}"
+                                        >
+                                            <lx-text-field
+                                                    lx-valid="BalanceForm.dateFrom.$valid"
+                                                    lx-error="BalanceForm.dateFrom.$invalid && BalanceForm.dateFrom.$touched"
+                                                    lx-allow-clear="true"
+                                                    lx-label="Date">
+                                                <input type="text" name="dateFrom"
+                                                       ng-model="balance.dateFromPicker.dateFormated"
+                                                       ng-required="true" />
+                                            </lx-text-field>
+                                        </lx-date-picker>
+                                        <div ng-messages="BalanceForm.dateFrom.$error"
+                                             ng-if="BalanceForm.dateFrom.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Transaction Date</div>
+                                        </div>
+                                    </div>
+
+                                    <div flex-item="2" class="p+ pt0">
+                                        <lx-date-picker
+                                                id="{{dateToPickerId}}"
+                                                ng-model="balance.dateTo"
+                                                lx-input-format="{{balance.dateToPicker.format}}"
+                                                lx-callback="datePickerCallback(balance.dateTo, 'to')"
+                                                lx-locale="{{balance.dateToPicker.locale}}"
+                                        >
+                                            <lx-text-field
+                                                    lx-valid="BalanceForm.dateTo.$valid"
+                                                    lx-error="BalanceForm.dateTo.$invalid && BalanceForm.dateTo.$touched"
+                                                    lx-allow-clear="true"
+                                                    lx-label="Date">
+                                                <input type="text" name="dateTo"
+                                                       ng-model="balance.dateToPicker.dateFormated"
+                                                       ng-required="true" />
+                                            </lx-text-field>
+                                        </lx-date-picker>
+                                        <div ng-messages="BalanceForm.dateTo.$error"
+                                             ng-if="BalanceForm.dateTo.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">Transaction Date</div>
+                                        </div>
+                                    </div>
+
+                                    <div flex-item="6" class="p+">
+                                        <div style="position: absolute;">
+                                            <lx-progress lx-type="circular" lx-color="teal"
+                                                         ng-if="LinearProgress">
+                                            </lx-progress>
+                                        </div>
+                                        <lx-button lx-color="red"
+                                                   ng-click="reset()"
+                                        >Clear</lx-button>
+                                        <lx-button lx-color="green"
+                                                   ng-click="GetBalance($event, balance)"
+                                                   ng-disabled="sendbutton || BalanceForm.$invalid">
+                                            Search </lx-button>
+                                    </div>
+
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div flex-item="16" ng-show="listTransactions" class="listAnimation">
+                    <div class="card">
+                        <div class="toolbar">
+                            <lx-search-filter>
+                                <input type="text" name="mysearch" ng-model="search.mysearch"
+                                       ng-model-options="{ debounce : 400 }" placeholder="Search Transactions">
+                            </lx-search-filter>
+                        </div>
+                        <div class="data-table-container">
+                        <header class="data-table-header">
+                            <div class="data-table-header__label">
+                                <span class="fs-title">Transactions</span>
+                            </div>
+                        </header>
+
+                        <table class="data-table">
+                            <thead>
+                            <tr class="">
+                                <th></th>
+                                <th >Type</th>
+                                <th >Status</th>
+                                <th >Amount</th>
+                                <th >Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="transaction in listTransactions | filter:search.mysearch | orderBy:'id' " class=" ">
+                                <td><lx-icon lx-id="{{transaction.trantype=='JDEBIT' ? 'arrow-down-bold' : 'arrow-up-bold'}}" lx-size="m" lx-color="{{transaction.trantype=='JDEBIT' ? 'red' : 'green'}}" lx-type="circled"></lx-icon></td>
+                                <td >{{transaction.trantype}}</td>
+                                <td >{{transaction.transtatus}}</td>
+                                <td >{{transaction.tranamount }}</td>
+                                <td >{{transaction.trandate | dateFromDB : "YYYY-MM-DD"}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+</div>

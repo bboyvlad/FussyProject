@@ -1,0 +1,94 @@
+<!-- EDIT DIALOG -->
+
+<lx-dialog id="{{ dialogCheckpay }}" lx-size="m">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Deposit / Transfer
+            </span>
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+
+        <!-- EDIT FORM -->
+        <div class="row" >
+            <form name="editNotifyPay" novalidate>
+                <!--1{{fuser}} 2{{master}}-->
+                <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                    <!--<div flex-item="2"></div>-->
+                    <div flex-item="16">
+                        <div class="card" >
+                            <div class="p+">
+                                <!--[{"id":4,"paymethod":65,"bank":2,"relatedref":"9876542","inspaymethod":0,"insbank":"GISBEL L BRANCHI
+ A","insacctnum":"4989333873598794","insname":"BANK RIFEL","amount":65.88,"dcreate":1238472000000,"dupdate"
+ :1478750400000,"approved":false}]-->
+                                <div flex-container="row">
+                                    <div flex-item="6">
+                                        <span class="fs-subhead">Bank:</span>
+                                        <span class="fs-subhead display-block">{{ feditcheckpay.insname }}</span>
+                                    </div>
+                                    <div flex-item="6">
+                                        <span class="fs-subhead">Reference:</span>
+                                        <span class="fs-subhead display-block">{{ feditcheckpay.relatedref }}</span>
+                                    </div>
+                                </div>
+                                <div flex-container="row">
+                                    <div flex-item="6">
+                                        <span class="fs-subhead">Amount:</span>
+                                        <span class="fs-subhead display-block">{{ feditcheckpay.amount }}</span>
+                                    </div>
+                                    <div flex-item="6">
+                                        <span class="fs-subhead">Date:</span>
+                                        <span class="fs-subhead display-block">{{ feditcheckpay.dcreate | dateFromDB : "YYYY-MM-DD" }}</span>
+                                    </div>
+                                </div>
+                                <div flex-container="row">
+                                    <div flex-item>
+                                        <lx-checkbox
+                                                ng-model="feditcheckpay.approved"
+                                                lx-color="blue"
+                                                name="enabled"
+                                                ng-true-value="true"
+                                                ng-false-value="false">
+                                            Approved
+                                        </lx-checkbox>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="card__actions">
+                                <div class="p+">
+
+                                    &lt;!&ndash;<lx-button lx-color="red"
+                                               ng-click="reset()"
+                                    >Limpiar</lx-button>
+                                    <lx-button lx-color="green"
+                                               ng-click="userCreate($event, feditcheckpay)"
+                                               ng-disabled="sendbutton || editNotifyPay.$invalid"
+                                    >REGISTRAR</lx-button>&ndash;&gt;
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+        <div style="position: relative;">
+            <lx-progress lx-type="linear" lx-color="teal"
+                         ng-if="LinearProgress">
+            </lx-progress>
+        </div>
+        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>Close</lx-button>
+        <lx-button lx-color="green"
+                   ng-click="updatePaymentsRecieved($event, feditcheckpay)"
+                   ng-disabled="sendbutton || editNotifyPay.$invalid"
+        >Update</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>

@@ -1,0 +1,453 @@
+<!--"bankname": "BANK OF AMERICA",
+"bankacctnum": "13456789012345678902",
+"dcreate": null,
+"notes": "none",
+"enabled": true,-->
+<div class="row" flex-column="16" flex-gutter="24" flex-container="row">
+    <div class="p+" flex-item="2">
+    </div>
+    <div class="p+" flex-item="12">
+
+        <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="light-blue" lx-indicator="yellow">
+            <lx-tab lx-icon="content-save" lx-label="Add">
+
+                <!-- FORM TAB -->
+                <form name="BankManageForm" novalidate>
+                    <!--{{faddbankaccount}}
+                    user: {{user.id}}-->
+                    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                        <div flex-item="1">
+                        </div>
+                        <div flex-item="14">
+                            <div class="card" >
+                                <div class="card__img card__img--top bgc-jd">
+                                    <img ng-src="{{icon}}" width="100px" class="p+">
+                                    <p class="fs-headline tc-white-1 display-block" >Add Bank Account </p>
+                                </div>
+                                <div class="p+">
+                                    <!--<strong class="fs-headline display-block">Agregue Bank Accounts</strong>-->
+                                    <div class="paragraph fs-body-1 mt+">
+                                        <div class="p+ pt0">
+                                            <div flex-container="row">
+                                                <div flex-item>
+
+                                                    <lx-text-field
+                                                            lx-label="Bank account name"
+                                                            lx-valid="BankManageForm.bankname.$valid"
+                                                            lx-error="BankManageForm.bankname.$invalid && BankManageForm.bankname.$touched"
+                                                            lx-allow-clear="true">
+                                                        <input type="text" name="bankname" ng-required="true"
+                                                               ng-model="faddbankaccount.bankname" capitalize/>
+                                                    </lx-text-field>
+                                                    <div ng-messages="BankManageForm.bankname.$error"
+                                                         ng-if="BankManageForm.bankname.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Your bank account name is required</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+
+                                                    <lx-text-field
+                                                            lx-label="Bank number"
+                                                            lx-valid="BankManageForm.bankacctnum.$valid"
+                                                            lx-error="BankManageForm.bankacctnum.$invalid && BankManageForm.bankacctnum.$touched"
+                                                            lx-allow-clear="true">
+                                                        <input type="text" name="bankacctnum" ng-required="true"
+                                                               ng-model="faddbankaccount.bankacctnum"
+                                                               ng-pattern="regex"/>
+                                                    </lx-text-field>
+                                                    <div ng-messages="BankManageForm.bankacctnum.$error"
+                                                         ng-if="BankManageForm.bankacctnum.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Your bank account number is required</div>
+                                                        <div ng-message="pattern">Only numbers are allow</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-date-picker
+                                                            id="{{datePickerId}}"
+                                                            ng-model="faddbankaccount.dcreate"
+                                                            lx-input-format="YYYY-MM-DD"
+                                                            lx-callback="datePickerCallback(faddbankaccount.dcreate)"
+                                                            locale="es"
+                                                            >
+                                                        <lx-text-field
+                                                                lx-valid="BankManageForm.dcreate.$valid"
+                                                                lx-error="BankManageForm.dcreate.$invalid && BankManageForm.dcreate.$touched"
+                                                                lx-allow-clear="true"
+                                                                lx-label="Creation Date">
+                                                            <input type="text" name="dcreate"
+                                                                   ng-model="faddbankaccount.datePicker.dateFormatted"
+                                                                   ng-required="true" />
+                                                        </lx-text-field>
+                                                    </lx-date-picker>
+                                                    <div ng-messages="BankManageForm.dcreate.$error"
+                                                         ng-if="BankManageForm.dcreate.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">No Olvides de colocar la fecha estimada de salida</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div flex-container="row">
+                                                <div flex-item>
+
+                                                    <lx-text-field
+                                                            lx-label="Bank account note"
+                                                            lx-valid="BankManageForm.notes.$valid"
+                                                            lx-error="BankManageForm.notes.$invalid && BankManageForm.notes.$touched"
+                                                            lx-allow-clear="true">
+                                                        <textarea type="text" name="notes"
+                                                               ng-model="faddbankaccount.notes" ></textarea>
+                                                    </lx-text-field>
+                                                    <!--<div ng-messages="BankManageForm.notes.$error"
+                                                         ng-if="BankManageForm.notes.$touched"
+                                                         style="color:maroon"
+                                                         role="alert">
+                                                        <div ng-message="required">Your bank account name is required</div>
+                                                    </div>-->
+                                                </div>
+                                            </div>
+
+                                            <div flex-container="row">
+                                                <div flex-item>
+                                                    <lx-checkbox
+                                                    ng-model="faddbankaccount.enabled"
+                                                    lx-color="blue"
+                                                    name="enabled"
+                                                    ng-true-value="true"
+                                                    ng-false-value="false"
+                                                    ng-required="true">
+                                                        Enable
+                                                    </lx-checkbox>
+                                                </div>
+                                                <div ng-messages="BankManageForm.enabled.$error"
+                                                     ng-if="BankManageForm.enabled.$touched"
+                                                     style="color:maroon"
+                                                     role="alert">
+                                                    <div ng-message="required">The bank account status is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card__actions" flex-container="row" flex-column="16" flex-gutter="24">
+                                    <div class="p+" flex-item="5"></div>
+                                    <div class="p+">
+                                        <div style="position: relative;">
+                                            <lx-progress lx-type="linear" lx-color="teal"
+                                                         ng-if="LinearProgress">
+                                            </lx-progress>
+                                        </div>
+                                        <lx-button lx-color="red"
+                                                   ng-click="reset()"
+                                        >Limpiar</lx-button>
+                                        <lx-button lx-color="green"
+                                                   ng-click="openDialogCoordinates()"
+                                                   ng-disabled="sendbutton || BankManageForm.$invalid">
+                                            SALVAR</lx-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </lx-tab>
+
+            <lx-tab lx-icon="airplane" lx-label="Manage">
+
+                <!-- DATATABLE TAB -->
+                <div flex-item="4">
+                    <div class="card">
+                        <div class="toolbar">
+                            <lx-search-filter>
+                                <input type="text" name="mysearch" ng-model="search.mysearch"
+                                       ng-model-options="{ debounce : 400 }" placeholder="Search User">
+                            </lx-search-filter>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-table-container">
+                    <!--<header class="data-table-header">
+                        <div class="data-table-header__label">
+                            <span class="fs-title">Bank Accounts</span>
+                        </div>
+                    </header>-->
+
+                    <table class="data-table">
+                        <thead>
+                        <tr class="">
+                            <th >Bank</th>
+                            <th >Account</th>
+                            <th >Creation date</th>
+                            <th >Status</th>
+                            <th  >Edit</th>
+                            <th  >Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-if="!search.mysearch==''" ng-repeat="bankaccu in listBankAccount | filter:search.mysearch | orderBy:'bankid'" class=" ">
+                            <td >{{bankaccu.bankname}}</td>
+                            <td >{{bankaccu.bankacctnum}}</td>
+                            <td >{{bankaccu.dcreate | dateFromDB : "YYYY-MM-DD"}}</td>
+                            <td >{{bankaccu.enabled}}</td>
+                            <td >
+                                <lx-icon ng-click="openDialogBankAccount(bankaccu)" lx-id="lead-pencil" lx-size="m" lx-color="blue" lx-type="circled"></lx-icon>
+                            </td>
+                            <td >
+                                <lx-icon ng-click="deleteBankAccount(bankaccu)" lx-id="delete" lx-size="m" lx-color="red" lx-type="circled"></lx-icon>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- EDIT DIALOG -->
+
+                <lx-dialog id="{{ dialogBankAccount }}">
+                    <lx-dialog-header>
+                        <div class="toolbar bgc-primary pl++">
+                            <span class="toolbar__label tc-white fs-title">
+                                Bank Accounts
+                            </span>
+
+                        </div>
+                    </lx-dialog-header>
+
+                    <lx-dialog-content>
+
+                        <!-- EDIT FORM -->
+                        <form name="editBankManageForm" novalidate>
+                            <!--{{faddbankaccount}}
+                            user: {{user.id}}-->
+                            <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                                <div flex-item="2"></div>
+                                <div flex-item="12">
+                                    <div class="card" >
+                                        <div class="card__img card__img--top bgc-jd">
+                                            <img ng-src="{{icon}}" width="100px" class="p+">
+                                            <p class="fs-headline tc-white-1 display-block" >Edit Bank Account </p>
+                                        </div>
+                                        <div class="p+">
+                                            <!--<strong class="fs-headline display-block">Agregue Bank Accounts</strong>-->
+                                            <div class="paragraph fs-body-1 mt+">
+                                                <div class="p+ pt0">
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank account name"
+                                                                    lx-valid="editBankManageForm.bankname.$valid"
+                                                                    lx-error="editBankManageForm.bankname.$invalid && editBankManageForm.bankname.$touched"
+                                                                    lx-allow-clear="true">
+                                                                <input type="text" name="bankname"
+                                                                       ng-required="true"
+                                                                       ng-model="feditbankaccount.bankname"
+                                                                       capitalize/>
+                                                            </lx-text-field>
+                                                            <div ng-messages="editBankManageForm.bankname.$error"
+                                                                 ng-if="editBankManageForm.bankname.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account name is required</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank number"
+                                                                    lx-valid="editBankManageForm.bankacctnum.$valid"
+                                                                    lx-error="editBankManageForm.bankacctnum.$invalid && editBankManageForm.bankacctnum.$touched"
+                                                                    lx-allow-clear="true">
+                                                                <input type="text"
+                                                                       name="bankacctnum"
+                                                                       ng-required="true"
+                                                                       ng-model="feditbankaccount.bankacctnum"
+                                                                       ng-pattern="regex"/>
+                                                            </lx-text-field>
+                                                            <div ng-messages="editBankManageForm.bankacctnum.$error"
+                                                                 ng-if="editBankManageForm.bankacctnum.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account number is required</div>
+                                                                <div ng-message="pattern">Only numbers are allow</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+                                                            <lx-date-picker
+                                                                    id="{{datePickerId}}"
+                                                                    ng-model="feditbankaccount.dcreate"
+                                                                    lx-input-format="YYYY-MM-DD"
+                                                                    lx-callback="datePickerCallback(feditbankaccount.dcreate, 'update')"
+                                                                    locale="es"
+                                                                    lx-valid="editBankManageForm.dcreate.$valid"
+                                                                    lx-error="editBankManageForm.dcreate.$invalid && editBankManageForm.dcreate.$touched">
+                                                                <lx-text-field lx-allow-clear="true" lx-label="Fecha de Creación">
+                                                                    <input type="text" name="dcreate"
+                                                                           ng-model="feditbankaccount.datePicker.dateFormatted" ng-required="true" />
+                                                                </lx-text-field>
+                                                            </lx-date-picker>
+                                                            <div ng-messages="editBankManageForm.dcreate.$error"
+                                                                 ng-if="editBankManageForm.dcreate.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">No Olvides de colocar la fecha estimada de salida</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+
+                                                            <lx-text-field
+                                                                    lx-label="Bank account note"
+                                                                    lx-valid="editBankManageForm.notes.$valid"
+                                                                    lx-error="editBankManageForm.notes.$invalid && editBankManageForm.notes.$touched"
+                                                                    lx-allow-clear="true">
+                                                        <textarea type="text" name="notes"
+                                                                  ng-model="feditbankaccount.notes" ></textarea>
+                                                            </lx-text-field>
+                                                            <!--<div ng-messages="editBankManageForm.notes.$error"
+                                                                 ng-if="editBankManageForm.notes.$touched"
+                                                                 style="color:maroon"
+                                                                 role="alert">
+                                                                <div ng-message="required">Your bank account name is required</div>
+                                                            </div>-->
+                                                        </div>
+                                                    </div>
+
+                                                    <div flex-container="row">
+                                                        <div flex-item>
+                                                            <lx-checkbox
+                                                                    ng-model="feditbankaccount.enabled"
+                                                                    lx-color="blue"
+                                                                    name="enabled"
+                                                                    ng-true-value="true"
+                                                                    ng-false-value="false"
+                                                                    ng-required="true">
+                                                                Enable
+                                                            </lx-checkbox>
+                                                        </div>
+                                                        <div ng-messages="editBankManageForm.enabled.$error"
+                                                             ng-if="editBankManageForm.enabled.$touched"
+                                                             style="color:maroon"
+                                                             role="alert">
+                                                            <div ng-message="required">The bank account status is required</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </lx-dialog-content>
+
+                    <lx-dialog-footer>
+                        <lx-progress lx-type="circular" lx-color="teal"
+                                     ng-if="LinearProgress">
+                        </lx-progress>
+                        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>Cerrar</lx-button>
+                        <lx-button lx-color="green"
+                                   ng-click="updateBankAccount($event, feditbankaccount)"
+                                   ng-disabled="sendbutton || editBankManageForm.$invalid">
+                            SALVAR</lx-button>
+                    </lx-dialog-footer>
+                </lx-dialog>
+
+            </lx-tab>
+
+        </lx-tabs>
+
+    </div>
+
+</div>
+
+<lx-dialog id="{{ dialogCoordinates }}" lx-size="s">
+    <lx-dialog-header>
+        <div class="toolbar bgc-primary pl++">
+            <span class="toolbar__label tc-white fs-title">
+                Check Coordinates
+            </span>
+
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+        <!--{{coord1}}-->
+
+
+        <div class="p+">
+            <div class="card">
+                <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+                    <div flex-item="6" class="p+">
+
+                        <div class="paragraph fs-body-1 mt+">
+                            <form name="formCoordinates" novalidate>
+                                <div flex-container="row">
+                                    <div flex-item="2" class="p+">
+                                        <lx-text-field lx-label="{{coord1.key}}"
+                                                       lx-valid="formCoordinates.coord1.$valid"
+                                                       lx-error="formCoordinates.coord1.$invalid && formCoordinates.coord1.$touched">
+                                            <input type="text" name="coord1" ng-model="coord1.val" capitalize>
+                                        </lx-text-field>
+                                        <div ng-messages="formCoordinates.coord1.$error"
+                                             ng-if="formCoordinates.coord1.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">This field must be fill</div>
+                                        </div>
+                                    </div>
+                                <!--</div>
+                                {{coord2}}
+                                <div flex-container="row">-->
+                                    <div flex-item="2" class="p+">
+                                        <lx-text-field lx-label="{{coord2.key}}"
+                                                       lx-valid="formCoordinates.coord2.$valid"
+                                                       lx-error="formCoordinates.coord2.$invalid && formCoordinates.coord2.$touched">
+                                            <input type="text" name="coord2" ng-model="coord2.val" capitalize>
+                                        </lx-text-field>
+                                        <div ng-messages="formCoordinates.coord2.$error"
+                                             ng-if="formCoordinates.coord2.$touched"
+                                             style="color:maroon"
+                                             role="alert">
+                                            <div ng-message="required">This field must be fill</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+        <lx-button lx-color="black" lx-type="flat" lx-dialog-close>Cerrar</lx-button>
+        <lx-button lx-color="black" lx-type="flat" ng-click="BankAccountCreate($event, faddbankaccount)">Enviar</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
+
+
+

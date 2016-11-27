@@ -1,0 +1,265 @@
+body {
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial;
+    min-width:500px !important;
+}
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+.subtlepattern {
+    background: rgba(0, 0, 0, 0.3) url("/css/img/backgrounds/gplaypattern.png") repeat scroll 0 0 !important
+}
+
+.card__img--top p{
+    bottom: 16px;
+    /*left: 16px;*/
+    position: absolute;
+    right: 16px;
+}
+table td {
+    /*word-break: break-all;
+    word-wrap: break-word;*/
+    overflow-wrap: break-word;
+}
+/*****************************************/
+/*********** ANIMATIONS - START **********/
+/*****************************************/
+
+/* fade */
+
+@-webkit-keyframes fade {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+@keyframes fade {
+    from { opacity: 1; }
+    to { opacity: 0;  }
+}
+
+.view.ng-leave 	{ z-index:9999; }
+.view.ng-enter 	{ z-index:8888; }
+.ng-enter-prepare {
+    opacity: 0;
+}
+/* View 1 animations for page leave and enter */
+
+/******** DASHBOARD **********/
+.aircraft.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.aircraft.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.captain.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.captain.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.cardcheck.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.cardcheck.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.cart.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.cart.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.addgiftcard.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.addgiftcard.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.redeemgiftcard.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.redeemgiftcard.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.addjdcard.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.addjdcard.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.refilljdcard.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.refilljdcard.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.paymethod.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.paymethod.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.pilot.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.pilot.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+/******** DASHBOARD **********/
+
+/******** USERS **********/
+.manage.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.manage.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+
+.loginpage.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.loginpage.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.singup.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.singup.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+/******** USERS **********/
+
+.index.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.index.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.dashboard.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.dashboard.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.bankaccount.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.bankaccount.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.notifypay.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.notifypay.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+.balancedetails.ng-leave         {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+
+}
+.balancedetails.ng-enter 		{
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+}
+
+/*.divCartAnimation.ng-leave {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+    overflow: hidden;
+}
+.divCartAnimation.ng-enter {
+    -webkit-animation:fade .8s ease both;
+    -moz-animation:fade .8s ease both;
+    animation:fade .8s ease both;
+    overflow: hidden;
+}*/
+/***************************************/
+/*********** ANIMATIONS - END **********/
+/***************************************/

@@ -1,0 +1,198 @@
+<!--
+{"fuelCardCode":"5000131305171004","estatus":"***DECLINE***","cardCode":"1004","cardName":"ABRAHAM PALACIOS","aircraftCode":"N2666J"} }
+
+ng-class="{ 'text-field&#45;&#45;error': lxTextField.error,  'text-field&#45;&#45;theme-light': !lxTextField.theme || lxTextField.theme === '***DECLINE***', 'bgc-danger': cardStatus.estatus === '***DECLINE***' }"
+
+-->
+
+<lx-dialog id="{{ dialogValidate }}"
+           lx-size="s">
+    <lx-dialog-header>
+        <div class="toolbar pl++"
+             ng-class="{ 'bgc-red-A100': cardStatus.estatus === '***DECLINE***' || cardBalance.estatus === '***DECLINE***', 'bgc-light-green-400': cardStatus.estatus === 'PASS' || cardBalance.estatus === 'PASS' }">
+            <span class="toolbar__label tc-white fs-title">
+                J&amp;D Fuel Card : {{fcardcheck.jdcardcode}} - {{cardStatus.estatus || cardBalance.estatus}}
+                <p class="p+" ng-if="cardStatus.estatus === '***DECLINE***' || cardBalance.estatus === '***DECLINE***'"> Card not valid for consumption!!! please contact CAC@jdoilfield.com </p>
+                <p class="p+" ng-if="cardStatus.estatus === 'PASS' || cardBalance.estatus === 'PASS'"> Card valid for consumption </p>
+            </span>
+
+        </div>
+    </lx-dialog-header>
+
+    <lx-dialog-content>
+
+
+
+        <div class="p+">
+            <div class="card">
+                <div class="p+" ng-if="cardStatus">
+                    <strong class="fs-headline display-block">Status</strong>
+
+                    <div class="paragraph fs-body-1 mt+">
+                        <!--<p>
+                            {{cardStatus}}
+                        </p>-->
+
+                        <div class="data-table-container">
+
+                            <table class="data-table">
+                                <thead>
+                                <tr >
+                                    <th>Card Code</th>
+                                    <th>Status</th>
+                                    <th>Card owner</th>
+                                    <th>Aircraft Plate</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr >
+                                    <td>{{cardStatus.fuelCardCode}}</td>
+                                    <td>{{cardStatus.estatus}}</td>
+                                    <td>{{cardStatus.cardName}}</td>
+                                    <td>{{cardStatus.aircraftCode}}</td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="p+" ng-if="cardBalance">
+                    <strong class="fs-headline display-block">Balance</strong>
+<!--{"id":35689,"fuelCardCode":"5000131305171004","estatus":"***DECLINE***","cardCode":"1004","cardName":"ABRAHAM PALACIOS","aircraftCode":"N2666J","sagroup":"---","sacurrency":"Bs.","sabalance":75000,"sacreditcondition":"07 days Credit","saNdays":0,"saAccumulated":0,"saQttinv":0,"ltdgroup":"***DOUBTFUL***","ltdcurrency":"USD","ltdbalance":-4340,"ltdcreditcondition":"07 days Credit","ltdNdays":857,"ltdAccumulated":4340,"ltdQttinv":5,"incgroup":"---","inccurrency":"---","incbalance":0,"inccredit-->
+                    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+
+                        <div class="paragraph fs-body-1 mt+">
+                            <div class="data-table-container">
+
+                                <table class="data-table">
+                                    <thead>
+                                    <tr >
+                                        <th>Card Code</th>
+                                        <th>Status</th>
+                                        <th>Card owner</th>
+                                        <th>Aircraft Plate</th
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr >
+                                        <td>{{cardBalance.fuelCardCode}}</td>
+                                        <td>{{cardBalance.estatus}}</td>
+                                        <td>{{cardBalance.cardName}}</td>
+                                        <td>{{cardBalance.aircraftCode}}</td>
+
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <table class="data-table">
+                                    <caption>J&amp;D Oilfield S.A</caption>
+                                    <thead>
+                                    <tr >
+                                        <th>Group</th>
+                                        <th>Currency</th>
+                                        <th>Balance</th>
+                                        <th>Credit Condition</th>
+                                        <th>Days</th>
+                                        <th>Accumulated</th>
+                                        <th>Qttinv</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr >
+                                        <td>{{cardBalance.sagroup}}</td>
+                                        <td>{{cardBalance.sacurrency}}</td>
+                                        <td>{{cardBalance.sabalance}}</td>
+                                        <td>{{cardBalance.sacreditcondition}}</td>
+                                        <td>{{cardBalance.saNdays}}</td>
+                                        <td>{{cardBalance.saAccumulated}}</td>
+                                        <td>{{cardBalance.saQttinv}}</td>
+
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <table class="data-table">
+                                    <caption>J&amp;D Oilfield LTD.</caption>
+                                    <thead>
+                                    <tr >
+                                        <th>Group</th>
+                                        <th>Currency</th>
+                                        <th>Balance</th>
+                                        <th>Credit Condition</th>
+                                        <th>Days</th>
+                                        <th>Accumulated</th>
+                                        <th>Qttinv</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr >
+                                        <td>{{cardBalance.ltdgroup}}</td>
+                                        <td>{{cardBalance.ltdcurrency}}</td>
+                                        <td>{{cardBalance.ltdbalance}}</td>
+                                        <td>{{cardBalance.ltdcreditcondition}}</td>
+                                        <td>{{cardBalance.ltdNdays}}</td>
+                                        <td>{{cardBalance.ltdAccumulated}}</td>
+                                        <td>{{cardBalance.ltdQttinv}}</td>
+
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <table class="data-table">
+                                    <caption>J&amp;D Oilfield INC.</caption>
+                                    <thead>
+                                    <tr >
+                                        <th>Group</th>
+                                        <th>Currency</th>
+                                        <th>Balance</th>
+                                        <th>Credit Condition</th>
+                                        <th>Days</th>
+                                        <th>Accumulated</th>
+                                        <th>Qttinv</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr >
+                                        <td>{{cardBalance.incgroup}}</td>
+                                        <td>{{cardBalance.inccurrency}}</td>
+                                        <td>{{cardBalance.incbalance}}</td>
+                                        <td>{{cardBalance.inccreditcondition}}</td>
+                                        <td>{{cardBalance.incNdays}}</td>
+                                        <td>{{cardBalance.incAccumulated}}</td>
+                                        <td>{{cardBalance.incQttinv}}</td>
+
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+    </lx-dialog-content>
+
+    <lx-dialog-footer>
+
+        <lx-button lx-color="black" lx-type="flat" ng-click="reset()" lx-dialog-close>Cerrar</lx-button>
+    </lx-dialog-footer>
+</lx-dialog>
