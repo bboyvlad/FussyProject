@@ -670,6 +670,48 @@ public class ServicerequestController {
 
     }
 
+    @RequestMapping(value = "/manage/isreleased/{id}",method = RequestMethod.POST)
+    public @ResponseBody String[] generateRelesease(@PathVariable long id) throws MessagingException {
+
+        System.out.println("id "+id);
+        Servicerequest sr = servicerequestRepository.findOne(id);
+        Principal Pp = principalRepository.findOne(sr.getPrincipal());
+
+        if(sr.isClosed()){
+            System.out.println("lo siento, no puedo hacer release a un servicerequest cerrado");
+            return new String[]{"message","failure"};
+        }
+
+        sr.setReleased(true);
+        if(sr.getDlanding().before(new Date()) || sr.getDlanding().equals(new Date()) ){ // si el sr es antes de hoy
+
+             /*Se envia el correo al cliente*/
+            MimeMessage msg = mailSender.createMimeMessage();
+
+            // use the true flag to indicate you need a multipart message
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+            helper.setTo(Pp.getEmail());
+            helper.setText("Estimado "+Pp.getName()+" "+Pp.getLastname()+", hemos validado satisfactoriamente su service request ");
+
+            helper.setSubject("Tu service request se ha validado");
+
+            // let's attach the infamous windows Sample file (this time copied to c:/)
+            FileSystemResource file = new FileSystemResource(java.lang.System.getProperty("user.home")+"/fussyfiles/principal/"+sr.getSerialcode()+".pdf");
+
+            helper.addAttachment(sr.getSerialcode()+".pdf", file);
+
+            mailSender.send(msg);
+
+            servicerequestRepository.save(sr);
+
+            return new String[]{"message","success"};
+
+        }else{
+            System.out.println("Fecha fuera del periodo");
+            return new String[]{"message","failure"};
+        }
+    }
+
     @RequestMapping(value = "/manage/all",method = RequestMethod.GET)
     public @ResponseBody List<Servicerequest> showServicesRequests(){
         try{
