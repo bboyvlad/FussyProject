@@ -253,12 +253,11 @@ public class ServicerequestController {
             c.setTime(fechaActual);
             c.add(Calendar.DATE, 15);
 
-            String serialcode="svc_"+utils.getCadenaAlfaNumAleatoria(15);
+
 
             servicerequest.setDexpired(c.getTime());
             servicerequest.setDlanding(shopcart[0].getDlanding());
             servicerequest.setReleased(false);
-            servicerequest.setSerialcode(serialcode);
 
             if(serviceamount[0]<= paymethod[0].getPayavailable()){ //verifico si tiene saldo disponible
 
@@ -270,13 +269,22 @@ public class ServicerequestController {
                 System.out.println("Tiene saldo");
                 System.out.println("balance "+paymethod[0].getPaybalance());
                 System.out.println("Monto operacion "+serviceamount[0]);
-                System.out.println(serialcode);
 
                 Location airport=loc.findOne(shopcart[0].getLocation());
                 servicerequest.setItems(itemsrequest);
 
                 //servicerequestRepository.save(servicerequest);
                 servicerequestRepository.saveAndFlush(servicerequest);
+
+                Calendar fecha = new GregorianCalendar();
+                int anno = fecha.get(Calendar.YEAR);
+
+
+                String serialcode="SR-"+anno+"-"+servicerequest.getPrincipal()+""+servicerequest.getId();
+                System.out.println(serialcode);
+                servicerequest.setSerialcode(serialcode);
+
+                servicerequestRepository.save(servicerequest);
 
                 /*genera el pdf*/
 
@@ -305,6 +313,7 @@ public class ServicerequestController {
 
                 params.put("mpound",aircraftGo[0].getMtow());
                 params.put("serialcode",serialcode);
+                params.put("airmodel",aircraftGo[0].getModel());
 
                 JRBeanCollectionDataSource beanCollectionDataSource=new JRBeanCollectionDataSource(irequestDTOs);
 
@@ -639,6 +648,7 @@ public class ServicerequestController {
         params.put("craftype",aircraftGo[0].getCraftype());
         params.put("mpound",aircraftGo[0].getMtow());
         params.put("serialcode",ticket.getSerialcode());
+        params.put("airmodel",aircraftGo[0].getModel());
 
         //Le doy un orden a los items, para que el report pueda agrupar los resultados correctamente
         Collections.sort(iticketDTOs,(dto1,dto2)->
