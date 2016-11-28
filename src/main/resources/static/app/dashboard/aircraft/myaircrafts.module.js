@@ -5,8 +5,8 @@
 
 var myaircrafts = angular.module('MyAirCraft', ['ngRoute', 'ngMessages']);
 
-myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'aircraftResource', 'LxDialogService', 'LxNotificationService', 'userResource',
-    function MyAirCraftsController($rootScope, $scope, $http, $aircraft, myJdMenu, helperFunc, aircraftResource, LxDialogService, LxNotificationService, userResource) {
+myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http', '$location', 'myJdMenu', 'helperFunc', 'aircraftResource', 'LxDialogService', 'LxNotificationService', 'userResource', '$translate', '$filter',
+    function MyAirCraftsController($rootScope, $scope, $http, $aircraft, myJdMenu, helperFunc, aircraftResource, LxDialogService, LxNotificationService, userResource, $translate, $filter) {
         $scope.cssClass = 'aircraft';
         $scope.icon = '../css/icons/plane-flying.png';
         var self = this;
@@ -145,7 +145,8 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
             then(
                 function (data) {
                     console.log("Updated!!" + data);
-                    LxNotificationService.success('Update successful!!!');
+                    $scope.sms1 = $filter('translate')('aircraft.module.sms1');
+                    LxNotificationService.success($scope.sms1);
                     $scope.listAircraft = aircraftResource.usersAircraft();
                     $scope.reset();
                     //$location.path("/dashboard");
@@ -177,13 +178,15 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                 function (data) {
                     console.log("Saved!!" + data.toString());
                     if(data.message == "Error en la operacion"){
-                        LxNotificationService.error('Error in the Operation , the update didn\'t complete !!!');
+                        $scope.sms2 = $filter('translate')('aircraft.module.sms2');
+                        LxNotificationService.error($scope.sms2);
                         self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                         self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                         //self.helperFuncBar();
                         return;
                     }
-                    LxNotificationService.success('Aircraft created successfully!!!');
+                    $scope.sms3 = $filter('translate')('aircraft.module.sms3');
+                    LxNotificationService.success($scope.sms3);
                     $scope.listAircraft = aircraftResource.usersAircraft();
                     $scope.reset();
                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
@@ -205,10 +208,11 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
             this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
             this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
             console.log(data.toSource());
-            LxNotificationService.confirm('Erase Aircraft', 'Please confirm that you wish to erase this Aircraft.',
+            $scope.sms4 = $filter('translate')('aircraft.module.sms4');
+            LxNotificationService.confirm($scope.sms4, $scope.sms5,
                 {
-                    cancel: 'Cancel',
-                    ok: 'Delete'
+                    cancel: $filter('translate')('aircraft.module.btn1'),
+                    ok: $filter('translate')('aircraft.module.btn2')
                 }, function(answer)
                 {
                     if (answer)
@@ -218,13 +222,15 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                             function (data) {
                                 console.log("Erased!!" + data.toString());
                                 if(data.message == "Error en la operation"){
-                                    LxNotificationService.error('Error in the operation, the elimination didn\'t complete !!!');
+                                    $scope.sms6 = $filter('translate')('aircraft.module.sms6');
+                                    LxNotificationService.error($scope.sms6);
                                     self.LinearProgress = helperFunc.toogleStatus(self.LinearProgress);
                                     self.sendbutton = helperFunc.toogleStatus(self.sendbutton);
                                     //self.helperFuncBar();
                                     return;
                                 }
-                                LxNotificationService.success('Aircraft, Deleted successfully!!!');
+                                $scope.sms7 = $filter('translate')('aircraft.module.sms7');
+                                LxNotificationService.success($scope.sms7);
                                 $scope.listAircraft = aircraftResource.usersAircraft();
                                 //$scope.faircrafts = [];
                                 //$location.path("/dashboard");
@@ -239,7 +245,8 @@ myaircrafts.controller('MyAirCraftsController', ['$rootScope','$scope', '$http',
                     }
                     else
                     {
-                        LxNotificationService.error('Disagree');
+                        $scope.sms8 = $filter('translate')('aircraft.module.sms8');
+                        LxNotificationService.error($scope.sms8);
                         this.LinearProgress = helperFunc.toogleStatus(this.LinearProgress);
                         this.sendbutton = helperFunc.toogleStatus(this.sendbutton);
                     }

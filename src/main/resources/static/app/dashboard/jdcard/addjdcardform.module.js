@@ -81,8 +81,8 @@ addjdcard.controller('AddJdCardController', ['$rootScope','$scope', '$http', '$l
 
                     $scope.sms3 = $filter('translate')('jdcard.add.module.sms3');
                     $scope.sms4 = $filter('translate')('jdcard.add.module.sms4');
-                    LxNotificationService.alert($scope.sms4,
-                        $scope.sms5,
+                    LxNotificationService.alert("J&D Card "+$scope.sms3,
+                        $scope.sms4+" J&D Card!",
                         'Ok',
                         function(answer)
                         {

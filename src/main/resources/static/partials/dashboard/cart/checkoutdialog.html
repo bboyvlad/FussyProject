@@ -28,24 +28,26 @@
                         <ul class="list mt++" ng-show="sCart.items">
                             <li class="list-row " ng-repeat=" item in sCart.items">
                                 <div class="list-row__content">
-                    <span class="display-block">
-                        {{item.pricename}}
-                    </span>
+                                    <span class="display-block">
+                                        {{item.pricename}}
+                                    </span>
                                     <span class="display-block fs-body-1 tc-black-2">
-                        {{item.pricedesc}} - subtotal: {{item.totalprice}}
-                    </span>
+                                        {{item.pricedesc}} - subtotal: {{item.totalprice | currency:"USD$"}}
+                                    </span>
                                 </div>
                             </li>
+                            <li>
+                                <div class="divider divider--dark"></div>
+                                TOTAL: {{ total | currency:"USD$"}}
+                            </li>
                         </ul>
-                        TOTAL: {{ total }}
 
                         <form name="checkOutForm" novalidate>
                             <!--user id: {{user.id}}
                             {{fcheckout}}-->
                             <!--{{jdcardOpts}}-->
                             <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
-                                <div flex-item="12">
-
+                                <div flex-item="16">
                                     <div class="card">
                                         <div class="p+">
                                             <strong class="fs-headline display-block">Choose a J&amp;D Card</strong>
@@ -80,13 +82,10 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </form>

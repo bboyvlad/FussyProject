@@ -74,10 +74,13 @@
             <div flex-item="8">
                 <div class="card" >
                     <div class="card__img card__img--top">
-                        <img th:src="@{/css/img/Fuelcard.jpg}"
-                             src="/css/img/Fuelcard.jpg"
-                             ng-src="/css/img/Fuelcard.jpg" />
-                        <!--<span class="fs-headline tc-white-1 display-block">Lorem Ipsum</span>-->
+                        <img th:src="@{/css/img/Fuelcard_empty.png}"
+                             src="/css/img/Fuelcard_empty.png"
+                             ng-src="/css/img/Fuelcard_empty.png" />
+                        <span class="fs-headline tc-white-1 display-block emboss ccname_text">
+                            {{frfilljdcard.jdcardSelected.paycardname}}</span>
+                        <span class="fs-headline tc-white-1 display-block emboss ccnumber_text">
+                            {{frfilljdcard.jdcardSelected.payacctnum | tdcmask}}</span>
                     </div>
                     <div class="p+">
                         <strong class="fs-headline display-block">{{'jdcard.refill.card2.title' | translate}} J&amp;D Card</strong>

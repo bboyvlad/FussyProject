@@ -6,7 +6,7 @@
     <div class="p+" flex-item="12">
 
         <lx-tabs class=" bgc-grey-100" lx-theme="dark" lx-color="blue" lx-indicator="orange">
-            <lx-tab lx-icon="content-save" lx-label="Add">
+            <lx-tab lx-icon="content-save" lx-label="{{ 'aircraft.tabs.tab1' | translate}}">
                 <!--{{user.id}}
 
                 {{faircrafts}}-->
@@ -17,10 +17,10 @@
                             <div class="card" >
                                 <div class="card__img card__img--top bgc-jd">
                                     <img ng-src="{{icon}}" width="100px" class="p+">
-                                    <p class="fs-headline tc-white-1 display-block" >Add aircraft </p>
+                                    <p class="fs-headline tc-white-1 display-block" >{{ 'aircraft.card1.headline' | translate}} </p>
                                 </div>
                                 <div class="p+">
-                                    <strong class="fs-headline display-block">New aircraft</strong>
+                                    <strong class="fs-headline display-block">{{ 'aircraft.card1.title' | translate}}</strong>
                                     <!--1{{faircrafts}}2{{faircrafts}}-->
                                     <div class="paragraph fs-body-1 mt+">
                                         <div class="p+ pt0">
@@ -43,7 +43,7 @@
                                                                     ng-change="setAircraftModelId(newValue)"
                                                                     lx-loading="selectAjax.loading"
                                                                     ng-required="true"
-                                                                    lx-label="Aircrafts">
+                                                                    lx-label="{{ 'aircraft.form1.f1' | translate}}">
                                                                 <lx-select-selected>
                                                                      {{ $selected.name }} - {{ $selected.manufacture }} - {{ $selected.craftype }}
                                                                 </lx-select-selected>
@@ -56,7 +56,7 @@
                                                                  ng-if="AircraftForm.aircraftmodel.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Choose your aircraft</div>
+                                                                <div ng-message="required">{{ 'aircraft.form1.f1error.e1' | translate}}</div>
                                                             </div>
                                                         <!--</div>
                                                     </div>-->
@@ -68,7 +68,7 @@
                                                 </div>
                                                 <div flex-item="8">
                                                     <div flex-item>
-                                                        <lx-text-field lx-label="Tail number"
+                                                        <lx-text-field lx-label="{{ 'aircraft.form1.f2' | translate}}"
                                                                        lx-valid="AircraftForm.tailnumber.$valid"
                                                                        lx-error="AircraftForm.tailnumber.$invalid && AircraftForm.tailnumber.$touched">
                                                             <input type="text"
@@ -81,7 +81,7 @@
                                                              ng-if="AircraftForm.tailnumber.$touched"
                                                              style="color:maroon"
                                                              role="alert">
-                                                            <div ng-message="required">Don't forget to enter the tail number</div>
+                                                            <div ng-message="required">{{ 'aircraft.form1.f2error.e1' | translate}}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -100,7 +100,7 @@
                                                             lx-valid="AircraftForm.aviationtype.$valid"
                                                             lx-error="AircraftForm.aviationtype.$invalid && AircraftForm.aviationtype.$touched"
                                                             ng-required="true"
-                                                            lx-label="Aviation type">
+                                                            lx-label="{{ 'aircraft.form1.f3' | translate}}">
                                                         <lx-select-selected>
                                                             {{ $selected.value }}
                                                         </lx-select-selected>
@@ -113,7 +113,7 @@
                                                          ng-if="AircraftForm.aviationtype.$touched"
                                                          style="color:maroon"
                                                          role="alert">
-                                                        <div ng-message="required">Choose an aviation type</div>
+                                                        <div ng-message="required">{{ 'aircraft.form1.f3error.e1' | translate}}</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -122,7 +122,7 @@
                                                 </div>
                                                 <div flex-item="8">
                                                     <div flex-item>
-                                                        <lx-text-field lx-label="Name"
+                                                        <lx-text-field lx-label="{{ 'aircraft.form1.f4' | translate}}"
                                                                        lx-valid="AircraftForm.aircraftname.$valid"
                                                                        lx-error="AircraftForm.aircraftname.$invalid && AircraftForm.aircraftname.$touched">
                                                             <input type="text"
@@ -134,7 +134,7 @@
                                                              ng-if="AircraftForm.aircraftname.$touched"
                                                              style="color:maroon"
                                                              role="alert">
-                                                            <div ng-message="required">Don't forget to enter the tail number</div>
+                                                            <div ng-message="required">{{ 'aircraft.form1.f4error.e1' | translate}}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -145,20 +145,20 @@
                                                 </div>
                                                 <div flex-item="8">
                                                     <span class="fs-title display-block">
-                                                            Enable aircraft:
+                                                            {{ 'aircraft.form1.f5' | translate}}:
                                                             <lx-radio-group class="mt+">
                                                                 <lx-radio-button
                                                                         name="test2"
                                                                         value="true"
                                                                         ng-model="faircrafts.active">
-                                                                    <lx-radio-button-label>Active</lx-radio-button-label>
+                                                                    <lx-radio-button-label>{{ 'aircraft.form1.f5label.l1' | translate}}</lx-radio-button-label>
                                                                 </lx-radio-button>
 
                                                                 <lx-radio-button
                                                                         name="test2"
                                                                         value="false"
                                                                         ng-model="faircrafts.active">
-                                                                    <lx-radio-button-label>Inactive</lx-radio-button-label>
+                                                                    <lx-radio-button-label>{{ 'aircraft.form1.f5label.l2' | translate}}</lx-radio-button-label>
                                                                 </lx-radio-button>
                                                             </lx-radio-group>
                                                         </span>
@@ -178,11 +178,11 @@
                                         <div class="tc-white-1 p+" flex-container="row" flex-align="space-between center">
                                             <lx-button lx-color="red"
                                                        ng-click="reset()"
-                                            >Clear</lx-button>
+                                            >{{ 'aircraft.form1.button1' | translate}}</lx-button>
                                             <lx-button lx-color="green"
                                                        ng-click="addAircraft($event, faircrafts)"
                                                        ng-disabled="sendbutton || AircraftForm.$invalid">
-                                                Save</lx-button>
+                                                {{ 'aircraft.form1.button2' | translate}}</lx-button>
                                         </div>
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@
                         <div class="toolbar">
                             <lx-search-filter>
                                 <input type="text" name="mysearch" ng-model="search.mysearch"
-                                       ng-model-options="{ debounce : 400 }" placeholder="Search user">
+                                       ng-model-options="{ debounce : 400 }" placeholder="{{ 'aircraft.datatable.placeholder' | translate}}">
                             </lx-search-filter>
                         </div>
                     </div>
@@ -218,12 +218,12 @@
                     <table class="data-table">
                         <thead>
                             <tr class="">
-                                <th >Name</th>
-                                <th >Model</th>
-                                <th >MTOW</th>
-                                <th >Status</th>
-                                <th  >Edit</th>
-                                <th  >Delete</th>
+                                <th >{{ 'aircraft.datatable.f1' | translate}}</th>
+                                <th >{{ 'aircraft.datatable.f2' | translate}}</th>
+                                <th >{{ 'aircraft.datatable.f3' | translate}}</th>
+                                <th >{{ 'aircraft.datatable.f4' | translate}}</th>
+                                <th  >{{ 'aircraft.datatable.f5' | translate}}</th
+                                <th  >{{ 'aircraft.datatable.f6' | translate}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,7 +246,7 @@
                     <lx-dialog-header>
                         <div class="toolbar bgc-primary pl++">
                 <span class="toolbar__label tc-white fs-title">
-                    Aircraft
+                    {{ 'aircraft.dialog.headline' | translate}}
                 </span>
 
                         </div>
@@ -263,7 +263,7 @@
                                 <div flex-item="12">
                                     <div class="card" >
                                         <div class="p+">
-                                            <strong class="fs-headline display-block">Update aircraft</strong>
+                                            <strong class="fs-headline display-block">{{ 'aircraft.dialog.card2.title' | translate}}</strong>
                                             <div class="paragraph fs-body-1 mt+" >
                                                 <div class="p+ pt0">
                                                     <div flex-container="row">
@@ -283,7 +283,7 @@
                                                                 ng-change="setAircraftModelId(newValue)"
                                                                 lx-loading="selectAjax.loading"
                                                                 ng-required="true"
-                                                                lx-label="Aircrafts">
+                                                                lx-label="{{ 'aircraft.form1.f1' | translate}}">
                                                                 <lx-select-selected>
                                                                     {{ $selected.name }} - {{ $selected.manufacture }} - {{ $selected.craftype }}
                                                                 </lx-select-selected>
@@ -296,7 +296,7 @@
                                                                  ng-if="editFormAir.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Choose your aircraft</div>
+                                                                <div ng-message="required">{{ 'aircraft.form1.f1error.e1' | translate}}</div>
                                                             </div>
                                                         </div>
 
@@ -306,7 +306,7 @@
                                                         </div>
                                                             <div flex-item="8">
                                                                 <div flex-item>
-                                                                    <lx-text-field lx-label="Tail number"
+                                                                    <lx-text-field lx-label="{{ 'aircraft.form1.f2' | translate}}"
                                                                        lx-valid="editFormAir.tailnumber.$valid"
                                                                        lx-error="editFormAir.tailnumber.$invalid && editFormAir.tailnumber.$touched">
                                                                         <input type="text"
@@ -318,7 +318,7 @@
                                                                          ng-if="editFormAir.tailnumber.$touched"
                                                                          style="color:maroon"
                                                                          role="alert">
-                                                                        <div ng-message="required">Don't forget to enter the tail number</div>
+                                                                        <div ng-message="required">{{ 'aircraft.form1.f2error.e1' | translate}}</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -336,7 +336,7 @@
                                                                     lx-valid="editFormAir.aviationtype.$valid"
                                                                     lx-error="editFormAir.aviationtype.$invalid && editFormAir.aviationtype.$touched"
                                                                     ng-required="true"
-                                                                    lx-label="Aviation type">
+                                                                    lx-label="{{ 'aircraft.form1.f3' | translate}}">
                                                                 <lx-select-selected>
                                                                     {{ $selected.value }}
                                                                 </lx-select-selected>
@@ -349,7 +349,7 @@
                                                                  ng-if="editFormAir.aviationtype.$touched"
                                                                  style="color:maroon"
                                                                  role="alert">
-                                                                <div ng-message="required">Choose an aviation type</div>
+                                                                <div ng-message="required">{{ 'aircraft.form1.f3error.e1' | translate}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -358,7 +358,7 @@
                                                         </div>
                                                         <div flex-item="8">
                                                             <div flex-item>
-                                                                <lx-text-field lx-label="Name"
+                                                                <lx-text-field lx-label="{{ 'aircraft.form1.f4' | translate}}"
                                                                                lx-valid="editFormAir.aircraftname.$valid"
                                                                                lx-error="editFormAir.aircraftname.$invalid && editFormAir.aircraftname.$touched">
                                                                     <input type="text"
@@ -370,7 +370,7 @@
                                                                      ng-if="editFormAir.aircraftname.$touched"
                                                                      style="color:maroon"
                                                                      role="alert">
-                                                                    <div ng-message="required">Don't forget to enter the tail number</div>
+                                                                    <div ng-message="required">{{ 'aircraft.form1.f4error.e1' | translate}}</div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -381,15 +381,14 @@
                                                         </div>
                                                         <div flex-item="8">
                                                             <span class="fs-title display-block">
-                                                            Enable aircraft:
+                                                            {{ 'aircraft.form1.f5' | translate}}:
                                                                 <lx-checkbox
                                                                         ng-model="editaircrafts.active"
                                                                         lx-color="blue"
                                                                         name="enabled"
                                                                         ng-true-value="true"
                                                                         ng-false-value="false">
-                                                                    Enabled
-                                                                </lx-checkbox>
+                                                                    {{ 'aircraft.form1.f5label.l3' | translate}}                                                            </lx-checkbox>
                                                             </span>
                                                         </div>
                                                     </div>

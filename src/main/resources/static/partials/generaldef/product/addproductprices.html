@@ -2,7 +2,7 @@
 <!-------------------------->
 <!-- START - PRODUCT FORM -->
 <!-------------------------->
-<div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+<div class="p+" flex-container="row"  flex-column="16" flex-gutter="24">
     <form name="AddProductForm" novalidate>
     <!--{{user.user_id}}
 
@@ -14,7 +14,7 @@
                     <strong class="fs-headline display-block">Nuevo Producto</strong>
                     <div class="paragraph fs-body-1 mt+">
                         <div class="p+ pt0">
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="4">
                                     <lx-text-field
                                             lx-label="Product name"
@@ -50,13 +50,13 @@
                                 <div flex-item="4">
                                     <lx-text-field
                                             lx-label="Medida de unidad"
-                                            lx-valid="AddProductForm.unit.$valid"
-                                            lx-error="AddProductForm.unit.$invalid && AddProductForm.unit.$touched">
-                                        <input type="text" name="unit" ng-required="true"
-                                               ng-model="fproduct.unit" />
+                                            lx-valid="AddProductForm.productunit.$valid"
+                                            lx-error="AddProductForm.productunit.$invalid && AddProductForm.productunit.$touched">
+                                        <input type="text" name="productunit" ng-required="true"
+                                               ng-model="fproduct.productunit" />
                                     </lx-text-field>
-                                    <div ng-messages="AddProductForm.unit.$error"
-                                         ng-if="AddProductForm.unit.$touched"
+                                    <div ng-messages="AddProductForm.productunit.$error"
+                                         ng-if="AddProductForm.productunit.$touched"
                                          style="color:maroon"
                                          role="alert">
                                         <div ng-message="required">Introduce la Medida de unidad</div>
@@ -64,17 +64,17 @@
                                 </div>
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="4">
                                     <lx-text-field
                                             lx-label="Descripción de medida de unidad"
-                                            lx-valid="AddProductForm.unitdesc.$valid"
-                                            lx-error="AddProductForm.unitdesc.$invalid && AddProductForm.unitdesc.$touched">
-                                        <input type="text" name="unitdesc" ng-required="true"
-                                               ng-model="fproduct.unitdesc" />
+                                            lx-valid="AddProductForm.productunitdesc.$valid"
+                                            lx-error="AddProductForm.productunitdesc.$invalid && AddProductForm.productunitdesc.$touched">
+                                        <input type="text" name="productunitdesc" ng-required="true"
+                                               ng-model="fproduct.productunitdesc" />
                                     </lx-text-field>
-                                    <div ng-messages="AddProductForm.unitdesc.$error"
-                                         ng-if="AddProductForm.unitdesc.$touched"
+                                    <div ng-messages="AddProductForm.productunitdesc.$error"
+                                         ng-if="AddProductForm.productunitdesc.$touched"
                                          style="color:maroon"
                                          role="alert">
                                         <div ng-message="required">Introduce la Descripción de medida de unidad</div>
@@ -107,11 +107,11 @@
                                             ng-required="true"
                                             lx-label="Price type">
                                         <lx-select-selected>
-                                            {{ $selected.description }}
+                                            {{ $selected.name }}
                                         </lx-select-selected>
 
                                         <lx-select-choices>
-                                            {{ $choice.description }}
+                                            {{ $choice.name }}
                                         </lx-select-choices>
                                     </lx-select>
                                     <div ng-messages="pricetype.$error"
@@ -134,7 +134,7 @@
                     <div class="p+">
                         <strong class="fs-headline display-block">Precio</strong>
                         <div class="paragraph fs-body-1 mt+">
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="4" class="p+" >
                                     <lx-select
                                             name="location"
@@ -180,7 +180,7 @@
                                             lx-error="AddProdutForm.provider.$invalid && AddProdutForm.provider.$touched"
                                             lx-loading="selectAjax.loading"
                                             ng-required="true"
-                                            lx-label="Locations">
+                                            lx-label="Provider">
                                         <lx-select-selected>
                                             <img src='../css/img/flags/{{$selected.country}}.png' alt="" style="visibility: visible; float: left;" width="25px" /> {{ $selected.name }}
                                         </lx-select-selected>
@@ -225,7 +225,7 @@
                                 </div>
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
 
                                 <div flex-item="4">
                                     <lx-text-field
@@ -233,7 +233,7 @@
                                             lx-valid="AddProductForm.pricename.$valid"
                                             lx-error="AddProductForm.pricename.$invalid && AddProductForm.pricename.$touched">
                                         <input type="text" name="pricename" ng-required="true"
-                                               ng-model="fproduct.pricename" ui-number-mask/>
+                                               ng-model="fproduct.pricename"/>
                                     </lx-text-field>
                                     <div ng-messages="AddProductForm.pricename.$error"
                                          ng-if="AddProductForm.pricename.$touched"
@@ -287,7 +287,7 @@
                             </div>
 
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
 
                                 <div flex-item="3">
                                     <lx-text-field
@@ -375,7 +375,7 @@
                                 </div>
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="4">
                                     <lx-select
                                             name="currency"
@@ -386,13 +386,13 @@
                                             lx-valid="AddProdutForm.currency.$valid"
                                             lx-error="AddProdutForm.currency.$invalid && AddProdutForm.currency.$touched"
                                             ng-required="true"
-                                            lx-label="Aviation type">
+                                            lx-label="Currency">
                                         <lx-select-selected>
-                                            {{ $selected.value }}
+                                            {{ $selected.name }}
                                         </lx-select-selected>
 
                                         <lx-select-choices>
-                                            {{ $choice.value }}
+                                            {{ $choice.name }}
                                         </lx-select-choices>
                                     </lx-select>
                                     <div ng-messages="AddProdutForm.currency.$error"
@@ -437,7 +437,7 @@
 
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
 
                                 <div flex-item="4">
                                     <lx-text-field
@@ -490,7 +490,7 @@
 
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="3">
                                     <lx-text-field
                                             lx-label="Diferencial"
@@ -556,14 +556,14 @@
     2{{productId}}
     3{{productId}}
     {{paymethod}}&ndash;&gt;
-    <div class="p+" flex-container="row" flex-column="16" flex-gutter="24">
+    <div class="p+" flex-container="row" flex-gutter="24" flex-column="16" flex-gutter="24">
         <div flex-item="16">
             <div class="card" >
                 <div class="p+">
                     <strong class="fs-headline display-block">Nuevo Producto</strong>
                     <div class="paragraph fs-body-1 mt+">
                         <div class="p+ pt0">
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div flex-item="16">
                                     <lx-text-field
                                             lx-label="Descripción del Precio"
@@ -581,7 +581,7 @@
                                 </div>
                             </div>
 
-                            <div flex-container="row">
+                            <div flex-container="row" flex-gutter="24">
                                 <div class="p+ pt0" flex-item="4">
                                     <lx-date-picker ng-model="fprice.fromdate"
                                                     lx-input-format="YYYY-MM-DD"

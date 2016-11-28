@@ -2,63 +2,63 @@
  * Created by bboyvlad on 9/8/16.
  */
 var menu = angular.module('jdmenu', []);
-menu.factory('myJdMenu', function() {
+menu.factory('myJdMenu', function($filter, $translate) {
     //var myJdMenu = {};
     var myJdMenu = {
         "usermenu":[
             {
                 "link":"/users/sing-up",
-                "text":"Sing Up"
+                "text": $filter('translate')('menu.usermenu.opt1')
             },
             {
                 "link":"/loginpage",
-                "text":"Log In"
+                "text": $filter('translate')('menu.usermenu.opt2')
             }
         ],
         "useradmin":[
             {
                 "link":"/users/admin",
-                "text":"Manage Users"
+                "text":$filter('translate')('menu.useradmin.opt1')
             }
         ],
         "jdcard":[
             {
                 "link":"/dashboard/buy/jdcard",
-                "text":"Buy J&D Card"
+                "text":$filter('translate')('menu.jdcard.opt1') +" J&D Card"
             },
             {
                 "link":"/dashboard/refill/jdcard",
-                "text":"Refill J&D Card"
+                "text":$filter('translate')('menu.jdcard.opt2')+" J&D Card"
             }
         ],
         "giftcard":[
             {
                 "link":"/dashboard/giftcard/buy",
-                "text":"Buy Gift Card"
+                "text":$filter('translate')('menu.giftcard.opt1')
             },
             {
                 "link":"/dashboard/giftcard/redeem",
-                "text":"Redeem Gift Card"
+                "text":$filter('translate')('menu.giftcard.opt2')
             }
         ],
         "payments":[
             {
                 "link":"/dashboard/paymentmethod-form",
-                "text":"Add Payment Method"
+                "text":$filter('translate')('menu.payments.opt1')
             },
             {
                 "link":"/dashboard/sendpayment",
-                "text":"Notify Deposit / Transfer"
+                "text":$filter('translate')('menu.payments.opt2')
             }
         ],
         "bankmanage":[
             {
                 "link":"/dashboard/bankmanage",
-                "text":"Bank Account Manage"
+                "text":$filter('translate')('menu.bankmanage.opt1')
             },
             {
                 "link":"/dashboard/showreceived",
-                "text":"Check Payment"
+                "text":$filter('translate')('menu.bankmanage.opt2')
             }
         ],
         "defgen":[
@@ -68,48 +68,48 @@ menu.factory('myJdMenu', function() {
             },*/
             {
                 "link":"/dashboard/products/add",
-                "text":"Products"
+                "text":$filter('translate')('menu.defgen.opt1')
             }
         ],
         "aircraft":[
             {
                 "link":"/dashboard/aircraft/manage",
-                "text":"Aircrafts"
+                "text":$filter('translate')('menu.aircraft.opt1')
             }
         ],
         "captain":[
             {
                 "link":"/dashboard/captain/manage",
-                "text":"Pilots"
+                "text":$filter('translate')('menu.captain.opt1')
             }
         ],
         "cardvalidate":[
             {
                 "link":"/dashboard/cardstatus",
-                "text":"Validator"
+                "text":$filter('translate')('menu.cardvalidate.opt1')
             }
         ],
         "balance":[
             {
                 "link":"/dashboard/balance_details",
-                "text":"Balance Details"
+                "text":$filter('translate')('menu.balance.opt1')
             }
         ],
         "servrequest":[
             {
                 "link":"/dashboard/defered_payments",
-                "text":"Pending Service Requests"
+                "text":$filter('translate')('menu.servrequest.opt1')
             },
             {
                 "link":"/dashboard/admin_pending_payments",
-                "text":"Admin Pending Requests"
+                "text":$filter('translate')('menu.servrequest.opt2')
             }
         ],
         "mainmenu":{
             "main":[
                 {
                     "link":"/",
-                    "text":"Home"
+                    "text":$filter('translate')('menu.mainmenu.opt1')
                 },
                 /*{
                     "link":"/",
@@ -125,7 +125,7 @@ menu.factory('myJdMenu', function() {
                 },*/
                 {
                     "link":"/",
-                    "text":"Contact"
+                    "text":$filter('translate')('menu.mainmenu.opt2')
                 }
             ]
         }
@@ -360,8 +360,6 @@ menu.controller('MyJdMenuController', [ '$scope', '$rootScope', '$filter', 'myJd
                         //console.log("Error!!" + data.toSource());
                     }
                 );
-
-
 
                 LxNotificationService.alert('Service Request',
                     "Su Service Request ha sido Generado satisfactoriamente...",
