@@ -25,11 +25,12 @@ public class ShopcartDTO {
     public ShopcartDTO() {
     }
 
-    public ShopcartDTO(long location, long myaircraft, long captain, Date landing, String description, boolean generated, Set<ItemcartDTO> items) {
+    public ShopcartDTO(long location, long myaircraft, long captain, Date landing, Date returndate, String description, boolean generated, Set<ItemcartDTO> items) {
         this.location = location;
         this.myaircraft = myaircraft;
         this.captain = captain;
         this.landing = landing;
+        this.returndate = returndate;
         this.description = description;
         this.generated = false;
         this.items = items;
