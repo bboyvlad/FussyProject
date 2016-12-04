@@ -129,7 +129,11 @@ public class PrincipalController {
         Hashtable<String, String> message = new Hashtable<String, String>();
         try {
 
+            System.out.println("Revisando el email");
+
             if(!principalExist(user.getEmail())){
+
+                System.out.println("No Existe!");
 
                 user.setEnabled(false);
                 //user.setTokenExpired(false);
@@ -144,7 +148,7 @@ public class PrincipalController {
                 u.setExpired(false);
                 u.setLocked(false);
 
-                Role userRole = roleRepository.findByCode("ROLE_USER");
+                Role userRole = roleRepository.findByCode("ROLE_GUEST");
                 u.setRoles(Arrays.asList(userRole));
 
                 Principal usr = principalRepository.save(u);
@@ -166,16 +170,17 @@ public class PrincipalController {
                         + request.getServerPort();
 
                 final SimpleMailMessage email=new SimpleMailMessage();
-                email.setSubject("Bienvenido a J&D International S.A.");
+                email.setSubject(usr.getName()+" J&D International S.A., te da la bienvenida !");
                 email.setTo(usr.getEmail());
                 email.setText("Hola "+usr.getName()+", para activar tu cuenta has click en el " +
                         "siguiente enlace: "+appUrl+"/users/activate/"+jwt+".jd");
 
                 mailSender.send(email);
+                System.out.println("Register mail send");
                 return principalRepository.findOne(usr.getId());
 
             }else{
-
+                System.out.println("Si Existe!");
                 message.put("message","Este email ya se encuentra registrado");
                 return message;
             }
@@ -484,6 +489,11 @@ public class PrincipalController {
 
             Pp.getPayments().add(pay);
 
+            Role userRole = roleRepository.findByCode("ROLE_USER");
+
+            Pp.getRoles().removeAll(Pp.getRoles());
+            Pp.getRoles().addAll(Arrays.asList(userRole));
+
             principalRepository.save(Pp);
 
             SimpleMailMessage email=new SimpleMailMessage();
@@ -724,7 +734,6 @@ public class PrincipalController {
             p.getRoles().addAll(Arrays.asList(userRole));
 
             return principalRepository.save(p);
-
     }
 
     /*
@@ -1039,7 +1048,8 @@ public class PrincipalController {
             Shopcart cart=new Shopcart();
 
             cart.setCaptain(flight.getCaptain());
-            cart.setRdate(flight.getReturndate());
+
+            cart.setRdate(flight.getReturndate()); //Fecha de regreso
 
             cart.setName(flight.getDescription());
             cart.setLocation(flight.getLocation());
@@ -1492,11 +1502,11 @@ public class PrincipalController {
 
     //Verificacion de email si existe
     boolean principalExist(String email){
-        if(principalRepository.findByEmail(email)!=null){
-            return true;
-        }else{
+        Principal Pp =principalRepository.findByEmail(email);
+        if (Pp==null) {
             return false;
         }
+            return false;
     }
 
 }
