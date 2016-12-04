@@ -1,6 +1,7 @@
 package jd.persistence.model;
 
 import javax.persistence.*;
+import java.util.TimeZone;
 
 /**
  * Created by eduardom on 10/4/16.
@@ -20,26 +21,12 @@ public class Location {
     private int elevation;
     private int timezone;
     private char dst;
-    private String region;
+    private TimeZone region;
     private boolean available;
 
     public Location() {
     }
 
-    public Location(long id, String name, String city, String country, String IATA, String ICAO, float latitude, float longitude, int elevation, int timezone, char dst, String region) {
-        this.id = id;
-        this.name = name;
-        this.city = city;
-        this.country = country;
-        this.IATA = IATA;
-        this.ICAO = ICAO;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.elevation = elevation;
-        this.timezone = timezone;
-        this.dst = dst;
-        this.region = region;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,11 +119,11 @@ public class Location {
         this.dst = dst;
     }
 
-    public String getRegion() {
+    public TimeZone getRegion() {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(TimeZone region) {
         this.region = region;
     }
 
