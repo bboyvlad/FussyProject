@@ -464,7 +464,8 @@ public class PrincipalController {
             Principal Pp=principalRepository.findByEmail(auth.getName());
 
             Paymethod pay= new Paymethod();
-            System.out.println("paytype "+ pay.getPaytype());
+            System.out.println("paytype "+ payadd.getPaytype());
+
             switch (payadd.getPaytype()){
                 case "CARD":
                     pay.setPayacctnum(payadd.getPayacctnum());
@@ -482,6 +483,7 @@ public class PrincipalController {
                     pay.setPaycardrandomcode(payadd.getPaycardrandomcode());
                     pay.setPayenabled(true);
             }
+
             pay.setPayalias(payadd.getPayalias());
             pay.setPaycardrandomcode("rdn_"+utils.getCadenaNumAleatoria(6));
             pay.setPaytype(payadd.getPaytype());
@@ -490,10 +492,18 @@ public class PrincipalController {
 
             Pp.getPayments().add(pay);
 
-            Role userRole = roleRepository.findByCode("ROLE_USER");
+            final boolean[] isGuest = {false};
+            Pp.getRoles().forEach((rol)->{
+                if(rol.getCode()=="ROLE_GUEST"){
+                    isGuest[0] =true;
+                }
+            });
 
-            Pp.getRoles().removeAll(Pp.getRoles());
-            Pp.getRoles().addAll(Arrays.asList(userRole));
+            if(isGuest[0]){
+                Role userRole = roleRepository.findByCode("ROLE_USER");
+                Pp.getRoles().removeAll(Pp.getRoles());
+                Pp.getRoles().addAll(Arrays.asList(userRole));
+            }
 
             principalRepository.save(Pp);
 
@@ -963,6 +973,7 @@ public class PrincipalController {
         /*Busqueda de precios segun los criterios seleccionados*/
         if(aircraft[0]!=null && captain[0]!=null){
 
+
             Set<PrepareflightpriceDTO> svcprices=new HashSet<PrepareflightpriceDTO>();
 
             /*Servicios precios por unidad*/
@@ -999,7 +1010,6 @@ public class PrincipalController {
             });
 
             /*Servicios por rango de pounds*/
-
             List<Pricepound> pricespounds=pricepound.findByLocationAndAviationAndFrompoundLessThanEqualAndTopoundGreaterThanEqual(flight.getLocation(),aircraft[0].getAviationtype(),aircraft[0].getMtow(),aircraft[0].getMtow());
 
             pricespounds.forEach((pricepound)->{

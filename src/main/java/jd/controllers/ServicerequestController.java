@@ -707,7 +707,7 @@ public class ServicerequestController {
         long hoy=ho.getTime();
         long dateLanding = sr.getDlanding().getTime();
 
-        if(dateLanding <= hoy ){ // si el sr es antes de hoy
+        if(dateLanding <= hoy ){ // si el sr es antes  o igual a ahorita !!
 
             /*Se envia el correo al cliente*/
             MimeMessage msg = mailSender.createMimeMessage();
