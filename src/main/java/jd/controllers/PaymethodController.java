@@ -182,9 +182,9 @@ public class PaymethodController {
     }
 
     @RequestMapping(value = "/{pay_id}", method = RequestMethod.GET)
-    public @ResponseBody Object showById(@PathVariable Long payid){
+    public @ResponseBody Object showById(@PathVariable Long pay_id){
         try {
-            return paymethodRepository.findOne(payid);
+            return paymethodRepository.findOne(pay_id);
         }catch (Exception e){
             return e.getLocalizedMessage();
         }
