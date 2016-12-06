@@ -158,6 +158,8 @@ public class ServicerequestController {
 
                 Servicerequest servicerequest = new Servicerequest();
 
+                Location incoming_location=locationRepository.findOne(shopcart[0].getIncomingloc());
+
                 final double[] serviceamount={0};
                 final double serviceGuarantee;
 
@@ -296,6 +298,11 @@ public class ServicerequestController {
                 params.put("email",Pp.getEmail());
                 params.put("guarantee",serviceGuarantee);
                 params.put("locationiata",airport.getIATA());
+
+                params.put("inc_icao",incoming_location.getICAO());
+                params.put("inc_iata",incoming_location.getIATA());
+                params.put("inc_airport",incoming_location.getName());
+                params.put("inc_city",incoming_location.getCity());
 
                 params.put("id",servicerequest.getId());
 
@@ -694,9 +701,15 @@ public class ServicerequestController {
         }
 
         sr.setReleased(true);
-        if(sr.getDlanding().before(new Date()) || sr.getDlanding().equals(new Date()) ){ // si el sr es antes de hoy
 
-             /*Se envia el correo al cliente*/
+        /*Me llevo las fechas a unix time*/
+        Date ho = new Date();
+        long hoy=ho.getTime();
+        long dateLanding = sr.getDlanding().getTime();
+
+        if(dateLanding <= hoy ){ // si el sr es antes de hoy
+
+            /*Se envia el correo al cliente*/
             MimeMessage msg = mailSender.createMimeMessage();
 
             // use the true flag to indicate you need a multipart message
@@ -714,10 +727,10 @@ public class ServicerequestController {
             mailSender.send(msg);
 
             servicerequestRepository.save(sr);
-
             return new String[]{"message","success"};
 
         }else{
+
             System.out.println("Fecha fuera del periodo");
             return new String[]{"message","failure"};
         }
@@ -885,7 +898,6 @@ public class ServicerequestController {
            return new String[]{"message","failure"};
         }
     }
-
 
     String getAviationname(int aviationtype){
 
