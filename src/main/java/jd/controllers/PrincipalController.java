@@ -228,6 +228,7 @@ public class PrincipalController {
     /*
     * PAYMETHOD
     */
+
     //buy a jdcard with stripe's payment method
     @RequestMapping(value = "/jdcard",  method = RequestMethod.POST) //cardController JD CardModel
     public @ResponseBody Object addJdcardStripe(@RequestBody RegisterPayTransactionDTO regpay,
@@ -1048,6 +1049,8 @@ public class PrincipalController {
             Shopcart cart=new Shopcart();
 
             cart.setCaptain(flight.getCaptain());
+
+            cart.setIncomingloc(flight.getIncomingloc()); //localidad de donde viene
 
             cart.setRdate(flight.getReturndate()); //Fecha de regreso
 
