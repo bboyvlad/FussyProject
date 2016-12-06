@@ -14,6 +14,7 @@ public class ShopcartDTO {
 
 
     private long location;
+    private long incomingloc; //incomming location ALTER TABLE JD_Fussy.dbo.Shopcart ADD incomingloc BIGINT NULL;
     private long myaircraft;
     private long captain;
     private Date landing;
@@ -98,5 +99,13 @@ public class ShopcartDTO {
 
     public void setReturndate(Date returndate) {
         this.returndate = returndate;
+    }
+
+    public long getIncomingloc() {
+        return incomingloc;
+    }
+
+    public void setIncomingloc(long incomingloc) {
+        this.incomingloc = incomingloc;
     }
 }

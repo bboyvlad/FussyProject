@@ -48,9 +48,9 @@ public class LocationController {
         }
     }
 
-    //retrieve products chids from group parent
+    //retrieve locations chids enabled
     @RequestMapping(value = "/airport/{tag}",method = RequestMethod.GET)
-    @ApiMethod(description = "Recupera una lista de localidades a traves del tag aeropuerto")
+    @ApiMethod(description = "Recupera una lista de localidades activas a traves del tag aeropuerto")
     public @ResponseBody List<Location> showAirportsByName(@ApiPathParam(name = "tag", description = "tag nombre del aeropuerto") @PathVariable String tag){
         try{
             //locationRepository.findByNameContainingIgnoreCase(tag);
@@ -64,7 +64,22 @@ public class LocationController {
         }
     }
 
-    //retrieve products chids from group parent
+    //retrieve location all data
+    @RequestMapping(value = "/airportall/{tag}",method = RequestMethod.GET)
+    @ApiMethod(description = "Recupera una lista de todas las localidades a traves del tag aeropuerto")
+    public @ResponseBody List<Location> showAllAirportsByName(@ApiPathParam(name = "tag", description = "tag nombre del aeropuerto") @PathVariable String tag){
+        try{
+            if(tag !=null){
+                return locationRepository.findAllByTag(tag);
+            }
+            return null;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    //retrieve location
     @RequestMapping(value = "{airport_id}",method = RequestMethod.GET)
     @ApiMethod(description = "Recupera una lista de localidades a traves del ID aeropuerto")
     public @ResponseBody Location getAirportsById(@ApiPathParam(name = "airport_id", description = "ID del aeropuerto") @PathVariable long airport_id){
