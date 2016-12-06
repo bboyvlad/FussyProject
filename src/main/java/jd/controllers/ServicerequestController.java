@@ -158,6 +158,8 @@ public class ServicerequestController {
 
                 Servicerequest servicerequest = new Servicerequest();
 
+                Location incoming_location=locationRepository.findOne(shopcart[0].getIncomingloc());
+
                 final double[] serviceamount={0};
                 final double serviceGuarantee;
 
@@ -296,6 +298,11 @@ public class ServicerequestController {
                 params.put("email",Pp.getEmail());
                 params.put("guarantee",serviceGuarantee);
                 params.put("locationiata",airport.getIATA());
+
+                params.put("inc_icao",incoming_location.getICAO());
+                params.put("inc_iata",incoming_location.getIATA());
+                params.put("inc_airport",incoming_location.getName());
+                params.put("inc_city",incoming_location.getCity());
 
                 params.put("id",servicerequest.getId());
 
