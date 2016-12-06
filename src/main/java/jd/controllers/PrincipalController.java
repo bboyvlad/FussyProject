@@ -498,7 +498,6 @@ public class PrincipalController {
                     isGuest[0] =true;
                 }
             });
-
             if(isGuest[0]){
                 Role userRole = roleRepository.findByCode("ROLE_USER");
                 Pp.getRoles().removeAll(Pp.getRoles());
