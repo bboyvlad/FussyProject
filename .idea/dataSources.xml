@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="SQL Server (jTds) - JD_Prices@192.168.24.10" uuid="057762c4-c03a-476a-b5e5-578e3c816aec">
+  <component name="DataSourceManagerImpl" format="xml" hash="3600105338">
+    <data-source source="LOCAL" name="SQL Server (jTds) - JD_Fussy@192.168.24.10" uuid="ba65d6cb-d008-45ac-be9a-5b2c4a38c2a3">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:jtds:sqlserver://192.168.24.10:1433/JD_Prices</jdbc-url>
+      <jdbc-url>jdbc:jtds:sqlserver://192.168.24.10:1433/JD_Fussy</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="JD_PricesTest" uuid="3dde645e-10d1-4f9d-a713-317eeec10683">
+    <data-source source="LOCAL" name="SQL Server (jTds) - JD_Fussy@192.168.1.112" uuid="d3f9a2f2-f39a-4a50-95b4-a616104403ba">
       <driver-ref>sqlserver.jtds</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:jtds:sqlserver://169.254.120.136:1433/JD_PricesTest</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="JD_PricesVBox" uuid="e907cfea-a319-4bf0-b825-9e6b73ee2f83">
-      <driver-ref>sqlserver.jtds</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:jtds:sqlserver://192.168.23.113:1433/JD_Prices</jdbc-url>
-    </data-source>
-    <data-source source="LOCAL" name="JD_PricesVladPC" uuid="e7854180-5e18-46cc-99f3-99be927fbb9a">
-      <driver-ref>sqlserver.jtds</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>net.sourceforge.jtds.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:jtds:sqlserver://192.168.24.43:1433/JD_Prices</jdbc-url>
+      <jdbc-url>jdbc:jtds:sqlserver://192.168.1.112:1433/JD_Fussy</jdbc-url>
     </data-source>
   </component>
 </project>

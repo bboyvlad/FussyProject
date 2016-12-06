@@ -253,12 +253,9 @@ public class ServicerequestController {
             c.setTime(fechaActual);
             c.add(Calendar.DATE, 15);
 
-            String serialcode="svc_"+utils.getCadenaAlfaNumAleatoria(15);
-
             servicerequest.setDexpired(c.getTime());
             servicerequest.setDlanding(shopcart[0].getDlanding());
             servicerequest.setReleased(false);
-            servicerequest.setSerialcode(serialcode);
 
             if(serviceamount[0]<= paymethod[0].getPayavailable()){ //verifico si tiene saldo disponible
 
@@ -270,13 +267,23 @@ public class ServicerequestController {
                 System.out.println("Tiene saldo");
                 System.out.println("balance "+paymethod[0].getPaybalance());
                 System.out.println("Monto operacion "+serviceamount[0]);
-                System.out.println(serialcode);
 
                 Location airport=loc.findOne(shopcart[0].getLocation());
                 servicerequest.setItems(itemsrequest);
 
                 //servicerequestRepository.save(servicerequest);
                 servicerequestRepository.saveAndFlush(servicerequest);
+
+                Calendar fecha = new GregorianCalendar();
+                int anno = fecha.get(Calendar.YEAR);
+
+
+                String serialcode="SR"+anno+""+servicerequest.getPrincipal()+""+servicerequest.getId();
+
+                System.out.println("Serial de SR "+serialcode);
+                servicerequest.setSerialcode(serialcode);
+
+                servicerequestRepository.save(servicerequest);
 
                 /*genera el pdf*/
 
@@ -291,8 +298,8 @@ public class ServicerequestController {
 
                 params.put("id",servicerequest.getId());
 
-                params.put("landing",shopcart[0].getDlanding());
-                params.put("returndate",shopcart[0].getRdate()); //return date
+                params.put("landing",fechaCompleta(shopcart[0].getDlanding())+" GMT"+airport.getTimezone());
+                params.put("returndate",fechaCompleta(shopcart[0].getRdate())+" GMT"+airport.getTimezone()); //return date
 
                 params.put("locationicao",airport.getICAO());
                 params.put("tail",aircraftGo[0].getTailnumber());
@@ -305,6 +312,7 @@ public class ServicerequestController {
 
                 params.put("mpound",aircraftGo[0].getMtow());
                 params.put("serialcode",serialcode);
+                params.put("airmodel",aircraftGo[0].getModel());
 
                 JRBeanCollectionDataSource beanCollectionDataSource=new JRBeanCollectionDataSource(irequestDTOs);
 
@@ -590,6 +598,7 @@ public class ServicerequestController {
 
         ticket.setTicket(rdto.getTicket());
         ticket.setAmount(serviceamount[0]);
+
         ticket.setPaymethod(sr.getPaymethod());
         ticket.setAviationtype(sr.getAviationtype());
         ticket.setLocation(sr.getLocation());
@@ -639,6 +648,7 @@ public class ServicerequestController {
         params.put("craftype",aircraftGo[0].getCraftype());
         params.put("mpound",aircraftGo[0].getMtow());
         params.put("serialcode",ticket.getSerialcode());
+        params.put("airmodel",aircraftGo[0].getModel());
 
         //Le doy un orden a los items, para que el report pueda agrupar los resultados correctamente
         Collections.sort(iticketDTOs,(dto1,dto2)->
@@ -875,6 +885,7 @@ public class ServicerequestController {
         }
     }
 
+
     String getAviationname(int aviationtype){
 
         if(aviationtype==1){
@@ -886,5 +897,59 @@ public class ServicerequestController {
         }
         return null;
     }
+
+    String fechaCompleta(Date fecha){
+
+        ArrayList Meses = new ArrayList(13);
+
+        Calendar nfecha = Calendar.getInstance();
+        nfecha.setTime(fecha);
+
+        int anno = nfecha.get(Calendar.YEAR);
+        int mes = nfecha.get(Calendar.MONTH) + 1;
+        int dia = nfecha.get(Calendar.DAY_OF_MONTH);
+        int hora = nfecha.get(Calendar.HOUR_OF_DAY);
+        int minuto = nfecha.get(Calendar.MINUTE);
+        int segundo = nfecha.get(Calendar.SECOND);
+
+        String txtFecha= anno+"-"+getMonth(mes).toUpperCase()+"-"+dia+" "+hora+":"+minuto;
+
+        return txtFecha;
+
+    }
+
+    String getMonth(int month) {
+
+        switch (month){
+            case 1:
+                return "Jan";
+            case 2:
+                return "Feb";
+            case 3:
+                return "Mar";
+            case 4:
+                return "Apr";
+            case 5:
+                return "May";
+            case 6:
+                return "Jun";
+            case 7:
+                return "Jul";
+            case 8:
+                return "Aug";
+            case 9:
+                return "Sep";
+            case 10:
+                return "Oct";
+            case 11:
+                return "Nov";
+            case 12:
+                return "Dec";
+            default:
+                return null;
+        }
+    }
+
+
 
 }

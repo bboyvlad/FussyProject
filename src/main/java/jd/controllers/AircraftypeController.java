@@ -49,15 +49,14 @@ public class AircraftypeController {
         return null;
     }
 
-    @RequestMapping(value = "/aircraftbytag/{name}",method = RequestMethod.GET)
-    @ApiMethod(description = "Recupera un listado de aeronaves segun el NOMBRE enviado")
-    public List<Aircraftype> getaircraftypebyname(@ApiPathParam(name = "name", description= "nombre del aeropuerto") @PathVariable String name) {
+    @RequestMapping(value = "/aircraftbytag/{tag}",method = RequestMethod.GET)
+    @ApiMethod(description = "Recupera un listado de aeronaves segun el TAG enviado")
+    public List<Aircraftype> getaircraftypebyname(@ApiPathParam(name = "tag", description= "nombre del aeropuerto") @PathVariable String tag) {
         try{
-            return aircraftypeRepository.findBynameContaining(name);
+            return aircraftypeRepository.findByNameManofactureCraftype(tag);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
         return null;
     }
-
 }
