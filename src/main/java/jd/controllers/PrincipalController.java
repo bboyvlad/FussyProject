@@ -45,8 +45,8 @@ import java.util.*;
 import java.io.IOException;
 import java.util.List;
 
-import com.twocheckout.*;
-import com.twocheckout.model.*;
+/*import com.twocheckout.*;
+import com.twocheckout.model.*;*/
 
 import com.itextpdf.text.DocumentException;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -343,7 +343,7 @@ public class PrincipalController {
         return messageJdcard;
     }
 
-    //buy a jdcard with 2checkout's payment method
+/*    //buy a jdcard with 2checkout's payment method
     @RequestMapping(value = "/jdcardto",  method = RequestMethod.POST)
     public @ResponseBody String[] addJdcard2checkout(@RequestBody RegisterPayTransactionDTO regpay,
                                                  Authentication auth) {
@@ -361,7 +361,7 @@ public class PrincipalController {
             }
         });
 
-        /*Verifico si el metodo de pago le pertenece a este usuario*/
+        *//*Verifico si el metodo de pago le pertenece a este usuario*//*
 
         if (!checked[0]){
             System.out.println("el metodo de pago no le pertenece a este usuario");
@@ -393,7 +393,7 @@ public class PrincipalController {
                 request.put("total", regpay.getAmount());
                 request.put("billingAddr", billing);
 
-                /*Genero el cobro de la transacción*/
+                *//*Genero el cobro de la transacción*//*
                 System.out.println("Generando el cargo en 2checkout");
                 Authorization response = TwocheckoutCharge.authorize(request);
                 System.out.println(response.getResponseMsg() + " "+response.getResponseCode());
@@ -454,7 +454,7 @@ public class PrincipalController {
             return new String[]{"message","Card inactive"};
         }
 
-    }
+    }*/
     //add payment method to user
     @RequestMapping(value = "/paymethod",  method = RequestMethod.POST)
     public @ResponseBody Object addpaymethod(@RequestBody Paymethod payadd,Authentication auth){
