@@ -27,6 +27,7 @@ public class Servicerequest {
     private boolean ticket;
     private boolean closed;
     private String serialcode;
+    private long incomingloc; //ALTER TABLE JD_Fussy.dbo.Servicerequest ADD incomingloc BIGINT NULL;
 
     private Set<Itemrequest> items;
 
@@ -185,5 +186,13 @@ public class Servicerequest {
 
     public void setSerialcode(String serialcode) {
         this.serialcode = serialcode;
+    }
+
+    public long getIncomingloc() {
+        return incomingloc;
+    }
+
+    public void setIncomingloc(long incomingloc) {
+        this.incomingloc = incomingloc;
     }
 }

@@ -25,6 +25,7 @@ public class Shopcart {
     private Date dlanding;
     private Date rdate; //Return date
     private long myaircraft;
+    private long incomingloc; //incomming location ALTER TABLE JD_Fussy.dbo.Shopcart ADD incomingloc BIGINT NULL;
     private Set<Itemcart> items = new HashSet<Itemcart>(0);
 
     public Shopcart() {
@@ -147,5 +148,13 @@ public class Shopcart {
 
     public void setMyaircraft(long myaircraft) {
         this.myaircraft = myaircraft;
+    }
+
+    public long getIncomingloc() {
+        return incomingloc;
+    }
+
+    public void setIncomingloc(long incomingloc) {
+        this.incomingloc = incomingloc;
     }
 }

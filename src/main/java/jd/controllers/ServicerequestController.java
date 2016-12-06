@@ -245,6 +245,7 @@ public class ServicerequestController {
             servicerequest.setMyaircraft(aircraftGo[0].getId());
             servicerequest.setRdate(shopcart[0].getRdate());
 
+            servicerequest.setIncomingloc(shopcart[0].getIncomingloc());
             servicerequest.setDcreate(fechaActual);
             servicerequest.setDupdate(fechaActual);
 
