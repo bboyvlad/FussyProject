@@ -6,40 +6,45 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * Created by eduardom on 9/12/16.
  */
 
 @Entity
-@Table(name = "Productfussy")
+@Table(name = "Product")
 public class Product {
-    private Long id;
+    private long id;
+    private long catalog;
     private String name;
     private String detaildesc;
-    private String pricetype;
-    private String unit;
-    private String unitdesc;
+    private boolean poundenable; //mtow
+    private boolean maxenable; //max min values
     private Date dcreate;
     private Date dupdate;
     private boolean active;
     private boolean deleted;
-
-    ArrayList<Price> pricesUnit= new ArrayList<>();
-    ArrayList<Pricedate> pricesDate= new ArrayList<>();
-    ArrayList<Pricepound> pricesPound= new ArrayList<>();
-
+    private Set<Locationcontract> locations = new HashSet<Locationcontract>(0);
 
     public Product() {  }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRODUCT_ID", unique = true, nullable = false)
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public long getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(long catalog) {
+        this.catalog = catalog;
     }
 
     public String getName() {
@@ -58,28 +63,28 @@ public class Product {
         this.detaildesc = detaildesc;
     }
 
+    public boolean isPoundenable() {
+        return poundenable;
+    }
+
+    public void setPoundenable(boolean poundenable) {
+        this.poundenable = poundenable;
+    }
+
+    public boolean isMaxenable() {
+        return maxenable;
+    }
+
+    public void setMaxenable(boolean maxenable) {
+        this.maxenable = maxenable;
+    }
+
     public Date getDcreate() {
         return dcreate;
     }
 
     public void setDcreate(Date dcreate) {
         this.dcreate = dcreate;
-    }
-
-    public String getPricetype() {
-        return pricetype;
-    }
-
-    public void setPricetype(String pricetype) {
-        this.pricetype = pricetype;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public Date getDupdate() {
@@ -90,6 +95,14 @@ public class Product {
         this.dupdate = dupdate;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -98,44 +111,16 @@ public class Product {
         this.deleted = deleted;
     }
 
-    public String getUnit() {
-        return unit;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "Provider_Location", joinColumns = {
+            @JoinColumn(name = "LOCATIONCONTRACT_ID", nullable = false, updatable = false) },
+            inverseJoinColumns = {@JoinColumn(name = "PROVIDERCONTRACT_ID",
+                    nullable = false, updatable = false) })
+    public Set<Locationcontract> getLocations() {
+        return locations;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getUnitdesc() {
-        return unitdesc;
-    }
-
-    public void setUnitdesc(String unitdesc) {
-        this.unitdesc = unitdesc;
-    }
-
-    @Transient
-    public ArrayList<Price> getPricesUnit() {
-        return pricesUnit;
-    }
-
-    public void setPricesUnit(ArrayList<Price> pricesUnit) {
-        this.pricesUnit = pricesUnit;
-    }
-    @Transient
-    public ArrayList<Pricedate> getPricesDate() {
-        return pricesDate;
-    }
-
-    public void setPricesDate(ArrayList<Pricedate> pricesDate) {
-        this.pricesDate = pricesDate;
-    }
-    @Transient
-    public ArrayList<Pricepound> getPricesPound() {
-        return pricesPound;
-    }
-
-    public void setPricesPound(ArrayList<Pricepound> pricesPound) {
-        this.pricesPound = pricesPound;
+    public void setLocations(Set<Locationcontract> locations) {
+        this.locations = locations;
     }
 }

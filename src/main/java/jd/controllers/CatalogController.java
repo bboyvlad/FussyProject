@@ -1,8 +1,8 @@
 package jd.controllers;
 
 import jd.Util.AppMappings;
-import jd.persistence.model.Svcgroup;
 import jd.persistence.model.Product;
+import jd.persistence.model.Svcgroup;
 import jd.persistence.repository.SvcgroupRepository;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.pojo.ApiStage;
@@ -91,7 +91,7 @@ public class CatalogController {
     public Object addProductGroup(@RequestBody Product product, @PathVariable Long groupid){
         try{
             Svcgroup grp = svcgroupRepository.findOne(groupid);
-            grp.getProducts().add(product);
+            grp.getProductfussies().add(product);
             return svcgroupRepository.save(grp);
         }catch(Exception e){
             return e.getMessage();
@@ -102,7 +102,7 @@ public class CatalogController {
     @RequestMapping(value = "/product/{groupid}", method = RequestMethod.GET)
     public Object showProductGroup(@PathVariable Long groupid){
         try{
-            return svcgroupRepository.findOne(groupid).getProducts();
+            return svcgroupRepository.findOne(groupid).getProductfussies();
         }catch(Exception e){
             return e.getMessage();
         }
@@ -113,7 +113,7 @@ public class CatalogController {
     public Object deleteProductGroup(@PathVariable Long groupid, Long productid){
         try{
             //BETA
-            return svcgroupRepository.findOne(groupid).getProducts().remove(productid);
+            return svcgroupRepository.findOne(groupid).getProductfussies().remove(productid);
         }catch(Exception e){
             return e.getMessage();
         }
