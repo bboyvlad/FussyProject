@@ -15,17 +15,17 @@ public class Svcgroup {
     private String name;
     private String detaildesc;
     private Boolean active;
-    private Set<Product> products = new HashSet<Product>(0);
+    private Set<Product> productfussies = new HashSet<>(0);
 
     public Svcgroup() {
     }
 
-    public Svcgroup(Long id, String name, String detaildesc, Boolean active, Set<Product> products) {
+    public Svcgroup(Long id, String name, String detaildesc, Boolean active, Set<Product> productfussies) {
         this.id = id;
         this.name = name;
         this.detaildesc = detaildesc;
         this.active = active;
-        this.products = products;
+        this.productfussies = productfussies;
     }
 
     @Id
@@ -68,11 +68,11 @@ public class Svcgroup {
             @JoinColumn(name = "SVCGROUP_ID", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "PRODUCT_ID",
                     nullable = false, updatable = false) })
-    public Set<Product> getProducts() {
-        return products;
+    public Set<Product> getProductfussies() {
+        return productfussies;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
+    public void setProductfussies(Set<Product> productfussies) {
+        this.productfussies = productfussies;
     }
 }

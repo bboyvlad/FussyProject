@@ -1,11 +1,7 @@
 package jd.persistence.model;
 
-
-import org.springframework.security.core.Authentication;
-
 import javax.persistence.*;
 import java.util.*;
-
 
 /**
  * Created by eduardom on 9/3/16.
